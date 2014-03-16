@@ -2,6 +2,10 @@
 <html>
 
 <head>
+
+<link rel="shortcut icon" href="https://googledrive.com/host/0BxlKW46OOILyRGlqQzNqSktncmM">
+<title>Bell Schedule (dev)</title>
+
 <script type="text/javascript">
 	/* todo:
 		p5 always first col
@@ -49,9 +53,14 @@
 	 * Parses schedules, creates schedule for correct week, sets title title (runs on page load)
 	 */
 	function init(){
+		attachOptionSaving();
+		loadOptions();
+		
 		setTitleTitle();
 		
 		parseRawSchedule();
+		
+		loadOptions();
 		
 		setSchedule();
 		highlightSchedule();
@@ -138,78 +147,62 @@
 				head.appendChild(headWrapper);
 				col.appendChild(head);
 				
+				var prevEnd = "8:00"; //set start of day to 8:00AM
+				
 				if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
 					for(var i=1;i<schedules[daySchedule[0]].length;i++){
 						var text = schedules[daySchedule[0]][i];
+						var periodName = text.substring(0,text.indexOf("\t"))
+						var periodTime = text.substring(text.indexOf("\t")+1);
 						
-						//yeah, the structure is very rigid. could probably be improved.
-						var startTime = text.substring(text.indexOf("\t")+1,text.indexOf("-"));
-						var startHour = startTime.substring(0,startTime.indexOf(":")).valueOf();
-						var startMin = startTime.substring(startTime.indexOf(":")+1);
-						if(startHour<7) startHour = parseInt(startHour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
-						var start = new Date(date.getFullYear(),date.getMonth(),date.getDate(),startHour,startMin);
+						var start = periodTime.substring(0,periodTime.indexOf("-"));
+						var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
 						
-						var endTime = text.substring(text.lastIndexOf("-")+1);
-						var endHour = endTime.substring(0,endTime.indexOf(":"));
-						var endMin = endTime.substring(endTime.indexOf(":")+1);
-						if(endHour<7) endHour = parseInt(endHour,10)+12;
-						var end = new Date(date.getFullYear(),date.getMonth(),date.getDate(),endHour,endMin);
+						var passing = document.createElement("div");
+						passing.classList.add("period");
+						createPeriod(passing,"",prevEnd,start,date);
+						col.appendChild(passing);
+						
+						prevEnd = end;
 						
 						var period = document.createElement("div");
 						period.classList.add("period");
 						
-						if(text.indexOf("|")>=0){ //handle split periods (i.e. lunches)
+						if(periodName.indexOf("|")>=0){ //handle split periods (i.e. lunches)
 							var table = document.createElement("table");
 							table.classList.add("lunch");
 							var row = table.insertRow(-1);
 							
-							
 							var lunch1 = row.insertCell(-1);
+							var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
 							
-							var end1Time = text.substring(text.indexOf("-")+1,text.lastIndexOf("|"));
-							var end1Hour = end1Time.substring(0,end1Time.indexOf(":"));
-							var end1Min = end1Time.substring(end1Time.indexOf(":")+1);
-							if(end1Hour<7) end1Hour = parseInt(end1Hour,10)+12;
-							var end1 = new Date(date.getFullYear(),date.getMonth(),date.getDate(),end1Hour,end1Min);
-							
-							var p1 = document.createElement("div");
-							p1.classList.add("period");
-							var text1 = text.substring(0,text.indexOf("|")) + "<br />" + text.substring(text.indexOf("\t")+1,text.lastIndexOf("|"));
-							p1.appendChild(createPeriod(text1,start,end1));
-							lunch1.appendChild(p1);
-							
-							var p2 = document.createElement("div");
-							p2.classList.add("period");
-							var w2 = document.createElement("div");
-							w2.classList.add("periodWrapper");
-							p2.appendChild(createPeriod("Lunch",end1,end));
-							lunch1.appendChild(p2);
-							
+							createSubPeriods(
+									lunch1,
+									periodName.substring(0,periodName.indexOf("||")),
+									start,
+									lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
+									lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
+									end,
+									date
+							);
 							
 							var lunch2 = row.insertCell(-1);
+							var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
 							
-							var start2Time = text.substring(text.lastIndexOf("|")+1,text.lastIndexOf("-"));
-							var start2Hour = start2Time.substring(0,start2Time.indexOf(":"));
-							var start2Min = start2Time.substring(start2Time.indexOf(":")+1);
-							if(start2Hour<7) start2Hour = parseInt(start2Hour,10)+12;
-							var start2 = new Date(date.getFullYear(),date.getMonth(),date.getDate(),start2Hour,start2Min);
-							
-							var p1 = document.createElement("div");
-							p1.classList.add("period");
-							p1.appendChild(createPeriod("Lunch",start,start2));
-							lunch2.appendChild(p1);
-							
-							var p2 = document.createElement("div");
-							p2.classList.add("period");
-							var text2 = text.substring(text.indexOf("|")+1,text.indexOf("\t")) + "<br />" + text.substring(text.lastIndexOf("|")+1);
-							p2.appendChild(createPeriod(text2,start2,end));
-							lunch2.appendChild(p2);
+							createSubPeriods(
+									lunch2,
+									periodName.substring(periodName.indexOf("||")+2),
+									start,
+									lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
+									lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
+									end,
+									date
+							);
 							
 							period.appendChild(table);
 						}else{
-							period.appendChild(createPeriod(text,start,end));
+							createPeriod(period,periodName,start,end,date);
 						}
-						
 						
 						col.appendChild(period);
 					}
@@ -267,6 +260,17 @@
 	}
 	
 	/*
+	 * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
+	 * Assumes hours less than 7 are PM and hours 7 or greater are AM.
+	 */
+	function getDateFromString(string,date){
+		var hour = string.substring(0,string.indexOf(":"));
+		var min = string.substring(string.indexOf(":")+1);
+		if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
+		return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
+	}
+	
+	/*
 	 * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
 	 * Schedule id index is 0 if not found in schedules.
 	 */
@@ -291,25 +295,61 @@
 	 * Creates and returns a new period wrapper with the given content and start/end times.
 	 * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
 	 */
-	function createPeriod(text,start,end){
+	function createPeriod(parent,name,start,end,date){
+		startDate = getDateFromString(start,date);
+		endDate = getDateFromString(end,date);
+		
 		var periodWrapper = document.createElement("div");
 		periodWrapper.classList.add("periodWrapper");
-		periodWrapper.start = start;
-		periodWrapper.end = end;
+		periodWrapper.start = startDate;
+		periodWrapper.end = endDate;
 		
-		var length = (end-start)/60000;
+		var length = (endDate-startDate)/60000;
 		
-		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
-		
-		if(length<30) //handle short periods (all text on one line)
-			periodWrapper.innerHTML=text;
-		else{
-			periodWrapper.innerHTML = text.replace("\t","<br />");
-			if(length>50 && !text.indexOf("P")) //handle block periods (class=long, i.e. bold text)
-				periodWrapper.classList.add("long");
+		if(length > 0) {
+			periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
+			
+			if(length >= 15) {
+				periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + "-" + end;
+				if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
+					periodWrapper.classList.add("long");
+			}
+			
+		return parent.appendChild(periodWrapper);
 		}
 		
-		return periodWrapper;
+	}
+	
+	/*
+	 * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
+	 */
+	function createSubPeriods(parent,name,start1,end1,start2,end2,date){
+		var p1 = document.createElement("div");
+		p1.classList.add("period");
+		createPeriod(
+				p1,
+				name.substring(0,name.indexOf("|")),
+				start1,
+				end1,
+				date);
+		parent.appendChild(p1);
+		
+		var lunchPassing = document.createElement("div");
+		lunchPassing.classList.add("period");
+		createPeriod(lunchPassing,"",end1,start2,date);
+		parent.appendChild(lunchPassing);
+		
+		var p2 = document.createElement("div");
+		p2.classList.add("period");
+		var w2 = document.createElement("div");
+		w2.classList.add("periodWrapper");
+		createPeriod(
+				p2,
+				name.substring(name.indexOf("|")+1),
+				start2,
+				end2,
+				date);
+		parent.appendChild(p2);
 	}
 	
 	/*
@@ -444,6 +484,33 @@
 			contractOptions();
 		else expandOptions();
 	}
+	
+	
+	
+	function attachOptionSaving(){
+		var options = document.getElementById("options");
+		var inputs = options.getElementsByTagName("input");
+		//var textBoxes = options.getElementsByTagName("textbox");
+		blah=(inputs);
+		for(var i=0; i<inputs.length; i++) {
+			var input = inputs[i];
+			if(input.type=="checkbox")
+				input.addEventListener("change", function(event) {
+					console.log(event.target.checked);
+					asdf=event;
+				});
+			else
+				input.addEventListener("change", function(event) {
+					console.log(event.target.value);
+					asdf=event;
+				});
+		}
+	}
+	
+	function loadOptions(){
+		
+	}
+	
 </script>
 
 <style>
@@ -688,10 +755,7 @@ table{
 	user-select: none;
 }
 </style>
-	
-	<link rel="shortcut icon" href="https://googledrive.com/host/0BxlKW46OOILyRGlqQzNqSktncmM">
-	
-	<title>Bell Schedule</title>
+
 </head>
 
 <body onload="init()">
@@ -755,7 +819,7 @@ OP!</div>
 10/14/13	2
 10/15/13	3
 10/16/13	No School
-10/17/13	4???
+10/17/13	45
 10/21/13	14
 10/24/13	41c
 10/25/13	51c
@@ -780,14 +844,27 @@ OP!</div>
 1/30/14	49
 2/4/14	23
 2/10/14|2/17/14	Pres. Wk. Break
-4/7/14-4/11/14	Spring Break
+2/18/14	2a
+3/4/14	21a
+3/10/14	13
+3/12/14	34
+3/13/14	41c
+3/14/14	51c
+3/27/14	46a
+4/2/14	31b
+4/4/14	51
+4/7/14|4/11/14	Spring Break
+4/15/14	21
+4/17/14	45a
+4/18/14	54
+4/23/14	31c
 
 1
 P1	8:00-8:50
 P2	8:55-9:45
 School Meeting	9:50-10:20
 P3	10:25-11:15
-P6|P5	11:20-12:10|12:00-12:50
+Lunch|P5||P6|Lunch	11:20-11:55|12:00-12:50||11:20-12:10|12:15-12:50
 P4	12:55-1:45
 P7	1:55-2:45
 P8	2:50-3:40
@@ -797,7 +874,7 @@ P1	8:00-8:50
 P3	8:55-9:45
 Class Meeting	9:50-10:10
 P4	10:15-11:05
-P5|P6	11:10-12:00|11:50-12:40
+P5|Lunch||Lunch|P6	11:10-12:00|12:05-12:40||11:10-11:45|11:50-12:40
 P8	12:45-1:35
 P7	1:40-2:30
 Extra Help	2:35-3:20
@@ -814,7 +891,7 @@ P2	2:10-3:00
 P1	8:00-9:15
 Advisory	9:20-9:50
 P2	9:55-11:10
-P6|P5	11:15-12:30|11:55-1:10
+Lunch|P5||P6|Lunch	11:15-11:50|11:55-1:10||11:15-12:30|12:35-1:10
 P7	1:15-2:30
 P8	2:35-3:25
 
@@ -823,7 +900,7 @@ P1	8:00-8:50
 P2	8:55-9:45
 Extra Help	9:50-10:20
 P3	10:25-11:15
-P5|P6	11:20-12:10|12:00-12:50
+P5|Lunch||Lunch|P6	11:20-12:10|12:15-12:50||11:20-11:55|12:00-12:50
 P7	12:55-1:45
 P4	1:50-2:40
 
@@ -832,7 +909,7 @@ P1	8:00-8:50
 P2	8:55-9:45
 Extra Help	9:50-10:20
 P3	10:25-11:15
-P6|P5	11:20-12:10|12:00-12:50
+Lunch|P5||P6|Lunch	11:20-11:55|12:00-12:50||11:20-12:10|12:15-12:50
 P4	12:55-1:45
 P7	1:55-2:45
 P8	2:50-3:40
@@ -842,7 +919,7 @@ P1	8:00-8:50
 P3	8:55-9:45
 School Meeting	9:50-10:10
 P4	10:15-11:05
-P5|P6	11:10-12:00|11:50-12:40
+P5|Lunch||Lunch|P6	11:10-12:00|12:05-12:40||11:40-11:45|11:50-12:40
 P8	12:45-1:35
 P7	1:40-2:30
 Extra Help	2:35-3:20
@@ -852,7 +929,17 @@ P1	8:00-8:45
 P3	8:50-9:35
 Class Meeting	9:40-10:40
 P4	10:45-11:30
-P5|P6	P11:35-12:20|12:15-1:00
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-1:00||11:35-12:10|12:15-1:00
+P8	1:05-1:50
+P7	1:55-2:40
+Extra Help	2:45-3:25
+
+21a
+P1	8:00-8:45
+P3	8:50-9:35
+Assembly	9:40-10:40
+P4	10:45-11:30
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-1:00||11:35-12:10|12:15-1:00
 P8	1:05-1:50
 P7	1:55-2:40
 Extra Help	2:45-3:25
@@ -865,11 +952,35 @@ Lunch	11:30-12:55
 P8	1:00-2:10
 P2	2:15-3:00
 
+31a
+P3	8:00-9:10
+Assembly	9:15-10:10
+P4	10:15-11:25
+Lunch	11:30-12:55
+P8	1:00-2:10
+P2	2:15-3:00
+
+31b
+P3	8:00-9:10
+ASB Speeches (G9-11) and Mr. Keller Presentation (G12)	9:15-10:10
+P4	10:15-11:25
+Lunch	11:30-12:55
+P8	1:00-2:10
+P2	2:15-3:00
+
+31c
+P3	8:00-9:10
+Stdnt Cncl speeches (G9-11) and graduation items (G12)	9:15-10:10
+P4	10:15-11:25
+Lunch	11:30-12:55
+P8	1:00-2:10
+P2	2:15-3:00
+
 41
 P1	8:00-9:10
 Assembly/Advisory	9:15-10:10
 P2	10:15-11:25
-P6|P5	11:30-12:40|12:10-1:20
+Lunch|P5||P6|Lunch	11:30-12:05|12:10-1:20||11:30-12:40|12:45-1:20
 P7	1:25-2:35
 P8	2:40-3:25
 
@@ -877,7 +988,7 @@ P8	2:40-3:25
 P1	8:00-9:10
 Comment Review	9:15-10:10
 P2	10:15-11:25
-P6|P5	11:30-12:40|12:10-1:20
+Lunch|P5||P6|Lunch	11:30-12:05|12:10-1:20||11:30-12:40|12:45-1:20
 P7	1:25-2:35
 P8	2:40-3:25
 
@@ -886,7 +997,7 @@ P1	8:00-8:45
 P2	8:50-9:35
 Assembly/Extra Help	9:40-10:40
 P3	10:45-11:30
-P5|P6	11:35-12:20|12:10-12:55
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-12:55||11:35-12:05|12:10-12:55
 P7	1:00-1:45
 P4	1:50-2:35
 
@@ -895,7 +1006,7 @@ P1	8:00-8:45
 P2	8:50-9:35
 Assembly	9:40-10:40
 P3	10:45-11:30
-P5|P6	11:35-12:20|12:10-12:55
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-12:55||11:35-12:05|12:10-12:55
 P7	1:00-1:45
 P4	1:50-2:35
 
@@ -904,7 +1015,7 @@ P1	8:00-8:45
 P2	8:50-9:35
 Extra Help	9:40-10:40
 P3	10:45-11:30
-P5|P6	11:35-12:20|12:10-12:55
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-12:55||11:35-12:05|12:10-12:55
 P7	1:00-1:45
 P4	1:50-2:35
 
@@ -913,7 +1024,7 @@ P1	8:00-8:45
 P2	8:50-9:35
 Comment Review	9:40-10:40
 P3	10:45-11:30
-P5|P6	11:35-12:20|12:10-12:55
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-12:55||11:35-12:05|12:10-12:55
 P7	1:00-1:45
 P4	1:50-2:35
 
@@ -922,9 +1033,20 @@ P1	8:00-8:45
 P2	8:50-9:35
 Lockdown Drill	9:40-10:40
 P3	10:45-11:30
-P5|P6	11:35-12:20|12:10-12:55
+P5|Lunch||Lunch|P6	11:35-12:20|12:25-12:55||11:35-12:05|12:10-12:55
 P7	1:00-1:45
 P4	1:50-2:35
+
+13
+P1	8:00-8:30
+P2	8:35-9:05
+School Meeting	9:10-9:30
+P3	9:35-10:05
+P4	10:10-10:40
+P5/6	10:45-11:15
+Lunch	11:20-12:20
+P7	12:25-12:55
+P8	1:00-1:30
 
 14
 P1	8:00-8:30
@@ -957,21 +1079,60 @@ Lunch	11:25-12:55
 P8	1:00-2:10
 P2	2:15-3:00
 
+34
+P3	8:00-9:10
+Extra Help	9:15-9:45
+P4	9:50-11:00
+LIFE	11:05-12:05
+Lunch	12:10-12:55
+P8	1:00-2:10
+P2	2:15-3:00
+
 40
 P1	8:00-8:55
 P2	9:00-9:55
 P8	10:00-10:35
 ReCreate Reading	10:40-11:20
-P6|P5	11:25-12:20|12:05-1:00
+Lunch|P5||P6|Lunch	11:25-12:00|12:05-1:00||11:25-12:20|12:25-1:00
 P7	1:05-2:00
 
-4???
+45
 P1	8:00-9:05
 P2	9:10-10:15
 Assembly	10:20-11:25
-P6|P5	11:30-12:35|12:20-1:25
+Lunch|P5||P6|Lunch	11:30-12:15|12:20-1:25||11:30-12:35|12:40-1:25
 P7	1:30-2:35
 P8	2:40-3:25
+
+45a
+P1	8:00-9:05
+P2	9:10-10:15
+Regatta	10:20-11:25
+Lunch|P5||P6|Lunch	11:30-12:15|12:20-1:25||11:30-12:35|12:40-1:25
+P7	1:30-2:35
+P8	2:40-3:25
+
+46
+P1	8:00-8:45
+P8	8:50-9:30
+Advisory	9:35-10:00
+P2	10:05-10:50
+Assembly 1	10:55-12:20
+Lunch	12:25-1:15
+P7	1:20-2:05
+P5/6	2:10-2:55
+Assembly 2	3:00-3:25
+
+46a
+P1	8:00-8:45
+P8	8:50-9:30
+Advisory	9:35-10:00
+P2	10:05-10:50
+HOSCARS	10:55-12:20
+Lunch	12:25-1:15
+P7	1:20-2:05
+P5/6	2:10-2:55
+HOSCARS	3:00-3:25
 
 47
 P1	8:00-9:05
@@ -1055,26 +1216,69 @@ Conflicts	12:00-2:00</div>
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule()">&#8635;</div><!--&#8681;-->
-<div id="version">V0.4.10</div>
+<div id="version">V0.5.00 (WIP)</div>
 
-<!--
+
 <div id="options" onMouseOver="expandOptions()" onMouseOut="contractOptions()">
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
 	<div id="optionsContent">
 		<h2>Options</h2>
 		Refresh Interval (in seconds): <input name="updateTime" type="number" min="0" value="60"></input><br />
+		Show passing periods: <input name="showPassingPeriods" type="checkbox" /><br />
 	</div>
 	<div id="download">
 		<a href="https://doc-0g-50-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/7f3h3el3h0vlh0ad0q3akcq74phfgbs9/1383328800000/14427671545047426503/*/0BxlKW46OOILyaGtWa1g5TXRNYlU?h=16653014193614665626&e=download" title="Download file for offline use">Download</a><br>
 	</div>
-</d-->
+
 
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
 
 V0.5.00 (WIP)
+Complete
+ - added passing periods
+ - reduced redundant (bad) code
+Planned
  - added options
  - added auto updating of schedule
+
+V0.4.16 (3/15/14)
+ - added special/alt schedules for April
+  - Wed 4/2: 31 (Alt for ASB Speeches (G9-11) and Mr. Keller presentation (G12))
+  - Fri 4/4: 51 (Alt for assembly)
+  - Tue 4/15: 21 (Alt for assembly)
+  - Thu 4/17: 45 (Alt for regatta)
+  - Fri 4/18: 54 (Alt for Spring Rally)
+  - Wed 4/23: 31 (Alt for Student Council speeches (G9-11) and graduation items (G12))
+ - fixed spring break only lasting a single day
+ - identified schedule 4??? (it's 45) and updated previous schedule on 10/17/13 accordingly
+ - fixed lunches and P5/6 being flipped on schedule 2 (reg. Tuesday)
+ - refactored lunch code to reduce redundancy
+
+V0.4.15 (3/9/14)
+ - fixed typos in 34 schedule (LIFE)
+  - period 4 started 10 minutes early
+  - P3 instead of P8
+
+V0.4.14 (3/4/14)
+ - fixed 21 alternate schedule (extra letter in time for lunches caused the period height to mess up)
+ - changed schedule for 3/4/14 from normal alternate to alternate alternate (21->21a; assembly instead of class meeting)
+
+V0.4.13 (2/26/14)
+ - fixed special schedules for March
+  - added Wed 3/12: 34 (LIFE)
+  - fixed HOSCARS (shifted from Fri 3/28 to Thu 3/27; previous changelog entry did not reflect actual changes)
+
+V0.4.12 (2/19/14)
+ - added alt/special schedules for March
+  - Tue 3/4: 21 (Assembly)
+  - Mon 3/10: 13 (Early Dismissal)
+  - Thu 3/13: 41 (Alt)
+  - Fri 3/14: 51 (Alt)
+  - Thu 3/27: 46 (HOSCARS)
+
+V0.4.11 (2/18/14)
+ - changed schedule for 2/18/14 from 2 (regular) to 2a (school meeting)
 
 V0.4.10 (2/11/14)
  - shortened "Pres. Week Break" to "Pres. Wk. Break" to make it fit better in header
@@ -1101,7 +1305,7 @@ V0.4.05 (12/14/13)
  - fixed syntax error in Thanksgiving break
 
 V0.4.04 (12/14/13)
- - closed table tag (oops. previously closed nonexistant div instead of the table.)
+ - closed table tag (oops. previously closed nonexistent div instead of the table.)
  - made nav arrows wider (increased padding) and added hover animations
  - moved schedule ID for days to next line; increased header row slightly (10px) to make things fit
  - set schedule for Monday 12/16/13 to 1a
