@@ -9,12 +9,13 @@ A (much needed) clean bell schedule web application for Harker students
 * Time left until the current period is over is displayed in small, bold text underneath the general period title
 
 ## To Do
-* p5 always first col
+* doge mode
 * options (save in localStorage)
-* intercept f5/ctrl-r
+* ~~intercept f5/ctrl-r~~
 * update check (offline too)
 * ~~passing periods~~
-* dynamically update time setting/disable "back to this week" button
+* dynamically update with time setting/disable
+* "back to this week" button
 * **current task: options (update timer interval)**
 * Parse PDF files for bell schedules and automatically update
 
