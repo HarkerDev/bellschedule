@@ -16,25 +16,29 @@
 	var urlParams; //object with GET variables as properties and their respective values as values
 	var schedules; //array of schedules (each schedule is an array in this array
 	var dispWeek; //Sunday of week currently being displayed by the schedule
-	
+	var updateInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
+
 	/*
 	 * Event listener for navigating through history.
 	 * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
 	 */
+	
 	window.addEventListener("popstate", function(event) {
 		updateSchedule(event.state);
 	});
+
+	window.setInterval("updateSchedule()", 60000);
 	
-	/*
+/*
 	 * Event listener for catching F5 and updating schedule instead of refreshing
 	 *
 	document.addEventListener("keydown", function(event) {
-		if ((event.which||event.keyCode) == 116)
+	if ((event.which||event.keyCode) == 116)
 			event.preventDefault(); //stop refresh
 			updateSchedule();
 	});
 	*/
-	
+
 	/*
 	 * Parses schedules, creates schedule for correct week, sets title title (runs on page load)
 	 */
@@ -58,7 +62,6 @@
 	 */
 	function parseRawSchedule(){
 		var rawSchedules=document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
-		
 		schedules = new Array();
 		var x=0; //index in schedules
 		schedules[0] = new Array(); //create array of special schedule days
@@ -505,6 +508,15 @@
 	
 	function loadOptions(){
 		
+	}
+
+	/*
+	* Updates the interval for automatically refreshing the page. Input is in seconds.
+	*/
+	function updateRefreshInterval(interval) {
+		interval *= 1000; //Convert to milliseconds.
+		window.clearInterval("updateSchedule()");
+		window.setInterval("updateSchedule()", interval);
 	}
 	
 </script>
@@ -1270,14 +1282,14 @@ Conflicts	12:00-2:00</div>
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule()">&#8635;</div><!--&#8681;-->
-<div id="version">V0.5.00 (WIP)</div>
+<div id="version">V0.5.01 (WIP)</div>
 
 
 <div id="options" onMouseOver="expandOptions()" onMouseOut="contractOptions()">
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
 	<div id="optionsContent">
 		<h2>Options</h2>
-		Refresh Interval (in seconds): <input name="updateTime" type="number" min="0" value="60"></input><br />
+		Refresh Interval (in seconds): <input name="updateInterval" type="number" min="0" value="60" oninput="updateRefreshInterval(updateInterval)"></input><br /> <!-- Not working yet :( -->
 		Show passing periods: <input name="showPassingPeriods" type="checkbox" /><br />
 	</div>
 	<div id="download">
@@ -1287,9 +1299,12 @@ Conflicts	12:00-2:00</div>
 
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
+
 v0.5.01 (3/17/14)
 - Added "Back to this Week" Button
  - Plan to hide it when it is already on the current week 
+- Added auto updating (defaults to one minute)
+ - Plan to properly integrate the interval value in options tab (will probably need JQuery or something similar).
 V0.5.00 (WIP)
 Complete
  - added passing periods

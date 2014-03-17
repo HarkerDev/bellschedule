@@ -13,6 +13,7 @@ A (much needed) clean bell schedule web application for Harker students
 * options (save in localStorage)
 * ~~intercept f5/ctrl-r~~
 * update check (offline too)
+ * Done but needs integration with options
 * ~~passing periods~~
 * dynamically update with time setting/disable
 * "back to this week" button
