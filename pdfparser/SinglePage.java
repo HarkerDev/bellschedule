@@ -10,6 +10,9 @@ import org.apache.pdfbox.PDFReader;
 
 /**
  * Utility to extract text from single page pdf file (untested) 
+ * args[0] the original file
+ * args[1] the password, or "" for no encryption
+ * args[2] the directory to extract the text
  * @author Manan
  */
 public class SinglePage {
