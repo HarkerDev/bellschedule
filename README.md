@@ -17,7 +17,7 @@ A (much needed) clean bell schedule web application for Harker students
 * dynamically update with time setting/disable
 * "back to this week" button
 * **current task: options (update timer interval)**
-* Parse PDF files for bell schedules and automatically update
+* **current task: Parse PDF files for bell schedules and automatically update schedule**
 
 ## How to Contribute
 1. **Check the To Do Section**: choose a pending task that hasn't yet been completed and help us add that functionality to the schedule
