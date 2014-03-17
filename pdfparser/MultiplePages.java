@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 /**
  * Utility to extract text from a multiple page pdf file (untested) 
  * @author Manan
+ * args[0] the original file
+ * args[1] the location for the output
  */
 public class MultiplePages {
 
@@ -23,7 +25,7 @@ public class MultiplePages {
         {
             document = PDDocument.load(args[0]);
             if (document.isEncrypted()) {
-                System.err.println("Error: Encrypted documents are not supported for this example.");
+                System.err.println("Error: Document is Encrypted");
                 System.exit(1);
             }
             
@@ -42,6 +44,7 @@ public class MultiplePages {
                     Object token = tokens.get(j);
                     if (token instanceof PDFOperator) {
                         PDFOperator op = (PDFOperator) token;
+                        //special format op
                         if (op.getOperation().equals("TJ") || op.getOperation().equals("Tj")) {
                             newTokens.remove(newTokens.size() - 1);
                             continue;
