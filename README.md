@@ -21,6 +21,7 @@ A (much needed) clean bell schedule web application for Harker students
  * Change it from button type to backgrounded text? (Makes it easier to hide?)
 * **current task: options (update timer interval)**
 * **current task: Parse PDF files for bell schedules and automatically update schedule**
+ * Fix PDF Parser (test with correct formatting and modify code) 
 
 ## How to Contribute
 1. **Check the To Do Section**: choose a pending task that hasn't yet been completed and help us add that functionality to the schedule
