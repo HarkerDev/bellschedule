@@ -16,6 +16,9 @@ A (much needed) clean bell schedule web application for Harker students
 * ~~passing periods~~
 * dynamically update with time setting/disable
 * "back to this week" button
+ * Make it hide when it is week 0 (the current week)
+ * Make CSS prettier?
+ * Change it from button type to backgrounded text? (Makes it easier to hide?)
 * **current task: options (update timer interval)**
 * **current task: Parse PDF files for bell schedules and automatically update schedule**
 

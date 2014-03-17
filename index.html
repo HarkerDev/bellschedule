@@ -17,7 +17,6 @@
 	var schedules; //array of schedules (each schedule is an array in this array
 	var dispWeek; //Sunday of week currently being displayed by the schedule
 	
-	
 	/*
 	 * Event listener for navigating through history.
 	 * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
@@ -110,7 +109,7 @@
 			
 			if(date>curWeek) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 			else document.getElementById("warning").style.display = "none"; //else hide warning
-			
+
 			while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
 			
 			var week = schedule.insertRow(-1); //create new week (row)
@@ -373,6 +372,16 @@
 		}
 		updateSearch(week);
 	}
+
+	function goCurrWeek() {
+		var week = new Date(); //The current week.
+		updateSchedule(week);
+		if(!isNaN(urlParams["w"]))
+			urlParams["w"] = 0;
+			delete urlParams["w"];
+		updateSearch(week);
+	}
+
 	/*
 	 * Updates GET variables to those in urlParams, pushes history state
 	 */
@@ -539,6 +548,7 @@ a{
 	max-width: 400px;
 	width: 50%;
 }
+
 #title{
 	display: inline;
 	/*-webkit-touch-callout: initial;*/
@@ -570,6 +580,60 @@ a{
 }
 #leftArrow:hover, #rightArrow:hover{
 	font-weight: bold;
+}
+#currWeek{
+	float: center;
+	cursor: pointer;
+	padding: 0 12px;
+	font-weight: normal;
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-webkit-border-top-left-radius:6px;
+	-moz-border-radius-topleft:6px;
+	border-top-left-radius:6px;
+	-webkit-border-top-right-radius:6px;
+	-moz-border-radius-topright:6px;
+	border-top-right-radius:6px;
+	-webkit-border-bottom-right-radius:6px;
+	-moz-border-radius-bottomright:6px;
+	border-bottom-right-radius:6px;
+	-webkit-border-bottom-left-radius:6px;
+	-moz-border-radius-bottomleft:6px;
+	border-bottom-left-radius:6px;
+	text-indent:0;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#000000;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:normal;
+	font-style:normal;
+	height:16px;
+	line-height:16px;
+	width:155px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #ffffff;
+}
+#currWeek:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}
+#currWeek:active {
+	position:relative;
+	top:1px;
+}
+#currWeekWrapper {
+	margin: 15px auto 5px;
+	max-width: 400px;
+	width: 50%;
 }
 
 #warning{
@@ -1197,6 +1261,9 @@ Conflicts	12:00-2:00</div>
 	<div id="rightArrow" title="Next Week" onclick="goNextWeek()">&#8250;</div>
 	<div id="title">Bell Schedule</div>
 </h1></div>
+<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
+	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Back to this Week</button>
+</h2></div>
 
 <div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
 
@@ -1220,7 +1287,9 @@ Conflicts	12:00-2:00</div>
 
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
-
+v0.5.01 (3/17/14)
+- Added "Back to this Week" Button
+ - Plan to hide it when it is already on the current week 
 V0.5.00 (WIP)
 Complete
  - added passing periods
