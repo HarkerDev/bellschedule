@@ -376,7 +376,8 @@
 		updateSearch(week);
 	}
 
-	function goCurrWeek() {
+	function goCurrWeek() 
+	{
 		var week = new Date(); //The current week.
 		updateSchedule(week);
 		if(!isNaN(urlParams["w"]))
@@ -519,6 +520,11 @@
 		window.setInterval("updateSchedule()", interval);
 	}
 	
+	function reloadPage()
+	{
+		location.reload();
+	}
+	
 </script>
 
 <style>
@@ -593,6 +599,8 @@ a{
 #leftArrow:hover, #rightArrow:hover{
 	font-weight: bold;
 }
+
+<!---Formatting changed as of commit 19 on 3172014, so this isn't used anymore--->
 #currWeek{
 	float: center;
 	cursor: pointer;
@@ -647,6 +655,7 @@ a{
 	max-width: 400px;
 	width: 50%;
 }
+<!---Formatting changes end here--->
 
 #warning{
 	display:none;
@@ -837,7 +846,6 @@ Randomly chosen text!
 No easter eggs!
 Unofficial!
 HHMS + PCR
-Hosted on Google Drive!
 Now with favicon!
 Not completely inefficient!
 Tested in Chrome!
@@ -1273,9 +1281,14 @@ Conflicts	12:00-2:00</div>
 	<div id="rightArrow" title="Next Week" onclick="goNextWeek()">&#8250;</div>
 	<div id="title">Bell Schedule</div>
 </h1></div>
-<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
-	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Back to this Week</button>
-</h2></div>
+
+<!---<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
+	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
+</h2></div>--->
+<input type="button" value="Current Week" title = "Current Week" onclick="goCurrWeek()">
+
+<!---fix this to go with the refresh arrow on the page--->
+<input type="button" value="Refresh" title = "Reload Page" onclick="reloadPage()">
 
 <div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
 
@@ -1289,7 +1302,7 @@ Conflicts	12:00-2:00</div>
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
 	<div id="optionsContent">
 		<h2>Options</h2>
-		Refresh Interval (in seconds): <input name="updateInterval" type="number" min="0" value="60" oninput="updateRefreshInterval(updateInterval)"></input><br /> <!-- Not working yet :( -->
+		Refresh Interval (seconds): <input name="updateInterval" type="number" min="0" value="60" oninput="updateRefreshInterval(updateInterval)"></input><br /> <!-- Not working yet :( -->
 		Show passing periods: <input name="showPassingPeriods" type="checkbox" /><br />
 	</div>
 	<div id="download">
