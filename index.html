@@ -42,8 +42,22 @@
 
 		setDispWeek();
 		setHighlightedPeriod();
+		//getURL();
+		deleteB();
 	}
 	
+	//updates every second
+	function deleteB(){
+		//alert(document.location.href); 
+		if(document.location.href=="http://iluvredwall.github.io/bellschedule/") {
+			document.getElementById("currWeek").style.visibility='hidden';
+		}
+		else 
+		{
+			document.getElementById("currWeek").style.visibility='visible';
+		}
+	}
+
 	/*
 	 * Parses raw schedule in body of page into schedule array
 	 * Code is questionable
@@ -205,7 +219,7 @@
 		urlParams = {};
 		while (match = search.exec(query))
 		   urlParams[decode(match[1])] = decode(match[2]);
-		   
+		deleteB();
 		return urlParams;
 /* alternatively...
 		(function(a) {
@@ -1301,7 +1315,7 @@ Conflicts	12:00-2:00</div>
 <!---<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
 	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
 </h2></div>--->
-<input type="button" value="Current Week" title = "Current Week" onclick="goCurrWeek()">
+<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">
 
 <!--- 
 <input type="button" value="Refresh" title = "Reload Page" onclick="reloadPage()">
