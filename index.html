@@ -516,7 +516,8 @@
 	}
 	
 	document.onkeydown = function(){
-	  switch (event.keyCode){ 
+	  switch (event.keyCode)
+	  { 
 			case 116 : //F5
 				updateSchedule();
 			case 82 : //R button
@@ -1319,6 +1320,7 @@ v0.5.01 (3/17/14)
  - Plan to hide it when it is already on the current week 
 - Added auto updating (defaults to one minute)
  - Plan to properly integrate the interval value in options tab (will probably need JQuery or something similar).
+- Added function to intercept CTRL+R and F5, instead update schedule 
 V0.5.00 (WIP)
 Complete
  - added passing periods
