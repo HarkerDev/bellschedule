@@ -515,17 +515,21 @@
 		location.reload();
 	}
 	
-	document.onkeydown = function(){
-	  switch (event.keyCode)
-	  { 
+	//do we have to return false here? 
+	document.onkeydown = function()
+	{
+		switch (event.keyCode)
+		{ 
 			case 116 : //F5
 				event.preventDefault();
 				updateSchedule();
+				break;
 			case 82 : //R button
-				if (event.ctrlKey){ //and control
+				if (event.ctrlKey||event.metaKey){ //and control or cmd (meta) 
 					event.preventDefault();
 					updateSchedule();
 				}
+				break;
 		}
 	}
 </script>
