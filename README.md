@@ -3,24 +3,22 @@
 A (much needed) clean bell schedule web application for Harker students
 
 ## Usage
-* Go to [the Github IO page](http://iluvredwall.github.io/bellschedule/) to access the web application and all of its functionality
+* Go to [the Github IO page](http://iluvredwall.github.io/bellschedule/) to access the schedule
 * Click the left and right arrows to switch between weeks
 * Periods are highlighted as the day progresses
 * Time left until the current period is over is displayed in small, bold text underneath the general period title
 
 ## To Do
 * doge mode
-* options (save in localStorage)
-* ~~intercept f5/ctrl-r~~
-* update check (offline too)
- * Done but needs integration with options
-* ~~passing periods~~
-* dynamically update with time setting/disable
+* ~~options~~
+ * **options for intercept f5/ctrl-r**
+ * update checking (offline too)
+  * Done but needs integration with options
+ * **option for passing periods**
+ * ~~dynamically update with time setting/disable~~
 * "back to this week" button
  * Make it hide when it is week 0 (the current week)
- * Make CSS prettier?
- * Change it from button type to backgrounded text? (Makes it easier to hide?)
-* **current task: options (update timer interval)**
+ * Switch away from buttons
 * **current task: Parse PDF files for bell schedules and automatically update schedule**
  * Fix PDF Parser (test with correct formatting and modify code) 
 
