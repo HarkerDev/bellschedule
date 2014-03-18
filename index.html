@@ -16,7 +16,8 @@
 	var urlParams; //object with GET variables as properties and their respective values as values
 	var schedules; //array of schedules (each schedule is an array in this array
 	var dispWeek; //Sunday of week currently being displayed by the schedule
-	var updateInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
+	//var updateScheduleInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
+	var updateScheduleID; //ID of interval of updateSchedule
 
 	/*
 	 * Event listener for navigating through history.
@@ -27,7 +28,6 @@
 		updateSchedule(event.state);
 	});
 
-	window.setInterval("updateSchedule()", 60000);
 	
 /*
 	 * Event listener for catching F5 and updating schedule instead of refreshing
@@ -50,10 +50,8 @@
 		
 		parseRawSchedule();
 		
-		loadOptions();
-		
-		setSchedule();
-		highlightSchedule();
+		setDispWeek();
+		setHighlightedPeriod();
 	}
 	
 	/*
@@ -87,7 +85,7 @@
 	/*
 	 * Displays schedule of the week of the given date/time
 	 */
-	function setSchedule(time){
+	function setDispWeek(time){
 		if(!time){
 			time = new Date(); //set default time to now
 			
@@ -98,19 +96,15 @@
 			if(!isNaN(urlParams["w"])) time.setDate(time.getDate() + urlParams["w"]*7);
 		}
 		
-		var schedule =  document.getElementById("schedule"); //get schedule table
-		
-		curWeek = new Date(); //get Sunday of this week
-		getSunday(curWeek);
-		
 		var date = new Date(time); //variable to keep track of current day in loop
 		getSunday(date);
 		
 		if(!dispWeek || (date.valueOf()!=dispWeek.valueOf())){
-			dispWeek = new Date(time);
-			getSunday(dispWeek);
+			var schedule = document.getElementById("schedule"); //get schedule table
 			
-			if(date>curWeek) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
+			dispWeek = new Date(date);
+			
+			if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 			else document.getElementById("warning").style.display = "none"; //else hide warning
 
 			while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
@@ -375,17 +369,20 @@
 		}
 		updateSearch(week);
 	}
-
-	function goCurrWeek() 
-	{
+	/*
+	 * Navigates schedule to current week.
+	 */
+	function goCurrWeek(){
 		var week = new Date(); //The current week.
 		updateSchedule(week);
-		if(!isNaN(urlParams["w"]))
-			urlParams["w"] = 0;
-			delete urlParams["w"];
+		
+		delete urlParams["w"];
+		delete urlParams["m"];
+		delete urlParams["d"];
+		delete urlParams["y"];
 		updateSearch(week);
 	}
-
+	
 	/*
 	 * Updates GET variables to those in urlParams, pushes history state
 	 */
@@ -402,7 +399,7 @@
 	/*
 	 * Highlights given date/time on the schedule; defaults to now if none is given
 	 */
-	function highlightSchedule(time){
+	function setHighlightedPeriod(time){
 		//set default time argument
 		if(!time) time = Date.now();
 		
@@ -459,14 +456,10 @@
 	 * Updates schedule to display as it would on the given date/time; defaults to now if none is given
 	 */
 	function updateSchedule(time){
-		var sunday = new Date(time);
-		getSunday(sunday);
+		//console.log("hi");
+		setDispWeek(time);
 		
-		if(sunday.valueOf() != dispWeek.valueOf()){
-			setSchedule(time);
-		}
-		
-		highlightSchedule();
+		setHighlightedPeriod();
 	}
 	
 	function expandOptions(){
@@ -488,40 +481,55 @@
 	
 	
 	function attachOptionSaving(){
-		var options = document.getElementById("options");
-		var inputs = options.getElementsByTagName("input");
-		//var textBoxes = options.getElementsByTagName("textbox");
-		blah=(inputs);
+		var inputs = document.getElementById("options").getElementsByTagName("input");
+		
 		for(var i=0; i<inputs.length; i++) {
 			var input = inputs[i];
-			if(input.type=="checkbox")
+			if(input.type=="checkbox") {
 				input.addEventListener("change", function(event) {
-					console.log(event.target.checked);
-					asdf=event;
+					//console.log(event.target.name + " " + event.target.checked);
+					localStorage[event.target.name] = event.target.checked;
 				});
-			else
+				if(localStorage[input.name])
+					input.checked = localStorage[input.name];
+				else 
+					localStorage[input.name] = input.checked;
+			} else if(input.type=="number") {
 				input.addEventListener("change", function(event) {
-					console.log(event.target.value);
-					asdf=event;
+					//console.log(event.target.name + " " + event.target.value);
+					localStorage[event.target.name] =  parseInt(event.target.value);
 				});
+				if(localStorage[input.name])
+					input.value = localStorage[input.name];
+				else 
+					localStorage[input.name] = input.value;
+			} else {
+				input.addEventListener("change", function(event) {
+					//console.log(event.target.name + " " + event.target.value);
+					localStorage[event.target.name] = event.target.value;
+				});
+				if(localStorage[input.name])
+					input.value = localStorage[input.name];
+				else 
+					localStorage[input.name] = input.value;
+			}
 		}
 	}
 	
 	function loadOptions(){
-		
+		setUpdateInterval(localStorage.updateScheduleInterval);
 	}
 
 	/*
-	* Updates the interval for automatically refreshing the page. Input is in seconds.
+	* Updates the interval for automatically refreshing the page.
+	* seconds is the new interval in seconds.
 	*/
-	function updateRefreshInterval(interval) {
-		interval *= 1000; //Convert to milliseconds.
-		window.clearInterval("updateSchedule()");
-		window.setInterval("updateSchedule()", interval);
+	function setUpdateInterval(seconds) {
+		window.clearInterval(updateScheduleID);
+		updateScheduleID = window.setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
 	}
 	
-	function reloadPage()
-	{
+	function reloadPage(){
 		location.reload();
 	}
 	
@@ -846,6 +854,7 @@ Randomly chosen text!
 No easter eggs!
 Unofficial!
 HHMS + PCR
+Hosted on GitHub!
 Now with favicon!
 Not completely inefficient!
 Tested in Chrome!
@@ -1302,26 +1311,25 @@ Conflicts	12:00-2:00</div>
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
 	<div id="optionsContent">
 		<h2>Options</h2>
-		Refresh Interval (seconds): <input name="updateInterval" type="number" min="0" value="60" oninput="updateRefreshInterval(updateInterval)"></input><br /> <!-- Not working yet :( -->
+		Update Interval (seconds): <input name="updateScheduleInterval" type="number" min="0" value="60" onchange="setUpdateInterval(this.value)"></input><br />
 		Show passing periods: <input name="showPassingPeriods" type="checkbox" /><br />
 	</div>
 	<div id="download">
-		<a href="https://doc-0g-50-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/7f3h3el3h0vlh0ad0q3akcq74phfgbs9/1383328800000/14427671545047426503/*/0BxlKW46OOILyaGtWa1g5TXRNYlU?h=16653014193614665626&e=download" title="Download file for offline use">Download</a><br>
+		<a href="" title="Download file for offline use">Download</a><br>
 	</div>
 
 
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
 
-v0.5.01 (3/17/14)
-- Added "Back to this Week" Button
- - Plan to hide it when it is already on the current week 
-- Added auto updating (defaults to one minute)
- - Plan to properly integrate the interval value in options tab (will probably need JQuery or something similar).
 V0.5.00 (WIP)
 Complete
  - added passing periods
  - reduced redundant (bad) code
+ - Added "Back to this Week" Button
+  - Plan to hide it when it is already on the current week 
+ - Added auto updating (defaults to one minute)
+  - Plan to properly integrate the interval value in options tab (will probably need JQuery or something similar).
 Planned
  - added options
  - added auto updating of schedule
