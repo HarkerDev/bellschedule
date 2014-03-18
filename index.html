@@ -42,14 +42,13 @@
 
 		setDispWeek();
 		setHighlightedPeriod();
-		//getURL();
 		deleteB();
 	}
 	
 	//updates every second
 	function deleteB(){
 		//alert(document.location.href); 
-		if(document.location.href=="http://iluvredwall.github.io/bellschedule/") {
+		if(document.location.href == "http://iluvredwall.github.io/bellschedule/") {
 			document.getElementById("currWeek").style.visibility='hidden';
 		}
 		else 
@@ -354,6 +353,7 @@
 			if(urlParams["w"] == 0)
 				delete urlParams["w"];
 		}
+		deleteB();
 		updateSearch(week);
 	}
 	/*
@@ -371,6 +371,7 @@
 			if(urlParams["w"] == 0)
 				delete urlParams["w"];
 		}
+		deleteB();
 		updateSearch(week);
 	}
 	/*
@@ -384,6 +385,7 @@
 		delete urlParams["m"];
 		delete urlParams["d"];
 		delete urlParams["y"];
+		deleteB();
 		updateSearch(week);
 	}
 	
