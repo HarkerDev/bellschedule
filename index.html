@@ -519,9 +519,11 @@
 	  switch (event.keyCode)
 	  { 
 			case 116 : //F5
+				event.preventDefault();
 				updateSchedule();
 			case 82 : //R button
 				if (event.ctrlKey){ //and control
+					event.preventDefault();
 					updateSchedule();
 				}
 		}
