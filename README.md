@@ -17,8 +17,8 @@ Bold tasks are currently being worked on.
  * suspend updateInterval while tab is not visible; updateSchedule when tab is changed to visible
  * **option for passing periods**
  * ~~dynamically update with time setting/disable~~
-* "back to this week" button
- * Hide on current week
+* ~~"back to this week" button~~
+ * ~~Hide on current week~~
  * Integrate better with change week buttons (somehow)
  * Switch away from buttons
 * **Parse PDF files for bell schedules and automatically update schedule**
