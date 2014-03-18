@@ -28,16 +28,6 @@
 		updateSchedule(event.state);
 	});
 
-	
-/*
-	 * Event listener for catching F5 and updating schedule instead of refreshing
-	 *
-	document.addEventListener("keydown", function(event) {
-	if ((event.which||event.keyCode) == 116)
-			event.preventDefault(); //stop refresh
-			updateSchedule();
-	});
-	*/
 
 	/*
 	 * Parses schedules, creates schedule for correct week, sets title title (runs on page load)
@@ -49,7 +39,7 @@
 		setTitleTitle();
 		
 		parseRawSchedule();
-		
+
 		setDispWeek();
 		setHighlightedPeriod();
 	}
@@ -533,6 +523,23 @@
 		location.reload();
 	}
 	
+	//do we have to return false here? 
+	document.onkeydown = function()
+	{
+		switch (event.keyCode)
+		{ 
+			case 116 : //F5
+				event.preventDefault();
+				updateSchedule();
+				break;
+			case 82 : //R button
+				if (event.ctrlKey||event.metaKey){ //and control or cmd (meta) 
+					event.preventDefault();
+					updateSchedule();
+				}
+				break;
+		}
+	}
 </script>
 
 <style>
@@ -1296,8 +1303,9 @@ Conflicts	12:00-2:00</div>
 </h2></div>--->
 <input type="button" value="Current Week" title = "Current Week" onclick="goCurrWeek()">
 
-<!---fix this to go with the refresh arrow on the page--->
+<!--- 
 <input type="button" value="Refresh" title = "Reload Page" onclick="reloadPage()">
+--->
 
 <div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
 
@@ -1322,6 +1330,7 @@ Conflicts	12:00-2:00</div>
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
 
+- Added function to intercept CTRL+R and F5, instead update schedule 
 V0.5.00 (WIP)
 Complete
  - added passing periods
