@@ -18,23 +18,23 @@
 	var dispWeek; //Sunday of week currently being displayed by the schedule
 	//var updateScheduleInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
 	var updateScheduleID; //ID of interval of updateSchedule
-
+	
+	var options = new Object();
+	
 	/*
 	 * Event listener for navigating through history.
 	 * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
 	 */
-	
 	window.addEventListener("popstate", function(event) {
 		updateSchedule(event.state);
 	});
-
-
+	
 	/*
 	 * Parses schedules, creates schedule for correct week, sets title title (runs on page load)
 	 */
 	function init(){
 		attachOptionSaving();
-		loadOptions();
+		attachOptionActions();
 		
 		setTitleTitle();
 		
@@ -75,7 +75,7 @@
 	/*
 	 * Displays schedule of the week of the given date/time
 	 */
-	function setDispWeek(time){
+	function setDispWeek(time,force){
 		if(!time){
 			time = new Date(); //set default time to now
 			
@@ -89,7 +89,7 @@
 		var date = new Date(time); //variable to keep track of current day in loop
 		getSunday(date);
 		
-		if(!dispWeek || (date.valueOf()!=dispWeek.valueOf())){
+		if(force || !dispWeek || (date.valueOf()!=dispWeek.valueOf())){
 			var schedule = document.getElementById("schedule"); //get schedule table
 			
 			dispWeek = new Date(date);
@@ -131,10 +131,12 @@
 						var start = periodTime.substring(0,periodTime.indexOf("-"));
 						var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
 						
-						var passing = document.createElement("div");
-						passing.classList.add("period");
-						createPeriod(passing,"",prevEnd,start,date);
-						col.appendChild(passing);
+						if(options.showPassingPeriods){
+							var passing = document.createElement("div");
+							passing.classList.add("period");
+							createPeriod(passing,"",prevEnd,start,date);
+							col.appendChild(passing);
+						}
 						
 						prevEnd = end;
 						
@@ -307,10 +309,12 @@
 				date);
 		parent.appendChild(p1);
 		
-		var lunchPassing = document.createElement("div");
-		lunchPassing.classList.add("period");
-		createPeriod(lunchPassing,"",end1,start2,date);
-		parent.appendChild(lunchPassing);
+		if(options.showPassingPeriods){
+			var lunchPassing = document.createElement("div");
+			lunchPassing.classList.add("period");
+			createPeriod(lunchPassing,"",end1,start2,date);
+			parent.appendChild(lunchPassing);
+		}
 		
 		var p2 = document.createElement("div");
 		p2.classList.add("period");
@@ -445,9 +449,8 @@
 	/*
 	 * Updates schedule to display as it would on the given date/time; defaults to now if none is given
 	 */
-	function updateSchedule(time){
-		//console.log("hi");
-		setDispWeek(time);
+	function updateSchedule(time,force){
+		setDispWeek(time,force);
 		
 		setHighlightedPeriod();
 	}
@@ -475,70 +478,69 @@
 		
 		for(var i=0; i<inputs.length; i++) {
 			var input = inputs[i];
-			if(input.type=="checkbox") {
+			//special cases because localStorage saves values as strings
+			if(input.type=="checkbox") {											//booleans
 				input.addEventListener("change", function(event) {
-					//console.log(event.target.name + " " + event.target.checked);
-					localStorage[event.target.name] = event.target.checked;
+					options[event.target.name] = localStorage[event.target.name] = event.target.checked;
 				});
-				if(localStorage[input.name])
-					input.checked = localStorage[input.name];
-				else 
-					localStorage[input.name] = input.checked;
-			} else if(input.type=="number") {
+				
+				if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
+				else options[input.name] = localStorage[input.name] = input.checked;
+			} else if(input.type=="number") {										//numbers
 				input.addEventListener("change", function(event) {
-					//console.log(event.target.name + " " + event.target.value);
-					localStorage[event.target.name] =  parseInt(event.target.value);
+					options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
 				});
-				if(localStorage[input.name])
-					input.value = localStorage[input.name];
-				else 
-					localStorage[input.name] = input.value;
-			} else {
+				
+				if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
+				else options[input.name] = parseInt(localStorage[input.name] = input.value);
+			} else {																//strings
 				input.addEventListener("change", function(event) {
-					//console.log(event.target.name + " " + event.target.value);
-					localStorage[event.target.name] = event.target.value;
+					options[event.target.name] = localStorage[event.target.name] = event.target.value;
 				});
-				if(localStorage[input.name])
-					input.value = localStorage[input.name];
-				else 
-					localStorage[input.name] = input.value;
+				
+				if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
+				else options[input.name] = localStorage[input.name] = input.value;
 			}
 		}
 	}
 	
-	function loadOptions(){
-		setUpdateInterval(localStorage.updateScheduleInterval);
+	function attachOptionActions(){
+		setUpdateInterval(options.updateScheduleInterval);
+		
+		document.getElementsByName("updateScheduleInterval")[0].addEventListener("change", function(event) {
+			setUpdateInterval(event.target.value);
+		});
+		document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
+			updateSchedule(null,true);
+		});
+		
+		document.addEventListener("keydown", function(event) {
+			switch (event.keyCode){ 
+				case 116 : //F5
+					if(options.interceptF5){ //enabled
+						event.preventDefault();
+						updateSchedule();
+					}
+					break;
+				case 82 : //R key
+					if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){ //enabled and control/cmd (meta)
+						event.preventDefault();
+						updateSchedule();
+					}
+					break;
+			}
+		});
 	}
-
+	
 	/*
 	* Updates the interval for automatically refreshing the page.
 	* seconds is the new interval in seconds.
 	*/
 	function setUpdateInterval(seconds) {
 		window.clearInterval(updateScheduleID);
-		updateScheduleID = window.setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
-	}
-	
-	function reloadPage(){
-		location.reload();
-	}
-	
-	//do we have to return false here? 
-	document.onkeydown = function()
-	{
-		switch (event.keyCode)
-		{ 
-			case 116 : //F5
-				event.preventDefault();
-				updateSchedule();
-				break;
-			case 82 : //R button
-				if (event.ctrlKey||event.metaKey){ //and control or cmd (meta) 
-					event.preventDefault();
-					updateSchedule();
-				}
-				break;
-		}
+		if(seconds>0)
+			updateScheduleID = window.setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
+		else updateScheduleID = null;
 	}
 </script>
 
@@ -815,6 +817,19 @@ table{
 	display: none; /* hide spinner on number inputs in webkit browsers */
 }
 
+#optionsContent{
+	margin: 0 auto;
+}
+#optionsContent tr{
+	height: 2em;
+}
+#optionsContent td{
+	padding: 0 5px;
+}
+#optionsContent td:first-child{
+	text-align: right;
+}
+
 #download{
 	position: absolute;
 	right: 0;
@@ -893,7 +908,9 @@ Metro!
 Mildly interesting!
 User-friendly!
 Incomplete sentences!
-OP!</div>
+OP!
+wow
+such title</div>
 
 <div id="schedules">8/28/13	31
 8/29/13	40
@@ -1311,19 +1328,32 @@ Conflicts	12:00-2:00</div>
 
 <table id="schedule"></table>
 
-<div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule()">&#8635;</div><!--&#8681;-->
-<div id="version">V0.5.01 (WIP)</div>
-
+<div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule(null,true)">&#8635;</div><!--&#8681;-->
+<div id="version">V0.5.00 (WIP)</div>
 
 <div id="options" onMouseOver="expandOptions()" onMouseOut="contractOptions()">
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
-	<div id="optionsContent">
-		<h2>Options</h2>
-		Update Interval (seconds): <input name="updateScheduleInterval" type="number" min="0" value="60" onchange="setUpdateInterval(this.value)"></input><br />
-		Show passing periods: <input name="showPassingPeriods" type="checkbox" /><br />
-	</div>
+	<h2>Options</h2>
+	<table id="optionsContent">
+		<tr>
+			<td>Update interval (seconds):</td>
+			<td><input name="updateScheduleInterval" type="number" min="0" value="60"></input></td>
+		</tr>
+		<tr>
+			<td>Show passing periods:</td>
+			<td><input name="showPassingPeriods" type="checkbox" checked="checked"></input></td>
+		</tr>
+		<tr>
+			<td>Intercept F5:</td>
+			<td><input name="interceptF5" type="checkbox"></input></td>
+		</tr>
+		<tr>
+			<td>Intercept Ctrl/Cmd-R:</td>
+			<td><input name="interceptCtrlR" type="checkbox"></input></td>
+		</tr>
+	</table>
 	<div id="download">
-		<a href="" title="Download file for offline use">Download</a><br>
+		<a href="https://github.com/iluvredwall/bellschedule/releases" title="Download file for offline use">Download</a><br>
 	</div>
 
 
@@ -1333,15 +1363,16 @@ these will eventually be shown as a tab on the options, or something.
 - Added function to intercept CTRL+R and F5, instead update schedule 
 V0.5.00 (WIP)
 Complete
- - added passing periods
- - reduced redundant (bad) code
- - Added "Back to this Week" Button
-  - Plan to hide it when it is already on the current week 
- - Added auto updating (defaults to one minute)
-  - Plan to properly integrate the interval value in options tab (will probably need JQuery or something similar).
-Planned
  - added options
- - added auto updating of schedule
+  - added passing periods
+  - added auto updating (defaults to one minute)
+ - cleaned up code (reduced redundancy)
+ - added "Back to this Week" Button
+  - plan to hide it when it is already on the current week 
+ - swapped week navigation arrows from characters to HTML character codes for compatibility with GitHub (should really belong in a V0.4.17)
+Planned
+ - options: passing periods
+ - options: intercept f5/ctrl-r
 
 V0.4.16 (3/15/14)
  - added special/alt schedules for April
