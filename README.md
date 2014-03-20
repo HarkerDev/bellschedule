@@ -11,7 +11,7 @@ A (much needed) clean bell schedule web application for Harker students
 
 ### Dev Version
 * **Note: the development version is unstable and may have unintended sideeffects in runtime**
-* [Download the current version of the code](https://github.com/HarkerUtilities/bellschedule/archive/master.zip)
+* [Download](https://github.com/HarkerUtilities/bellschedule/archive/master.zip) the current version of the code
 * Extract the ZIP file to any directory on your computer
 * In the extracted folder, open the index.html file in a browser of your choice (we recommend Mozilla Firefox or Google Chrome) 
 * The schedule will run in your browser until you close the window
