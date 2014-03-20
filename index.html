@@ -44,6 +44,18 @@
 		setHighlightedPeriod();
 	}
 	
+	//updates every second
+	function deleteB(){
+		//alert(document.location.href); 
+		if(document.location.href == "http://iluvredwall.github.io/bellschedule/") {
+			document.getElementById("currWeek").style.visibility='hidden';
+		}
+		else 
+		{
+			document.getElementById("currWeek").style.visibility='visible';
+		}
+	}
+
 	/*
 	 * Parses raw schedule in body of page into schedule array
 	 * Code is questionable
@@ -96,6 +108,9 @@
 			
 			if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 			else document.getElementById("warning").style.display = "none"; //else hide warning
+			
+			if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
+			else document.getElementById("currWeek").style.display = "inline"; //else show the button
 
 			while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
 			
@@ -207,7 +222,6 @@
 		urlParams = {};
 		while (match = search.exec(query))
 		   urlParams[decode(match[1])] = decode(match[2]);
-		   
 		return urlParams;
 /* alternatively...
 		(function(a) {
@@ -231,7 +245,7 @@
 		if(date.getDay()>=6) date.setDate(date.getDate()+1); //set date to next Sunday if today is Saturday
 		else date.setDate(date.getDate()-date.getDay()); //else set date Sunday of this week
 		date.setHours(0,0,0,0); //set to beginning of day
-		return;
+		return date;
 	}
 	
 	/*
@@ -374,6 +388,7 @@
 		delete urlParams["m"];
 		delete urlParams["d"];
 		delete urlParams["y"];
+		
 		updateSearch(week);
 	}
 	
@@ -1318,7 +1333,7 @@ Conflicts	12:00-2:00</div>
 <!---<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
 	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
 </h2></div>--->
-<input type="button" value="Current Week" title = "Current Week" onclick="goCurrWeek()">
+<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">
 
 <!--- 
 <input type="button" value="Refresh" title = "Reload Page" onclick="reloadPage()">
@@ -1365,14 +1380,12 @@ V0.5.00 (WIP)
 Complete
  - added options
   - added passing periods
+  - added ability to override f5/ctrl-r as refresh and instead just update the schedule
   - added auto updating (defaults to one minute)
  - cleaned up code (reduced redundancy)
  - added "Back to this Week" Button
-  - plan to hide it when it is already on the current week 
+  - hidden when the page is already on the current week 
  - swapped week navigation arrows from characters to HTML character codes for compatibility with GitHub (should really belong in a V0.4.17)
-Planned
- - options: passing periods
- - options: intercept f5/ctrl-r
 
 V0.4.16 (3/15/14)
  - added special/alt schedules for April
