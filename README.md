@@ -3,10 +3,18 @@
 A (much needed) clean bell schedule web application for Harker students
 
 ## Usage
-* Go to [the Github IO page](http://iluvredwall.github.io/bellschedule/) to access the schedule
+### Stable Version
+* Go to [the Github IO page](http://harkerutilities.github.io/bellschedule/) to access the schedule
 * Click the left and right arrows to switch between weeks
 * Periods are highlighted as the day progresses
 * Time left until the current period is over is displayed in small, bold text underneath the general period title
+
+### Dev Version
+* **Note: the development version is unstable and may have unintended sideeffects in runtime**
+* [Download](https://github.com/HarkerUtilities/bellschedule/archive/master.zip) the current version of the code
+* Extract the ZIP file to any directory on your computer
+* In the extracted folder, open the index.html file in a browser of your choice (we recommend Mozilla Firefox or Google Chrome) 
+* The schedule will run in your browser until you close the window
 
 ## To Do
 Bold tasks are currently being worked on.
