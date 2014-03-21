@@ -23,6 +23,9 @@ Bold tasks are currently being worked on.
  * update checking for new versions (offline support too)
  * suspend updateInterval while tab is not visible; updateSchedule when tab is changed to vissible
  * improve handling different resolutions
+ * better touchscreen support? (can't read tooltips)
+ * show only current day (mainly useful for phones)
+ * changelog tab
 * ~~"back to this week" button~~
  * ~~Hide on current week~~
  * Integrate better with change week buttons (somehow)
