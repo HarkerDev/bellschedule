@@ -43,18 +43,6 @@
 		setDispWeek();
 		setHighlightedPeriod();
 	}
-	
-	//updates every second
-	function deleteB(){
-		//alert(document.location.href); 
-		if(document.location.href == "http://iluvredwall.github.io/bellschedule/") {
-			document.getElementById("currWeek").style.visibility='hidden';
-		}
-		else 
-		{
-			document.getElementById("currWeek").style.visibility='visible';
-		}
-	}
 
 	/*
 	 * Parses raw schedule in body of page into schedule array
@@ -108,10 +96,10 @@
 			
 			if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 			else document.getElementById("warning").style.display = "none"; //else hide warning
-			
+			/*
 			if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
 			else document.getElementById("currWeek").style.display = "inline"; //else show the button
-
+			*/
 			while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
 			
 			var week = schedule.insertRow(-1); //create new week (row)
@@ -632,63 +620,6 @@ a{
 	font-weight: bold;
 }
 
-<!---Formatting changed as of commit 19 on 3172014, so this isn't used anymore--->
-#currWeek{
-	float: center;
-	cursor: pointer;
-	padding: 0 12px;
-	font-weight: normal;
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
-	background-color:#ededed;
-	-webkit-border-top-left-radius:6px;
-	-moz-border-radius-topleft:6px;
-	border-top-left-radius:6px;
-	-webkit-border-top-right-radius:6px;
-	-moz-border-radius-topright:6px;
-	border-top-right-radius:6px;
-	-webkit-border-bottom-right-radius:6px;
-	-moz-border-radius-bottomright:6px;
-	border-bottom-right-radius:6px;
-	-webkit-border-bottom-left-radius:6px;
-	-moz-border-radius-bottomleft:6px;
-	border-bottom-left-radius:6px;
-	text-indent:0;
-	border:1px solid #dcdcdc;
-	display:inline-block;
-	color:#000000;
-	font-family:Arial;
-	font-size:15px;
-	font-weight:normal;
-	font-style:normal;
-	height:16px;
-	line-height:16px;
-	width:155px;
-	text-decoration:none;
-	text-align:center;
-	text-shadow:1px 1px 0px #ffffff;
-}
-#currWeek:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
-	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
-	background-color:#dfdfdf;
-}
-#currWeek:active {
-	position:relative;
-	top:1px;
-}
-#currWeekWrapper {
-	margin: 15px auto 5px;
-	max-width: 400px;
-	width: 50%;
-}
-<!---Formatting changes end here--->
-
 #warning{
 	display:none;
 	margin-bottom: 5px;
@@ -838,14 +769,18 @@ table{
 #optionsContent tr{
 	height: 2em;
 }
-#optionsContent td{
-	padding: 0 5px;
+#optionsContent th{
+	padding: 15px 0 5px;
 }
 #optionsContent td:first-child{
+	padding-right: 15px;
 	text-align: right;
 }
+.tooltipIndicator{
+	text-decoration: underline;
+}
 
-#download{
+#repo{
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -892,6 +827,7 @@ No easter eggs!
 Unofficial!
 HHMS + PCR
 Hosted on GitHub!
+Open source!
 Now with favicon!
 Not completely inefficient!
 Tested in Chrome!
@@ -925,7 +861,8 @@ User-friendly!
 Incomplete sentences!
 OP!
 wow
-such title</div>
+such title
+Now with options!</div>
 
 <div id="schedules">8/28/13	31
 8/29/13	40
@@ -1333,59 +1270,62 @@ Conflicts	12:00-2:00</div>
 <!---<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
 	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
 </h2></div>--->
-<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">
-
-<!--- 
-<input type="button" value="Refresh" title = "Reload Page" onclick="reloadPage()">
---->
+<!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
 
 <div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
 
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule(null,true)">&#8635;</div><!--&#8681;-->
-<div id="version">V0.5.00 (WIP)</div>
+<div id="version">V1.0.00</div>
 
 <div id="options" onMouseOver="expandOptions()" onMouseOut="contractOptions()">
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
 	<h2>Options</h2>
 	<table id="optionsContent">
+		<tr><th colspan="2">General</th></tr>
 		<tr>
-			<td>Update interval (seconds):</td>
+			<td>Automatic update interval (seconds):</td>
 			<td><input name="updateScheduleInterval" type="number" min="0" value="60"></input></td>
 		</tr>
 		<tr>
 			<td>Show passing periods:</td>
 			<td><input name="showPassingPeriods" type="checkbox" checked="checked"></input></td>
 		</tr>
+		
+		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13(Only really useful with automatic updating disabled.)">
+			Override refresh <sup class="tooltipIndicator">?</sub>
+		</span></th></tr>
 		<tr>
-			<td>Intercept F5:</td>
+			<td>Override F5:</td>
 			<td><input name="interceptF5" type="checkbox"></input></td>
 		</tr>
 		<tr>
-			<td>Intercept Ctrl/Cmd-R:</td>
+			<td>Override Ctrl/Cmd-R:</td>
 			<td><input name="interceptCtrlR" type="checkbox"></input></td>
 		</tr>
 	</table>
-	<div id="download">
-		<a href="https://github.com/iluvredwall/bellschedule/releases" title="Download file for offline use">Download</a><br>
+	<div id="repo">
+		<a href="https://github.com/HarkerUtilities/bellschedule" target="_blank" title="GitHub repository">View repository on GitHub</a><br>
 	</div>
 
 
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
 
-- Added function to intercept CTRL+R and F5, instead update schedule 
-V0.5.00 (WIP)
-Complete
+V1.0.01 (WIP)
+ - added "Back to this Week" Button
+  - hidden when the page is already on the current week
+
+V1.0.00 (3/20/14)
  - added options
   - added passing periods
   - added ability to override f5/ctrl-r as refresh and instead just update the schedule
   - added auto updating (defaults to one minute)
+  - added link to GitHub repository
  - cleaned up code (reduced redundancy)
- - added "Back to this Week" Button
-  - hidden when the page is already on the current week 
  - swapped week navigation arrows from characters to HTML character codes for compatibility with GitHub (should really belong in a V0.4.17)
+ - added a few more title titles; changed "Hosted on Google Drive!" to "Hosted on GitHub!"
 
 V0.4.16 (3/15/14)
  - added special/alt schedules for April
