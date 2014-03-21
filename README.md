@@ -4,27 +4,25 @@ A (much needed) clean bell schedule web application for Harker students
 
 ## Usage
 ### Stable Version
-* Go to [the Github IO page](http://harkerutilities.github.io/bellschedule/) to access the schedule
+* Go to [the Github IO page](http://harkerdev.github.io/bellschedule/) to access the schedule
 * Click the left and right arrows to switch between weeks
 * Periods are highlighted as the day progresses
 * Time left until the current period is over is displayed in small, bold text underneath the general period title
 
 ### Dev Version
 * **Note: the development version is unstable and may have unintended sideeffects in runtime**
-* [Download](https://github.com/HarkerUtilities/bellschedule/archive/master.zip) the current version of the code
+* [Download](https://github.com/HarkerDev/bellschedule/archive/master.zip) the current version of the code
 * Extract the ZIP file to any directory on your computer
-* In the extracted folder, open the index.html file in a browser of your choice (we recommend Mozilla Firefox or Google Chrome) 
-* The schedule will run in your browser until you close the window
+* In the extracted folder, open the index.html file in a browser of your choice (we recommend Mozilla Firefox or Google Chrome)
+* The schedule will run in your browser until you close the tab
 
 ## To Do
 Bold tasks are currently being worked on.
 * doge mode
 * ~~options~~
- * **options for intercept f5/ctrl-r**
  * update checking for new versions (offline support too)
- * suspend updateInterval while tab is not visible; updateSchedule when tab is changed to visible
- * **option for passing periods**
- * ~~dynamically update with time setting/disable~~
+ * suspend updateInterval while tab is not visible; updateSchedule when tab is changed to vissible
+ * improve handling different resolutions
 * ~~"back to this week" button~~
  * ~~Hide on current week~~
  * Integrate better with change week buttons (somehow)
