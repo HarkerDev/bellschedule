@@ -4,22 +4,9 @@
 <head>
 
 <link rel="shortcut icon" href="favicon.ico">
-<title>Bell Schedule</title>
+<title>Bell Schedule (dev)</title>
 
 <script type="text/javascript">
-	/* todo:
-		p5 always first col
-		options (save in localStorage)
-			intercept f5/ctrl-r
-		update check (offline too)
-		passing periods
-		dynamically update
-			time setting/disable
-		"back to this week" button
-		
-		current task: options (update timer interval)
-	*/
-	
 	//warning: I left debug code everywhere, and much of this is still pretty messy.
 	
 	/*
@@ -29,7 +16,10 @@
 	var urlParams; //object with GET variables as properties and their respective values as values
 	var schedules; //array of schedules (each schedule is an array in this array
 	var dispWeek; //Sunday of week currently being displayed by the schedule
+	//var updateScheduleInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
+	var updateScheduleID; //ID of interval of updateSchedule
 	
+	var options = new Object();
 	
 	/*
 	 * Event listener for navigating through history.
@@ -40,39 +30,26 @@
 	});
 	
 	/*
-	 * Event listener for catching F5 and updating schedule instead of refreshing
-	 *
-	document.addEventListener("keydown", function(event) {
-		if ((event.which||event.keyCode) == 116)
-			event.preventDefault(); //stop refresh
-			updateSchedule();
-	});
-	*/
-	
-	/*
 	 * Parses schedules, creates schedule for correct week, sets title title (runs on page load)
 	 */
 	function init(){
-		//attachOptionSaving();
-		//loadOptions();
+		attachOptionSaving();
+		attachOptionActions();
 		
 		setTitleTitle();
 		
 		parseRawSchedule();
-		
-		loadOptions();
-		
-		setSchedule();
-		highlightSchedule();
+
+		setDispWeek();
+		setHighlightedPeriod();
 	}
-	
+
 	/*
 	 * Parses raw schedule in body of page into schedule array
 	 * Code is questionable
 	 */
 	function parseRawSchedule(){
 		var rawSchedules=document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
-		
 		schedules = new Array();
 		var x=0; //index in schedules
 		schedules[0] = new Array(); //create array of special schedule days
@@ -98,7 +75,7 @@
 	/*
 	 * Displays schedule of the week of the given date/time
 	 */
-	function setSchedule(time){
+	function setDispWeek(time,force){
 		if(!time){
 			time = new Date(); //set default time to now
 			
@@ -109,21 +86,20 @@
 			if(!isNaN(urlParams["w"])) time.setDate(time.getDate() + urlParams["w"]*7);
 		}
 		
-		var schedule =  document.getElementById("schedule"); //get schedule table
-		
-		curWeek = new Date(); //get Sunday of this week
-		getSunday(curWeek);
-		
 		var date = new Date(time); //variable to keep track of current day in loop
 		getSunday(date);
 		
-		if(!dispWeek || (date.valueOf()!=dispWeek.valueOf())){
-			dispWeek = new Date(time);
-			getSunday(dispWeek);
+		if(force || !dispWeek || (date.valueOf()!=dispWeek.valueOf())){
+			var schedule = document.getElementById("schedule"); //get schedule table
 			
-			if(date>curWeek) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
+			dispWeek = new Date(date);
+			
+			if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 			else document.getElementById("warning").style.display = "none"; //else hide warning
-			
+			/*
+			if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
+			else document.getElementById("currWeek").style.display = "inline"; //else show the button
+			*/
 			while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
 			
 			var week = schedule.insertRow(-1); //create new week (row)
@@ -158,10 +134,12 @@
 						var start = periodTime.substring(0,periodTime.indexOf("-"));
 						var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
 						
-						/*var passing = document.createElement("div");
-						passing.classList.add("period");
-						createPeriod(passing,"",prevEnd,start,date);
-						col.appendChild(passing);*/
+						if(options.showPassingPeriods){
+							var passing = document.createElement("div");
+							passing.classList.add("period");
+							createPeriod(passing,"",prevEnd,start,date);
+							col.appendChild(passing);
+						}
 						
 						prevEnd = end;
 						
@@ -232,7 +210,6 @@
 		urlParams = {};
 		while (match = search.exec(query))
 		   urlParams[decode(match[1])] = decode(match[2]);
-		   
 		return urlParams;
 /* alternatively...
 		(function(a) {
@@ -256,7 +233,7 @@
 		if(date.getDay()>=6) date.setDate(date.getDate()+1); //set date to next Sunday if today is Saturday
 		else date.setDate(date.getDate()-date.getDay()); //else set date Sunday of this week
 		date.setHours(0,0,0,0); //set to beginning of day
-		return;
+		return date;
 	}
 	
 	/*
@@ -334,10 +311,12 @@
 				date);
 		parent.appendChild(p1);
 		
-		/*var lunchPassing = document.createElement("div");
-		lunchPassing.classList.add("period");
-		createPeriod(lunchPassing,"",end1,start2,date);
-		parent.appendChild(lunchPassing);*/
+		if(options.showPassingPeriods){
+			var lunchPassing = document.createElement("div");
+			lunchPassing.classList.add("period");
+			createPeriod(lunchPassing,"",end1,start2,date);
+			parent.appendChild(lunchPassing);
+		}
 		
 		var p2 = document.createElement("div");
 		p2.classList.add("period");
@@ -387,6 +366,21 @@
 		updateSearch(week);
 	}
 	/*
+	 * Navigates schedule to current week.
+	 */
+	function goCurrWeek(){
+		var week = new Date(); //The current week.
+		updateSchedule(week);
+		
+		delete urlParams["w"];
+		delete urlParams["m"];
+		delete urlParams["d"];
+		delete urlParams["y"];
+		
+		updateSearch(week);
+	}
+	
+	/*
 	 * Updates GET variables to those in urlParams, pushes history state
 	 */
 	function updateSearch(week){
@@ -402,7 +396,7 @@
 	/*
 	 * Highlights given date/time on the schedule; defaults to now if none is given
 	 */
-	function highlightSchedule(time){
+	function setHighlightedPeriod(time){
 		//set default time argument
 		if(!time) time = Date.now();
 		
@@ -458,15 +452,10 @@
 	/*
 	 * Updates schedule to display as it would on the given date/time; defaults to now if none is given
 	 */
-	function updateSchedule(time){
-		var sunday = new Date(time);
-		getSunday(sunday);
+	function updateSchedule(time,force){
+		setDispWeek(time,force);
 		
-		if(sunday.valueOf() != dispWeek.valueOf()){
-			setSchedule(time);
-		}
-		
-		highlightSchedule();
+		setHighlightedPeriod();
 	}
 	
 	function expandOptions(){
@@ -488,29 +477,74 @@
 	
 	
 	function attachOptionSaving(){
-		var options = document.getElementById("options");
-		var inputs = options.getElementsByTagName("input");
-		//var textBoxes = options.getElementsByTagName("textbox");
-		blah=(inputs);
+		var inputs = document.getElementById("options").getElementsByTagName("input");
+		
 		for(var i=0; i<inputs.length; i++) {
 			var input = inputs[i];
-			if(input.type=="checkbox")
+			//special cases because localStorage saves values as strings
+			if(input.type=="checkbox") {											//booleans
 				input.addEventListener("change", function(event) {
-					console.log(event.target.checked);
-					asdf=event;
+					options[event.target.name] = localStorage[event.target.name] = event.target.checked;
 				});
-			else
+				
+				if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
+				else options[input.name] = localStorage[input.name] = input.checked;
+			} else if(input.type=="number") {										//numbers
 				input.addEventListener("change", function(event) {
-					console.log(event.target.value);
-					asdf=event;
+					options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
 				});
+				
+				if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
+				else options[input.name] = parseInt(localStorage[input.name] = input.value);
+			} else {																//strings
+				input.addEventListener("change", function(event) {
+					options[event.target.name] = localStorage[event.target.name] = event.target.value;
+				});
+				
+				if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
+				else options[input.name] = localStorage[input.name] = input.value;
+			}
 		}
 	}
 	
-	function loadOptions(){
+	function attachOptionActions(){
+		setUpdateInterval(options.updateScheduleInterval);
 		
+		document.getElementsByName("updateScheduleInterval")[0].addEventListener("change", function(event) {
+			setUpdateInterval(event.target.value);
+		});
+		document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
+			updateSchedule(null,true);
+		});
+		
+		document.addEventListener("keydown", function(event) {
+			switch (event.keyCode){ 
+				case 116 : //F5
+					if(options.interceptF5){ //enabled
+						event.preventDefault();
+						updateSchedule();
+					}
+					break;
+				case 82 : //R key
+					if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){ //enabled and control/cmd (meta)
+						event.preventDefault();
+						updateSchedule();
+					}
+					break;
+			}
+		});
 	}
 	
+	/*
+	* Updates the interval for automatically refreshing the page.
+	* seconds is the new interval in seconds.
+	*/
+	function setUpdateInterval(seconds) {
+		window.clearInterval(updateScheduleID);
+		if(seconds>0)
+			updateScheduleID = window.setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
+		else updateScheduleID = null;
+	}
 </script>
 
 <style>
@@ -552,6 +586,7 @@ a{
 	max-width: 400px;
 	width: 50%;
 }
+
 #title{
 	display: inline;
 	/*-webkit-touch-callout: initial;*/
@@ -728,7 +763,24 @@ table{
 	display: none; /* hide spinner on number inputs in webkit browsers */
 }
 
-#download{
+#optionsContent{
+	margin: 0 auto;
+}
+#optionsContent tr{
+	height: 2em;
+}
+#optionsContent th{
+	padding: 15px 0 5px;
+}
+#optionsContent td:first-child{
+	padding-right: 15px;
+	text-align: right;
+}
+.tooltipIndicator{
+	text-decoration: underline;
+}
+
+#repo{
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -774,7 +826,8 @@ Randomly chosen text!
 No easter eggs!
 Unofficial!
 HHMS + PCR
-Hosted on Google Drive!
+Hosted on GitHub!
+Open source!
 Now with favicon!
 Not completely inefficient!
 Tested in Chrome!
@@ -806,7 +859,10 @@ Metro!
 Mildly interesting!
 User-friendly!
 Incomplete sentences!
-OP!</div>
+OP!
+wow
+such title
+Now with options!</div>
 
 <div id="schedules">8/28/13	31
 8/29/13	40
@@ -1211,42 +1267,67 @@ Conflicts	12:00-2:00</div>
 	<div id="title">Bell Schedule</div>
 </h1></div>
 
+<!---<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
+	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
+</h2></div>--->
+<!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
+
 <div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
 
 <table id="schedule"></table>
 
-<div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule()">&#8635;</div><!--&#8681;-->
-<div id="version">V0.4.16</div>
+<div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule(null,true)">&#8635;</div><!--&#8681;-->
+<div id="version">V1.0.00</div>
 
-<!--
 <div id="options" onMouseOver="expandOptions()" onMouseOut="contractOptions()">
 	<div id="optionsArrow" class="noHighlight" onClick="toggleOptions()">&#8598;</div>
-	<div id="optionsContent">
-		<h2>Options</h2>
-		Refresh Interval (in seconds): <input name="updateTime" type="number" min="0" value="60"></input><br />
-		Show passing periods: <input name="showPassingPeriods" type="checkbox" /><br />
+	<h2>Options</h2>
+	<table id="optionsContent">
+		<tr><th colspan="2">General</th></tr>
+		<tr>
+			<td>Automatic update interval (seconds):</td>
+			<td><input name="updateScheduleInterval" type="number" min="0" value="60"></input></td>
+		</tr>
+		<tr>
+			<td>Show passing periods:</td>
+			<td><input name="showPassingPeriods" type="checkbox" checked="checked"></input></td>
+		</tr>
+		
+		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13(Only really useful with automatic updating disabled.)">
+			Override refresh <sup class="tooltipIndicator">?</sub>
+		</span></th></tr>
+		<tr>
+			<td>Override F5:</td>
+			<td><input name="interceptF5" type="checkbox"></input></td>
+		</tr>
+		<tr>
+			<td>Override Ctrl/Cmd-R:</td>
+			<td><input name="interceptCtrlR" type="checkbox"></input></td>
+		</tr>
+	</table>
+	<div id="repo">
+		<a href="https://github.com/HarkerUtilities/bellschedule" target="_blank" title="GitHub repository">View repository on GitHub</a><br>
 	</div>
-	<div id="download">
-		<a href="https://doc-0g-50-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/7f3h3el3h0vlh0ad0q3akcq74phfgbs9/1383328800000/14427671545047426503/*/0BxlKW46OOILyaGtWa1g5TXRNYlU?h=16653014193614665626&e=download" title="Download file for offline use">Download</a><br>
-	</div>
--->
+
 
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
 
-V0.5.00 (WIP)
-Complete
- - added passing periods
- - reduced redundant (bad) code
-Planned
+V1.0.01 (WIP)
+ - added "Back to this Week" Button
+  - hidden when the page is already on the current week
+
+V1.0.00 (3/20/14)
  - added options
- - added auto updating of schedule
+  - added passing periods
+  - added ability to override f5/ctrl-r as refresh and instead just update the schedule
+  - added auto updating (defaults to one minute)
+  - added link to GitHub repository
+ - cleaned up code (reduced redundancy)
+ - swapped week navigation arrows from characters to HTML character codes for compatibility with GitHub (should really belong in a V0.4.17)
+ - added a few more title titles; changed "Hosted on Google Drive!" to "Hosted on GitHub!"
 
 V0.4.16 (3/15/14)
- - added order to split periods (P5 is now always on the left half and P6 on the right)
- - added start and end times for lunches to lunch periods
- - lunches are currently 5px larger than they should be; this will be fixed when passing periods are enabled
- - fixed lunches and P5/6 being flipped on schedule 2 (reg. Tuesday)
  - added special/alt schedules for April
   - Wed 4/2: 31 (Alt for ASB Speeches (G9-11) and Mr. Keller presentation (G12))
   - Fri 4/4: 51 (Alt for assembly)
@@ -1256,6 +1337,7 @@ V0.4.16 (3/15/14)
   - Wed 4/23: 31 (Alt for Student Council speeches (G9-11) and graduation items (G12))
  - fixed spring break only lasting a single day
  - identified schedule 4??? (it's 45) and updated previous schedule on 10/17/13 accordingly
+ - fixed lunches and P5/6 being flipped on schedule 2 (reg. Tuesday)
  - refactored lunch code to reduce redundancy
 
 V0.4.15 (3/9/14)
