@@ -7,6 +7,7 @@
 <title>Bell Schedule (dev)</title>
 
 <script src="script.js"></script>
+<script src="doge.js"></script>
 
 <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -506,6 +507,12 @@ Conflicts	12:00-2:00</div>
 			<td>Override Ctrl/Cmd-R:</td>
 			<td><input name="interceptCtrlR" type="checkbox"></input></td>
 		</tr>
+		
+		<tr><th colspan="2">Miscellaneous</th></tr>
+		<tr>
+			<td>Doge mode:</td>
+			<td><input name="enableDoge" type="checkbox" checked="checked"></input></td>
+		</tr>
 	</table>
 	<div id="repo">
 		<a href="https://github.com/HarkerUtilities/bellschedule" target="_blank" title="GitHub repository">View repository on GitHub</a><br>
@@ -516,9 +523,12 @@ Conflicts	12:00-2:00</div>
 these will eventually be shown as a tab on the options, or something.
 
 V1.0.01 (WIP)
+ - added doge mode
  - added "Back to this Week" Button
   - hidden when the page is already on the current week
- - arrow keys now will switch the displayed week
+ - added more keyboard shortcuts
+  - left/right arrow keys go to prev/next week
+  - down arrow key goes to current week
 
 V1.0.00 (3/20/14)
  - added options

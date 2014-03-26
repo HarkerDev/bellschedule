@@ -16,7 +16,7 @@ var options = new Object();
  * Event listener for navigating through history.
  * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
-window.addEventListener("popstate", function(event) {
+addEventListener("popstate", function(event) {
 	updateSchedule(event.state);
 });
 
@@ -33,6 +33,7 @@ function init(){
 
 	setDispWeek();
 	setHighlightedPeriod();
+	
 }
 
 /*
@@ -196,7 +197,7 @@ function getUrlParams(){
 		pl     = /\+/g,  // Regex for replacing addition symbol with a space
 		search = /([^&=]+)=?([^&]*)/g,
 		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query  = window.location.search.substring(1);
+		query  = location.search.substring(1);
 
 	urlParams = {};
 	while (match = search.exec(query))
@@ -213,7 +214,7 @@ function getUrlParams(){
 			b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
 		}
 		return b;
-	})(window.location.search.substr(1).split('&'));
+	})(location.search.substr(1).split('&'));
 */
 }
 
@@ -500,7 +501,6 @@ function attachOptionSaving(){
 
 function attachOptionActions(){
 	setUpdateInterval(options.updateScheduleInterval);
-	
 	document.getElementsByName("updateScheduleInterval")[0].addEventListener("change", function(event) {
 		setUpdateInterval(event.target.value);
 	});
@@ -522,7 +522,21 @@ function attachOptionActions(){
 					updateSchedule();
 				}
 				break;
+			case 37 : //Left arrow
+				goLastWeek();
+			break;
+			case 39 : //Right arrow
+				goNextWeek();
+			break;
+			case 40 :
+				goCurrWeek();
+			break;
 		}
+	});
+	
+	setDoge(options.enableDoge);
+	document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
+		setDoge(event.target.checked);
 	});
 }
 
@@ -531,8 +545,8 @@ function attachOptionActions(){
 * seconds is the new interval in seconds.
 */
 function setUpdateInterval(seconds) {
-	window.clearInterval(updateScheduleID);
+	clearInterval(updateScheduleID);
 	if(seconds>0)
-		updateScheduleID = window.setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
+		updateScheduleID = setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
 	else updateScheduleID = null;
 }
