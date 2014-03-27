@@ -8,6 +8,7 @@
 body{
 	font: 12px "Segoe UI", "Arial", sans-serif;
 	text-align: center;
+	background-position-x: center;
 }
 
 h2{
@@ -82,6 +83,7 @@ table{
 #schedule{
 	margin: auto;
 	height: 300px;
+	background-color: rgba(255,255,255,.5)
 }
 
 #schedule td{
@@ -116,7 +118,7 @@ table{
 }
 .headWrapper{
 	height: inherit;
-}
+}rgba(128,128,128,.75)
 .headDate{
 	font-size: .8em;
 }
@@ -125,14 +127,14 @@ table{
 }
 
 #today .period, #today .head{
-	background-color: #ddd;
+	background-color: rgba(208,208,208,.75); /* looks like #ddd on white background */
 }
 #today .head{
 	font-weight: bold;
 }
 
 .now{
-	background: #999;
+	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
 }
 
 #today.halloween .period, #today.halloween .head{
@@ -187,6 +189,7 @@ table{
 	color: #333;
 	transition: right .5s, bottom .5s;
 	-webkit-transition: right .5s, bottom .5s;
+	z-index: 10;
 }
 #options.optionsExpanded{
 	right: 0;

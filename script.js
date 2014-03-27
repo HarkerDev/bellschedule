@@ -21,10 +21,10 @@ addEventListener("popstate", function(event) {
 });
 
 /*
- * Parses schedules, creates schedule for correct week, sets title title (runs on page load)
+ * Parses schedules, creates schedule for correct week, sets title title on page load
  */
-function init(){
-	attachOptionSaving();
+addEventListener("load", function(event) {
+	initOptions();
 	attachOptionActions();
 	
 	setTitleTitle();
@@ -34,7 +34,7 @@ function init(){
 	setDispWeek();
 	setHighlightedPeriod();
 	
-}
+});
 
 /*
  * Parses raw schedule in body of page into schedule array
@@ -466,10 +466,14 @@ function toggleOptions(){
 	else expandOptions();
 }
 
-
-
-function attachOptionSaving(){
-	var inputs = document.getElementById("options").getElementsByTagName("input");
+function initOptions(){
+	var opt = document.getElementById("options");
+	opt.addEventListener("mouseover", expandOptions);
+	opt.addEventListener("mouseout", contractOptions);
+	
+	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
+	
+	var inputs = opt.getElementsByTagName("input");
 	
 	for(var i=0; i<inputs.length; i++) {
 		var input = inputs[i];
