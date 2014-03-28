@@ -1,6 +1,6 @@
 var suchArray = ["such","very","much","many","so"];
 
-var nounArray = ["schedule","time","date","table","class","lines","title","color"];
+var nounArray = ["schedule","time","date","table","class","periods","lines","title","color","day"];
 
 var suchDelay = 2000;	//delay between adding new div in ms
 var maxDoge = 5;		//max number of dogeDivs
@@ -17,8 +17,8 @@ function setDogeMax(max) { maxDoge = max; }
 function startDoge(delay) {
 	document.body.style.backgroundImage = "url('doge.jpg')";
 	
-	suchIntervalID = setInterval("swapDoge()", delay);
-	swapDoge();
+	suchIntervalID = setInterval("swapDogeDiv()", delay);
+	swapDogeDiv();
 }
 
 function stopDoge() {
@@ -28,40 +28,48 @@ function stopDoge() {
 	suchIntervalID = null;
 	
 	var doge = document.getElementsByClassName("doge");
-	while(doge.length > 0) document.body.removeChild(doge[0]);
+	for(var i=0;i<doge.length;i++) removeDogeDiv(doge[i]);
 }
 
-function createDoge() {	
-	var div = document.createElement("div");
+function createDogeDiv() {
+	var dogeDiv = document.createElement("div");
 	var text = document.createTextNode(Math.random()<.1 ? "wow" : (choose(suchArray) + " " + choose(nounArray)));
 	
-	div.classList.add("doge");
-	div.appendChild(text);
+	dogeDiv.classList.add("doge");
+	dogeDiv.appendChild(text);
 	
-	div.style.font = "bold " + randInt(15,50) + "px 'Comic Sans MS'";
-	div.style.color = "hsl(" + randInt(360) + ",100%,50%)";
-	div.style.transform = div.style.webkitTransform = "rotate(" + randInt(-30,30) + "deg)";
+	dogeDiv.style.font = "bold " + randInt(15,50) + "px 'Comic Sans MS'";
+	dogeDiv.style.color = "hsl(" + randInt(360) + ",100%,50%)";
+	dogeDiv.style.transform = dogeDiv.style.webkitTransform = "rotate(" + randInt(-30,30) + "deg)";
 	
-	div.style.position = "absolute";
-	div.style.visibility = "hidden"; //render invisible once to calculate width/height
+	dogeDiv.style.position = "absolute";
+	dogeDiv.style.opacity = "0"; //render invisible once to calculate width/height
+	dogeDiv.style.transition = dogeDiv.style.webkitTransition = "opacity .2s";
 	
-	document.body.appendChild(div);
+	document.body.appendChild(dogeDiv);
 	
 	/* 
-	 * randomize position, but make sure div doesn't overflow off right/bottom of window
-	 * all the divide by 2 nonsense accounts for rotation
+	 * randomize position, but make sure dogeDiv doesn't overflow off right/bottom of window
+	 * all the dogeDivide by 2 nonsense accounts for rotation
 	 *     (length of a side of a triangle must be less than the sum of the lengths of the other two sides)
 	 */
-	div.style.top = randInt(div.offsetWidth/2, window.innerHeight-div.offsetHeight-div.offsetWidth/2) + "px";
-	div.style.left = randInt(div.offsetHeight/2, window.innerWidth-div.offsetWidth-div.offsetHeight/2) + "px";
-	div.style.visibility = "visible";
+	dogeDiv.style.top = randInt(dogeDiv.offsetWidth/2, window.innerHeight-dogeDiv.offsetHeight-dogeDiv.offsetWidth/2) + "px";
+	dogeDiv.style.left = randInt(dogeDiv.offsetHeight/2, window.innerWidth-dogeDiv.offsetWidth-dogeDiv.offsetHeight/2) + "px";
+	dogeDiv.style.opacity = "1";
 }
 
-function swapDoge() {
+function removeDogeDiv(dogeDiv) {
+	if(dogeDiv.style.opacity != "0") { //don't remove div that's already disappearing
+		dogeDiv.style.opacity = "0";
+		setTimeout(function() {document.body.removeChild(dogeDiv);}, 1000); //wait a second to let fade animation finish
+	}
+}
+
+function swapDogeDiv() {
 	var doges = document.getElementsByClassName("doge")
 	if(doges.length >= maxDoge)
-		document.body.removeChild(choose(doges));
-	createDoge();
+		removeDogeDiv(choose(doges));
+	createDogeDiv();
 }
 
 function choose(array) {
