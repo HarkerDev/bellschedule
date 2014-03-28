@@ -9,8 +9,17 @@ var schedules; //array of schedules (each schedule is an array in this array
 var dispWeek; //Sunday of week currently being displayed by the schedule
 //var updateScheduleInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
 var updateScheduleID; //ID of interval of updateSchedule
-
+var isActive;
 var options = new Object();
+
+//toggles activity
+window.onfocus = function () { 
+  isActive = true; 
+}; 
+
+window.onblur = function () { 
+  isActive = false; 
+}; 
 
 /*
  * Event listener for navigating through history.
