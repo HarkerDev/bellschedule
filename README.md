@@ -38,3 +38,8 @@ Bold tasks are currently being worked on.
 2. **Fork this Repository**: fork either the main or development branches to your account
 3. **Make the Changes**: make proposed changes on your fork
 4. **Submit a Pull Request**: submit a pull request, then we'll review the changes and accept them if applicable
+
+## Founders and Primary Contributors
+* (Brian Chan)[www.github.com/iluvredwall]
+* (Manan Shah)[www.github.com/mananshah99]
+* (Andrew Tierno)[www.github.com/andrew-tierno]
