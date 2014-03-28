@@ -19,6 +19,35 @@ window.onfocus = focus;
 window.onblur = hide;
 
 /*
+ * Function to detect whether the page is being displayed on a mobile device. 
+ * Currently checks if the useragent matches one of the common mobile phones:
+ * 	- Android
+ * 	- webOS
+ * 	- iPhone
+ *	- iPad
+ * 	- iPod
+ *  - BlackBerry
+ *  - Windows Phone
+ * and also checks if the window resolution is small enough for the device to be
+ * deemed a mobile device (width <=800 and height <= 600)
+ */
+function isMobile() { 
+ if(navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ )
+ {
+    return true;
+ }
+ else if(window.innerWidth <= 800 && window.innerHeight <= 600) return true;
+ else return false;
+}
+
+/*
  * Event listener for navigating through history.
  * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
