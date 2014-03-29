@@ -24,7 +24,7 @@ addEventListener("visibilityChange", function(event) {
 
 /**
  * Event listener for navigating through history.
- * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
+ * (onload event will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
 addEventListener("popstate", function(event) {
 	updateSchedule(event.state);
@@ -455,10 +455,8 @@ function setHighlightedPeriod(time){
  * Updates schedule to display as it would on the given date/time; defaults to now if none is given
  */
 function updateSchedule(time,force){
-	if(active){
-		setDispWeek(time,force);
-		setHighlightedPeriod();
-	}
+	setDispWeek(time,force);
+	setHighlightedPeriod();
 }
 /**
  * Expands the options div and changes the options arrow to point down and to the right.
