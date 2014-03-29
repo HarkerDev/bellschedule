@@ -1,61 +1,36 @@
 //warning: I left debug code everywhere, and much of this is still pretty messy.
 
-/*
+/**
  * Globals
  */
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
 var urlParams; //object with GET variables as properties and their respective values as values
 var schedules; //array of schedules (each schedule is an array in this array
 var dispWeek; //Sunday of week currently being displayed by the schedule
-//var updateScheduleInterval = 60; //The interval for the automatic update, in seconds. Defaults to one minute.
+
 var updateScheduleID; //ID of interval of updateSchedule
 var options = new Object();
-var active = true;
 
-function focus() { active = true; }
-function hide() { active = false; }
+addEventListener("visibilityChange", function(event) {
+	console.log("event");
+	if(document.hidden)
+		setUpdateInterval(0);
+	else {
+		updateSchedule();
+		setUpdateInterval(options.updateScheduleInterval);
+		console.log("back");
+	}
+});
 
-window.onfocus = focus;
-window.onblur = hide;
-
-/*
- * Function to detect whether the page is being displayed on a mobile device. 
- * Currently checks if the useragent matches one of the common mobile phones:
- * 	- Android
- * 	- webOS
- * 	- iPhone
- *	- iPad
- * 	- iPod
- *  - BlackBerry
- *  - Windows Phone
- * and also checks if the window resolution is small enough for the device to be
- * deemed a mobile device (width <=800 and height <= 600)
- */
-function isMobile() { 
- if(navigator.userAgent.match(/Android/i)
- || navigator.userAgent.match(/webOS/i)
- || navigator.userAgent.match(/iPhone/i)
- || navigator.userAgent.match(/iPad/i)
- || navigator.userAgent.match(/iPod/i)
- || navigator.userAgent.match(/BlackBerry/i)
- || navigator.userAgent.match(/Windows Phone/i)
- )
- {
-    return true;
- }
- else if(window.innerWidth <= 800 && window.innerHeight <= 600) return true;
- else return false;
-}
-
-/*
+/**
  * Event listener for navigating through history.
  * (body.onLoad will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
 addEventListener("popstate", function(event) {
-	updateSchedule(event.state); 
+	updateSchedule(event.state);
 });
 
-/*
+/**
  * Parses schedules, creates schedule for correct week, sets title title on page load
  */
 addEventListener("load", function(event) {
@@ -71,7 +46,7 @@ addEventListener("load", function(event) {
 	
 });
 
-/*
+/**
  * Parses raw schedule in body of page into schedule array
  * Code is questionable
  */
@@ -99,7 +74,7 @@ function parseRawSchedule(){
 	}
 }
 
-/*
+/**
  * Displays schedule of the week of the given date/time
  */
 function setDispWeek(time,force){
@@ -215,7 +190,7 @@ function setDispWeek(time,force){
 	}
 }
 
-/*
+/**
  * Sets the title of the title to a random line from the title titles list
  */
 function setTitleTitle(){
@@ -223,7 +198,7 @@ function setTitleTitle(){
 	document.getElementById("title").title=titles[Math.floor(Math.random()*titles.length)];
 }
 
-/*
+/**
  * Gets GET variables from URL and returns them as properties of an object.
  */
 function getUrlParams(){
@@ -253,7 +228,7 @@ function getUrlParams(){
 */
 }
 
-/*
+/**
  * Sets given date to the Sunday of next week if date is Saturday; else sets date to Sunday of that week
  */
 function getSunday(date){
@@ -263,7 +238,7 @@ function getSunday(date){
 	return date;
 }
 
-/*
+/**
  * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
  * Assumes hours less than 7 are PM and hours 7 or greater are AM.
  */
@@ -274,7 +249,7 @@ function getDateFromString(string,date){
 	return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
 }
 
-/*
+/**
  * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
  * Schedule id index is 0 if not found in schedules.
  */
@@ -295,7 +270,7 @@ function getDayInfo(day){
 	return [day.getDay(),day.getDay(),dateString]; //default schedule for that day
 }
 
-/*
+/**
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
@@ -324,7 +299,7 @@ function createPeriod(parent,name,start,end,date){
 	
 }
 
-/*
+/**
  * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
  */
 function createSubPeriods(parent,name,start1,end1,start2,end2,date){
@@ -358,7 +333,7 @@ function createSubPeriods(parent,name,start1,end1,start2,end2,date){
 	parent.appendChild(p2);
 }
 
-/*
+/**
  * Navigates schedule to previous week.
  */
 function goLastWeek(){
@@ -375,7 +350,7 @@ function goLastWeek(){
 	}
 	updateSearch(week);
 }
-/*
+/**
  * Navigates schedule to next week.
  */
 function goNextWeek(){
@@ -392,7 +367,7 @@ function goNextWeek(){
 	}
 	Search(week);
 }
-/*
+/**
  * Navigates schedule to current week.
  */
 function goCurrWeek(){
@@ -407,7 +382,7 @@ function goCurrWeek(){
 	updateSearch(week);
 }
 
-/*
+/**
  * Updates GET variables to those in urlParams, pushes history state
  */
 function updateSearch(week){
@@ -420,7 +395,7 @@ function updateSearch(week){
 	history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
-/*
+/**
  * Highlights given date/time on the schedule; defaults to now if none is given
  */
 function setHighlightedPeriod(time){
@@ -476,7 +451,7 @@ function setHighlightedPeriod(time){
 	}
 }
 
-/*
+/**
  * Updates schedule to display as it would on the given date/time; defaults to now if none is given
  */
 function updateSchedule(time,force){
@@ -485,23 +460,34 @@ function updateSchedule(time,force){
 		setHighlightedPeriod();
 	}
 }
-
+/**
+ * Expands the options div and changes the options arrow to point down and to the right.
+ */
 function expandOptions(){
 	document.getElementById("options").classList.add("optionsExpanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8600;";
 }
-
+/**
+ * Contracts the options div and changes the options arrow to point up and to the left.
+ */
 function contractOptions(){
 	document.getElementById("options").classList.remove("optionsExpanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8598;";
 }
-
+/**
+ * Toggles the options div between extended and contracted and updates options arrow accordingly.
+ */
 function toggleOptions(){
 	if(document.getElementById("options").classList.contains("optionsExpanded"))
 		contractOptions();
 	else expandOptions();
+	
 }
 
+/**
+ * Initializes automatic option saving and sets options to previously-saved values, if any.
+ * If no previous saved value exists, sets current (default) value as saved value.
+ */
 function initOptions(){
 	var opt = document.getElementById("options");
 	opt.addEventListener("mouseover", expandOptions);
@@ -538,7 +524,9 @@ function initOptions(){
 		}
 	}
 }
-
+/**
+ * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
+ */
 function attachOptionActions(){
 	setUpdateInterval(options.updateScheduleInterval);
 	document.getElementsByName("updateScheduleInterval")[0].addEventListener("change", function(event) {
@@ -580,13 +568,22 @@ function attachOptionActions(){
 	});
 }
 
-/*
-* Updates the interval for automatically refreshing the page.
-* seconds is the new interval in seconds.
-*/
+/**
+ * Updates the interval for automatically refreshing the page.
+ * seconds is the new interval in seconds.
+ */
 function setUpdateInterval(seconds) {
 	clearInterval(updateScheduleID);
 	if(seconds>0)
 		updateScheduleID = setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
 	else updateScheduleID = null;
+}
+
+/**
+ * Function to detect whether the page is being displayed on a mobile device. 
+ * Currently checks if the useragent/vendor matches a regex string for mobile phones.
+ */
+function isMobile() {
+	var a = navigator.userAgent || navigator.vendor || window.opera;
+	return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4));
 }
