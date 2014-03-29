@@ -365,7 +365,7 @@ function goNextWeek(){
 		if(urlParams["w"] == 0)
 			delete urlParams["w"];
 	}
-	Search(week);
+	updateSearch(week);
 }
 /**
  * Navigates schedule to current week.
