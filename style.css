@@ -1,0 +1,261 @@
+@-webkit-keyframes fadeIO {
+	0% {opacity: 0;}
+	30% {opacity: 100%;}
+	70% {opacity: 100%;}
+	100% {opacity: 0;}
+}
+
+body{
+	font: 12px "Segoe UI", "Arial", sans-serif;
+	text-align: center;
+	background-position-x: center;
+}
+
+h2{
+	margin: 0 0 5px;
+}
+
+a{
+	color: #555;
+}
+
+#titleTitles, #schedules, #changelog{
+	display: none;
+}
+
+.noHighlight{
+	/*-webkit-touch-callout: none; (disables context menu on mobile? perhaps this also disables highlighting on mobile?)*/
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#header{
+	margin: 15px auto 5px;
+	max-width: 400px;
+	width: 50%;
+}
+
+#title{
+	display: inline;
+	/*-webkit-touch-callout: initial;*/
+	-webkit-user-select: initial;
+	-khtml-user-select: initial;
+	-moz-user-select: initial;
+	-ms-user-select: initial;
+	user-select: initial;
+}
+
+#leftArrow{
+	float: left;
+}
+#rightArrow{
+	float: right;
+}
+#leftArrow, #rightArrow{
+	cursor: pointer;
+	padding: 0 12px;
+	font-weight: normal; /*asfasdf*/
+	transition: padding .2s;
+	-webkit-transition: padding .2s;
+}
+#leftArrow:hover{
+	padding: 0 20px 0 4px;
+}
+#rightArrow:hover{
+	padding: 0 4px 0 20px;
+}
+#leftArrow:hover, #rightArrow:hover{
+	font-weight: bold;
+}
+
+#warning{
+	display:none;
+	margin-bottom: 5px;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+#schedule{
+	margin: auto;
+	height: 300px;
+	background-color: rgba(255,255,255,.5)
+}
+
+#schedule td{
+	width: 158px;  /* 2px short to account for 2px border */
+	border: 2px solid black;
+	padding: 0 0 15px;
+	vertical-align: top;
+}
+
+.period, .head{
+	width: inherit;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	overflow: hidden;
+	line-height: 110%;
+}
+.periodWrapper, .headWrapper{
+	display: table-cell;
+	width: inherit;
+	border-bottom: 1px solid black;
+	vertical-align: middle;
+}
+.periodLength{
+	font-size: .8em;
+}
+
+.head{
+	height: 50px;
+	border-bottom: 2px solid black;
+	font-size: 16px;
+}
+.headWrapper{
+	height: inherit;
+}
+.headDate{
+	font-size: .8em;
+}
+.headSchedId{
+	font-size: .7em;
+}
+
+#today .period, #today .head{
+	background-color: rgba(208,208,208,.75); /* looks like #ddd on white background */
+}
+#today .head{
+	font-weight: bold;
+}
+
+.now{
+	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
+}
+
+#today.halloween .period, #today.halloween .head{
+	background-color: #f80;
+}
+
+#today.halloween .now{
+	background: #222;
+	color: white;
+}
+
+.long{
+	font-weight: bold;
+}
+
+#schedule .lunch{
+	width:100%;
+	height:100%;
+}
+#schedule .lunch td{
+	width: 80px;  /* half of day width */
+	padding: 0px;
+	border-width: 0;
+}
+#schedule .lunch td:first-child {
+	border-right: 1px solid black;
+}
+
+#version{
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	padding: 0 3px;
+	border-top-right-radius: 3px;
+	color: #555;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+#options{
+	position: fixed;
+	right: -50%;
+	bottom: -70%;
+	border-left: 1px solid gray;
+	border-top: 1px solid gray;
+	border-top-left-radius: 5px;
+	padding: 30px 0 0 30px;
+	/*width: 30px;
+	height: 30px;*/
+	width: 50%;
+	height: 70%;
+	background-color: rgba(207, 207, 207, 0.9);
+	color: #333;
+	transition: right .5s, bottom .5s;
+	-webkit-transition: right .5s, bottom .5s;
+	z-index: 10;
+}
+#options.optionsExpanded{
+	right: 0;
+	bottom: 0;
+	/*width: 50%;
+	height: 75%;*/
+}
+#optionsArrow{
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 0 7.5px 2px;
+	font-size: 20px;
+	text-align: left;
+	cursor: pointer;
+}
+#options input[type=number]{
+	width: 30px;
+	border: 1px solid gray;
+	background: rgba(255, 255, 255, .5);
+	text-align: center;
+}
+#options input::-webkit-outer-spin-button, #options input::-webkit-inner-spin-button{
+	display: none; /* hide spinner on number inputs in webkit browsers */
+}
+
+#optionsContent{
+	margin: 0 auto;
+}
+#optionsContent tr{
+	height: 2em;
+}
+#optionsContent th{
+	padding: 15px 0 5px;
+}
+#optionsContent td:first-child{
+	padding-right: 15px;
+	text-align: right;
+}
+.tooltipIndicator{
+	text-decoration: underline;
+}
+
+#repo{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding: 0 5px 3px 0;
+}
+
+#refresh{
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding-right: 3px;
+	color: #AAA;
+	font-size: 24px;
+	cursor: pointer;
+	transition: color .25s;
+	-webkit-transition: color .25s;
+}
+#refresh:hover{
+	color: #333;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
