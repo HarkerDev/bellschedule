@@ -1,6 +1,6 @@
-var suchArray = ["such","very","much","many","so"];
+var suchAdjectives = ["such","very","much","many","so"];
 
-var nounArray = ["schedule","time","date","table","class","periods","lines","title","color","day"];
+var suchNouns = ["schedule","time","date","table","class","periods","lines","title","color","day","organize","impress"];
 
 var suchDelay = 2000;	//delay between adding new div in ms
 var maxDoge = 5;		//max number of dogeDivs
@@ -33,7 +33,7 @@ function stopDoge() {
 
 function createDogeDiv() {
 	var dogeDiv = document.createElement("div");
-	var text = document.createTextNode(Math.random()<.1 ? "wow" : (choose(suchArray) + " " + choose(nounArray)));
+	var text = document.createTextNode(Math.random()<.1 ? "wow" : (choose(suchAdjectives) + " " + choose(suchNouns)));
 	
 	dogeDiv.classList.add("doge");
 	dogeDiv.appendChild(text);
@@ -80,10 +80,4 @@ function randInt(x,y) {
 	if(y==null)
 		return Math.floor(Math.random()*x);
 	else return Math.floor(Math.random()*(y-x) + x)
-}
-
-function rand(x,y) {
-	if(y==null)
-		return Math.random()*x
-	else return Math.random()*(y-x) + x;
 }

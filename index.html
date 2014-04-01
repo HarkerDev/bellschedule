@@ -480,7 +480,7 @@ Conflicts	12:00-2:00</div>
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule(null,true)">&#8635;</div><!--&#8681;-->
-<div id="version">V1.0.00</div>
+<div id="version">V1.0.01</div>
 
 <div id="options">
 	<div id="optionsArrow" class="noHighlight">&#8598;</div>
@@ -488,12 +488,22 @@ Conflicts	12:00-2:00</div>
 	<table id="optionsContent">
 		<tr><th colspan="2">General</th></tr>
 		<tr>
-			<td><span title="Set to 0 to disable automatic updating">Automatic update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="updateScheduleInterval" type="number" min="0" value="60"></input></td>
-		</tr>
-		<tr>
 			<td>Show passing periods:</td>
 			<td><input name="showPassingPeriods" type="checkbox" checked="checked"></input></td>
+		</tr>
+		
+		<tr><th colspan="2"><span title="Set to 0 to disable automatic updating">Automatic Updating <sup class="tooltipIndicator">?</sup></span></th></tr>
+		<tr>
+			<td><span title="Applies while tab is selected and window is active">Active update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
+			<td><input name="activeUpdateInterval" type="number" min="0" value="5"></input></td>
+		</tr>
+		<tr>
+			<td><span title="Applies while tab is selected, but window is not active">Inactive update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
+			<td><input name="inactiveUpdateInterval" type="number" min="0" value="60"></input></td>
+		</tr>
+		<tr>
+			<td><span title="Applies while tab is not selected or window is minimized">Hidden update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
+			<td><input name="hiddenUpdateInterval" type="number" min="0" value="0"></input></td>
 		</tr>
 		
 		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13(Only really useful with automatic updating disabled.)">
@@ -515,7 +525,7 @@ Conflicts	12:00-2:00</div>
 		</tr>
 	</table>
 	<div id="repo">
-		<a href="https://github.com/HarkerDev/bellschedule" target="_blank" title="GitHub repository">View repository on GitHub</a><br>
+		<a href="https://github.com/HarkerDev/bellschedule" target="_blank" title="GitHub repository">GitHub repository</a><br>
 	</div>
 </div>
 
@@ -524,9 +534,16 @@ Conflicts	12:00-2:00</div>
 these will eventually be shown as a tab on the options, or something.
 
 V1.0.01 (WIP)
- - added doge mode
  - added "Back to this Week" Button
   - hidden when the page is already on the current week
+
+V1.0.01 (4/1/14)
+ - added doge mode
+ - added more update interval settings
+  - active update interval (tab is selected and window has focus)
+  - inactive update interval (tab is selected, but window does not have focus)
+  - hidden update interval (tab is not selected or window is minimized)
+ - schedule now automatically updates when tab becomes visible or gains focus
  - added more keyboard shortcuts
   - left/right arrow keys go to prev/next week
   - down arrow key goes to current week

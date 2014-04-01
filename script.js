@@ -7,19 +7,27 @@ var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "S
 var urlParams; //object with GET variables as properties and their respective values as values
 var schedules; //array of schedules (each schedule is an array in this array
 var dispWeek; //Sunday of week currently being displayed by the schedule
+var mobile = isMobile();
 
 var updateScheduleID; //ID of interval of updateSchedule
 var options = new Object();
 
-addEventListener("visibilityChange", function(event) {
-	console.log("event");
-	if(document.hidden)
-		setUpdateInterval(0);
-	else {
-		updateSchedule();
-		setUpdateInterval(options.updateScheduleInterval);
-		console.log("back");
-	}
+var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
+
+document.addEventListener("visibilitychange", function(event) {
+	if(!document.hidden) updateSchedule(); //only slightly redundant; on un-minimize, document gains visibility without focus
+	updateUpdateInterval();
+});
+
+addEventListener("focus", function(event) {
+	updateSchedule();
+	
+	hasFocus = true;
+	updateUpdateInterval();
+});
+addEventListener("blur", function(event) {
+	hasFocus = false;
+	updateUpdateInterval();
 });
 
 /**
@@ -495,6 +503,11 @@ function initOptions(){
 	
 	var inputs = opt.getElementsByTagName("input");
 	
+	if(localStorage.updateScheduleInterval) { //rename key
+		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
+		localStorage.removeItem("updateScheduleInterval");
+	}
+	
 	for(var i=0; i<inputs.length; i++) {
 		var input = inputs[i];
 		//special cases because localStorage saves values as strings
@@ -526,9 +539,9 @@ function initOptions(){
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
 function attachOptionActions(){
-	setUpdateInterval(options.updateScheduleInterval);
-	document.getElementsByName("updateScheduleInterval")[0].addEventListener("change", function(event) {
-		setUpdateInterval(event.target.value);
+	updateUpdateInterval();
+	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
+		updateUpdateInterval();
 	});
 	document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
 		updateSchedule(null,true);
@@ -564,6 +577,18 @@ function attachOptionActions(){
 	document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
 		setDoge(event.target.checked);
 	});
+}
+
+/**
+ * Sets the correct update interval based on the current state (focus and visibility) of the document.
+ */
+function updateUpdateInterval() {
+	if(document.hidden)
+		setUpdateInterval(options.hiddenUpdateInterval); //assume that hidden implies no focus
+	else if(hasFocus) {
+		setUpdateInterval(options.activeUpdateInterval);
+	} else
+		setUpdateInterval(options.inactiveUpdateInterval);
 }
 
 /**
