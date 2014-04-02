@@ -1,3 +1,6 @@
+//javascript:(function(){document.body.appendChild(document.createElement('script')).src="http://harkerdev.github.io/bellschedule/doge.js";setTimeout("startDoge(2000)",500);})();
+//bookmarklet to run doge mode on any page (nouns will be the same, though)
+
 var suchAdjectives = ["such","very","much","many","so"];
 
 var suchNouns = ["schedule","time","date","table","class","periods","lines","title","color","day","organize","impress"];
@@ -15,7 +18,7 @@ function setDogeDelay(delay) { suchDelay = delay; }
 function setDogeMax(max) { maxDoge = max; }
 
 function startDoge(delay) {
-	document.body.style.backgroundImage = "url('doge.jpg')";
+	document.body.style.backgroundImage = "url('http://harkerdev.github.io/bellschedule/doge.jpg')";
 	
 	suchIntervalID = setInterval("swapDogeDiv()", delay);
 	swapDogeDiv();
@@ -42,7 +45,7 @@ function createDogeDiv() {
 	dogeDiv.style.color = "hsl(" + randInt(360) + ",100%,50%)";
 	dogeDiv.style.transform = dogeDiv.style.webkitTransform = "rotate(" + randInt(-30,30) + "deg)";
 	
-	dogeDiv.style.position = "absolute";
+	dogeDiv.style.position = "fixed";
 	dogeDiv.style.opacity = "0"; //render invisible once to calculate width/height
 	dogeDiv.style.transition = dogeDiv.style.webkitTransition = "opacity .2s";
 	

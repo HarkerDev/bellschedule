@@ -480,7 +480,7 @@ Conflicts	12:00-2:00</div>
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule(null,true)">&#8635;</div><!--&#8681;-->
-<div id="version">V1.0.01</div>
+<div id="version">V1.0.02</div>
 
 <div id="options">
 	<div id="optionsArrow" class="noHighlight">&#8598;</div>
@@ -521,7 +521,7 @@ Conflicts	12:00-2:00</div>
 		<tr><th colspan="2">Miscellaneous</th></tr>
 		<tr>
 			<td>Doge mode:</td>
-			<td><input name="enableDoge" type="checkbox" checked="checked"></input></td>
+			<td><input name="enableDoge" type="checkbox"></input></td>
 		</tr>
 	</table>
 	<div id="repo">
@@ -533,12 +533,18 @@ Conflicts	12:00-2:00</div>
 <div id="changelog">(exclamation marks before versions indicate bugginess of that version)
 these will eventually be shown as a tab on the options, or something.
 
-V1.0.01 (WIP)
+V1.0.03 (WIP)
  - added "Back to this Week" Button
   - hidden when the page is already on the current week
 
+V1.0.02 (4/2/14)
+ - set doge mode disabled by default
+ - made some minor back-end changes to allow doge mode to run on (almost) any webpage
+  - background image link changed from relative to absolute
+  - switched doge divs from absolute to fixed so they no longer scroll with the page
+ 
 V1.0.01 (4/1/14)
- - added doge mode
+ - added doge mode (enabled by default for April Fools' Day)
  - added more update interval settings
   - active update interval (tab is selected and window has focus)
   - inactive update interval (tab is selected, but window does not have focus)
