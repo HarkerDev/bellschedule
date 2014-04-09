@@ -6,13 +6,9 @@
 }
 
 body{
-	font: 12px "Segoe UI", "Arial", sans-serif;
+	font: .75em "Segoe UI", "Arial", sans-serif;
 	text-align: center;
 	background-position-x: center;
-}
-
-h2{
-	margin: 0 0 5px;
 }
 
 a{
@@ -82,7 +78,7 @@ table{
 
 #schedule{
 	margin: auto;
-	height: 300px;
+	height: 300px; /* acts like min-height */
 	background-color: rgba(255,255,255,.5)
 }
 
@@ -112,9 +108,9 @@ table{
 }
 
 .head{
-	height: 50px;
+	height: 3.25em;
 	border-bottom: 2px solid black;
-	font-size: 16px;
+	font-size: 1.33em;
 }
 .headWrapper{
 	height: inherit;
@@ -187,30 +183,48 @@ table{
 	height: 70%;
 	background-color: rgba(207, 207, 207, 0.9);
 	color: #333;
-	transition: right .5s, bottom .5s;
-	-webkit-transition: right .5s, bottom .5s;
+	transition: right .5s, bottom .5s, padding .5s, border-top-left-radius .5s;
+	-webkit-transition: right .5s, bottom .5s, padding .5s border-top-left-radius .5s;
 	z-index: 10;
 }
-#options.optionsExpanded{
+#options.mobile{ /* must be before #options.expanded for expanding to apply properly */
+	right: -100%;
+	bottom: -100%;
+	width: 100%;
+	height: 100%;
+}
+#options.expanded{
 	right: 0;
 	bottom: 0;
-	/*width: 50%;
-	height: 75%;*/
+	padding: 0;
+}
+#options.mobile.expanded{
+	border-top-left-radius: 0;
+}
+
+#optionsTitle{
+	margin: 0 0 5px;
+	-webkit-transition: margin .5s;
+}
+.expanded>#optionsTitle{
+	margin-top: 30px;
 }
 #optionsArrow{
 	position: absolute;
 	left: 0;
 	top: 0;
 	padding: 0 7.5px 2px;
-	font-size: 20px;
+	font-size: 1.66em;
 	text-align: left;
 	cursor: pointer;
 }
-#options input[type=number]{
-	width: 30px;
+#options input[type=number], #options input[type=text]{
 	border: 1px solid gray;
 	background: rgba(255, 255, 255, .5);
 	text-align: center;
+}
+#options input[type=number]{
+	width: 2.5em;
 }
 #options input::-webkit-outer-spin-button, #options input::-webkit-inner-spin-button{
 	display: none; /* hide spinner on number inputs in webkit browsers */
@@ -246,7 +260,7 @@ table{
 	right: 0;
 	padding-right: 3px;
 	color: #AAA;
-	font-size: 24px;
+	font-size: 2em;
 	cursor: pointer;
 	transition: color .25s;
 	-webkit-transition: color .25s;
