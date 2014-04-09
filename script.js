@@ -60,6 +60,8 @@ function initTitle() {
 	document.getElementById("leftArrow").addEventListener("click", goLastWeek);
 	document.getElementById("rightArrow").addEventListener("click", goNextWeek);
 	
+	document.getElementById("refresh").addEventListener("click", function(){ updateSchedule(null,true) });
+	
 	setTitleTitle();
 }
 
