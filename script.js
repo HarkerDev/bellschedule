@@ -45,7 +45,8 @@ addEventListener("load", function(event) {
 	initOptions();
 	attachOptionActions();
 	
-	setTitleTitle();
+	initTitle();
+
 	
 	parseRawSchedule();
 
@@ -53,6 +54,14 @@ addEventListener("load", function(event) {
 	setHighlightedPeriod();
 	
 });
+
+function initTitle() {
+	document.getElementById("header").addEventListener("click", setTitleTitle);
+	document.getElementById("leftArrow").addEventListener("click", goLastWeek);
+	document.getElementById("rightArrow").addEventListener("click", goNextWeek);
+	
+	setTitleTitle();
+}
 
 /**
  * Parses raw schedule in body of page into schedule array

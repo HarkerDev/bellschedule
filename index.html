@@ -2,6 +2,7 @@
 <html>
 
 <head>
+<meta charset="utf-8"/>
 
 <link rel="shortcut icon" href="favicon.ico">
 <title>Bell Schedule (dev)</title>
@@ -464,15 +465,15 @@ English	9:00-11:00
 Lunch	11:00-12:00
 Conflicts	12:00-2:00</div>
 
-<div id="header" class="noHighlight" onClick="setTitleTitle()"><h1>
-	<div id="leftArrow" title="Last Week" onclick="goLastWeek()">&#8249;</div>
-	<div id="rightArrow" title="Next Week" onclick="goNextWeek()">&#8250;</div>
-	<div id="title">Bell Schedule</div>
-</h1></div>
+<h1 id="header" class="noHighlight">
+	<span id="leftArrow" title="Last Week">&#8249;</span>
+	<span id="rightArrow" title="Next Week">&#8250;</span>
+	<span id="title">Bell Schedule</span>
+</h1>
 
-<!---<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
+<!--<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
 	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
-</h2></div>--->
+</h2></div>-->
 <!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
 
 <div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
@@ -480,7 +481,7 @@ Conflicts	12:00-2:00</div>
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule" onClick="updateSchedule(null,true)">&#8635;</div><!--&#8681;-->
-<div id="version">V1.0.02</div>
+<div id="version">V1.0.03</div>
 
 <div id="options">
 	<div id="optionsArrow" class="noHighlight">&#8598;</div>
@@ -489,39 +490,39 @@ Conflicts	12:00-2:00</div>
 		<tr><th colspan="2">General</th></tr>
 		<tr>
 			<td>Show passing periods:</td>
-			<td><input name="showPassingPeriods" type="checkbox" checked="checked"></input></td>
+			<td><input name="showPassingPeriods" type="checkbox" checked="checked" /></td>
 		</tr>
 		
 		<tr><th colspan="2"><span title="Set to 0 to disable automatic updating">Automatic Updating <sup class="tooltipIndicator">?</sup></span></th></tr>
 		<tr>
 			<td><span title="Applies while tab is selected and window is active">Active update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="activeUpdateInterval" type="number" min="0" value="15"></input></td>
+			<td><input name="activeUpdateInterval" type="number" min="0" value="15" /></td>
 		</tr>
 		<tr>
 			<td><span title="Applies while tab is selected, but window is not active">Inactive update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="inactiveUpdateInterval" type="number" min="0" value="60"></input></td>
+			<td><input name="inactiveUpdateInterval" type="number" min="0" value="60" /></td>
 		</tr>
 		<tr>
 			<td><span title="Applies while tab is not selected or window is minimized">Hidden update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="hiddenUpdateInterval" type="number" min="0" value="0"></input></td>
+			<td><input name="hiddenUpdateInterval" type="number" min="0" value="0" /></td>
 		</tr>
 		
-		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13(Only really useful with automatic updating disabled.)">
-			Override refresh <sup class="tooltipIndicator">?</sub>
+		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13;(Only really useful with automatic updating disabled.)">
+			Override refresh <sup class="tooltipIndicator">?</sup>
 		</span></th></tr>
 		<tr>
 			<td>Override F5:</td>
-			<td><input name="interceptF5" type="checkbox"></input></td>
+			<td><input name="interceptF5" type="checkbox" /></td>
 		</tr>
 		<tr>
 			<td>Override Ctrl/Cmd-R:</td>
-			<td><input name="interceptCtrlR" type="checkbox"></input></td>
+			<td><input name="interceptCtrlR" type="checkbox" /></td>
 		</tr>
 		
 		<tr><th colspan="2">Miscellaneous</th></tr>
 		<tr>
 			<td>Doge mode:</td>
-			<td><input name="enableDoge" type="checkbox"></input></td>
+			<td><input name="enableDoge" type="checkbox" /></td>
 		</tr>
 	</table>
 	<div id="repo">
@@ -536,6 +537,10 @@ these will eventually be shown as a tab on the options, or something.
 V1.0.03 (WIP)
  - added "Back to this Week" Button
   - hidden when the page is already on the current week
+ - minor cleanup everywhere
+  - added character encoding (UTF-8)
+  - fixed some incorrect/illegal html tags
+  - moved rest of JS event handlers from HTML to JS
 
 V1.0.02 (4/2/14)
  - set doge mode disabled by default

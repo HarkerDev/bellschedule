@@ -33,7 +33,7 @@ a{
 }
 
 #header{
-	margin: 15px auto 5px;
+	margin: .67em auto;
 	max-width: 400px;
 	width: 50%;
 }
