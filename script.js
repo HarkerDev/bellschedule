@@ -46,7 +46,6 @@ addEventListener("load", function(event) {
 	attachOptionActions();
 	
 	initTitle();
-
 	
 	parseRawSchedule();
 
@@ -481,21 +480,21 @@ function updateSchedule(time,force){
  * Expands the options div and changes the options arrow to point down and to the right.
  */
 function expandOptions(){
-	document.getElementById("options").classList.add("optionsExpanded");
+	document.getElementById("options").classList.add("expanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8600;";
 }
 /**
  * Contracts the options div and changes the options arrow to point up and to the left.
  */
 function contractOptions(){
-	document.getElementById("options").classList.remove("optionsExpanded");
+	document.getElementById("options").classList.remove("expanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8598;";
 }
 /**
  * Toggles the options div between extended and contracted and updates options arrow accordingly.
  */
 function toggleOptions(){
-	if(document.getElementById("options").classList.contains("optionsExpanded"))
+	if(document.getElementById("options").classList.contains("expanded"))
 		contractOptions();
 	else expandOptions();
 	
@@ -509,6 +508,10 @@ function initOptions(){
 	var opt = document.getElementById("options");
 	opt.addEventListener("mouseover", expandOptions);
 	opt.addEventListener("mouseout", contractOptions);
+	
+	if(mobile) {
+		opt.classList.add("mobile");
+	}
 	
 	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
 	
