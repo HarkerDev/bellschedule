@@ -224,10 +224,16 @@ table{
 /*.mobile>#optionsArrow {
 	font-size: 3.33em;
 }*/
+
+#options.mobile input[type=checkbox]{
+	transform: scale(2);
+	-webkit-transform: scale(2);
+}
 #options input[type=number], #options input[type=text]{
 	border: 1px solid gray;
 	background: rgba(255, 255, 255, .5);
 	text-align: center;
+	font-size: 1em;
 }
 #options input[type=number]{
 	width: 2.5em;
