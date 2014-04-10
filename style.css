@@ -190,7 +190,8 @@ table{
 #options.mobile{ /* must be before #options.expanded for expanding to apply properly */
 	right: -100%;
 	bottom: -100%;
-	padding: 5em 0 0 5em;
+	/*padding: 5em 0 0 5em;*/
+	font-size: 2em;
 	width: 100%;
 	height: 100%;
 }
@@ -214,14 +215,15 @@ table{
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 0 7.5px 2px;
+	/*padding: 0 7.5px 2px;*/
+	padding: 0 .35em .1em;
 	font-size: 1.66em;
 	text-align: left;
 	cursor: pointer;
 }
-.mobile>#optionsArrow {
+/*.mobile>#optionsArrow {
 	font-size: 3.33em;
-}
+}*/
 #options input[type=number], #options input[type=text]{
 	border: 1px solid gray;
 	background: rgba(255, 255, 255, .5);
