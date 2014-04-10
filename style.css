@@ -176,7 +176,7 @@ table{
 	border-left: 1px solid gray;
 	border-top: 1px solid gray;
 	border-top-left-radius: 5px;
-	padding: 30px 0 0 30px;
+	padding: 2.5em 0 0 2.5em;
 	/*width: 30px;
 	height: 30px;*/
 	width: 50%;
@@ -190,6 +190,7 @@ table{
 #options.mobile{ /* must be before #options.expanded for expanding to apply properly */
 	right: -100%;
 	bottom: -100%;
+	padding: 5em 0 0 5em;
 	width: 100%;
 	height: 100%;
 }
@@ -217,6 +218,9 @@ table{
 	font-size: 1.66em;
 	text-align: left;
 	cursor: pointer;
+}
+.mobile>#optionsArrow {
+	font-size: 3.33em;
 }
 #options input[type=number], #options input[type=text]{
 	border: 1px solid gray;
