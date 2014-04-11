@@ -190,7 +190,7 @@ table{
 #options.mobile{ /* must be before #options.expanded for expanding to apply properly */
 	right: -100%;
 	bottom: -100%;
-	/*padding: 5em 0 0 5em;*/
+	padding: 3.75em 0 0 3.75em;
 	font-size: 2em;
 	width: 100%;
 	height: 100%;
@@ -208,22 +208,21 @@ table{
 	margin: 0 0 5px;
 	-webkit-transition: margin .5s;
 }
-.expanded>#optionsTitle{
+.expanded #optionsTitle{
 	margin-top: 30px;
 }
 #optionsArrow{
 	position: absolute;
 	left: 0;
 	top: 0;
-	/*padding: 0 7.5px 2px;*/
 	padding: 0 .35em .1em;
 	font-size: 1.66em;
 	text-align: left;
 	cursor: pointer;
 }
-/*.mobile>#optionsArrow {
-	font-size: 3.33em;
-}*/
+.mobile #optionsArrow {
+	font-size: 2.5em;
+}
 
 #options.mobile input[type=checkbox]{
 	transform: scale(2);
