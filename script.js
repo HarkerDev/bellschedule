@@ -1,4 +1,7 @@
-//warning: I left debug code everywhere, and much of this is still pretty messy.
+/**
+ * Primary script for the Harker Bell Schedule
+ * Hosted at http://harkerdev.github.io/bellschedule
+**/
 
 /**
  * Globals
@@ -68,19 +71,28 @@ function initTitle() {
  * Parses raw schedule in body of page into schedule array
  * Code is questionable
  */
-function parseRawSchedule(){
+function parseRawSchedule() {
 	var rawSchedules=document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
 	schedules = new Array();
 	var x=0; //index in schedules
 	schedules[0] = new Array(); //create array of special schedule days
 	
-	while(rawSchedules.length>0){ //loop through all lines in raw schedule text
-		if(rawSchedules[0].length==0){ //if line is empty, move to next index in schedules
+	while(rawSchedules.length>0)
+	{ 
+		//loop through all lines in raw schedule text
+		if(rawSchedules[0].length==0)
+		{ 
+			//if line is empty, move to next index in schedules
 			schedules[++x] = new Array(); //could probably use id as index instead, or just properties
 			rawSchedules.shift();
-		}else{ //if line has text, save in current location in schedules
+		} 
+		else
+		{ 
+			//if line has text, save in current location in schedules
 			var str = rawSchedules.shift();
-			if(x==0 && str.indexOf("|")>=0){ //behavior for blocks of dates with the same schedule
+			if(x==0 && str.indexOf("|")>=0)
+			{ 
+				//behavior for blocks of dates with the same schedule
 				var start = new Date(str.substring(0,str.indexOf("|")));
 				var end = new Date(str.substring(str.indexOf("|")+1,str.indexOf("\t")));
 				for(;start<=end;start.setDate(start.getDate()+1)){
@@ -95,8 +107,9 @@ function parseRawSchedule(){
 /**
  * Displays schedule of the week of the given date/time
  */
-function setDispWeek(time,force){
-	if(!time){
+function setDispWeek(time, force) {
+	if(!time)
+	{
 		time = new Date(); //set default time to now
 		
 		urlParams = getUrlParams(); //adjust week shown based on url if default
@@ -116,15 +129,12 @@ function setDispWeek(time,force){
 		
 		if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 		else document.getElementById("warning").style.display = "none"; //else hide warning
-		/*
-		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
-		else document.getElementById("currWeek").style.display = "inline"; //else show the button
-		*/
 		while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
 		
 		var week = schedule.insertRow(-1); //create new week (row)
 		
-		for(var d=0;d<5;d++){ //for each day Monday through Friday (inclusive)
+		for(var d=0;d<5;d++) { 
+			//for each day Monday through Friday (inclusive)
 			date.setDate(date.getDate()+1); //increment day
 			
 			var daySchedule = getDayInfo(date); //get schedule for that day
@@ -146,7 +156,8 @@ function setDispWeek(time,force){
 			var prevEnd = "8:00"; //set start of day to 8:00AM
 			
 			if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
-				for(var i=1;i<schedules[daySchedule[0]].length;i++){
+			{
+				for(var i=1;i<schedules[daySchedule[0]].length;i++) {
 					var text = schedules[daySchedule[0]][i];
 					var periodName = text.substring(0,text.indexOf("\t"))
 					var periodTime = text.substring(text.indexOf("\t")+1);
@@ -166,7 +177,9 @@ function setDispWeek(time,force){
 					var period = document.createElement("div");
 					period.classList.add("period");
 					
-					if(periodName.indexOf("|")>=0){ //handle split periods (i.e. lunches)
+					if(periodName.indexOf("|")>=0)
+					{ 
+						//handle split periods (i.e. lunches)
 						var table = document.createElement("table");
 						table.classList.add("lunch");
 						var row = table.insertRow(-1);
@@ -198,12 +211,11 @@ function setDispWeek(time,force){
 						);
 						
 						period.appendChild(table);
-					}else{
-						createPeriod(period,periodName,start,end,date);
 					}
-					
+					else createPeriod(period,periodName,start,end,date);
 					col.appendChild(period);
 				}
+			}
 		}
 	}
 }
@@ -211,7 +223,7 @@ function setDispWeek(time,force){
 /**
  * Sets the title of the title to a random line from the title titles list
  */
-function setTitleTitle(){
+function setTitleTitle() {
 	var titles = document.getElementById("titleTitles").textContent.split("\n");
 	document.getElementById("title").title=titles[Math.floor(Math.random()*titles.length)];
 }
@@ -219,7 +231,7 @@ function setTitleTitle(){
 /**
  * Gets GET variables from URL and returns them as properties of an object.
  */
-function getUrlParams(){
+function getUrlParams() {
 	var urlParams;
 	var match,
 		pl     = /\+/g,  // Regex for replacing addition symbol with a space
@@ -231,25 +243,12 @@ function getUrlParams(){
 	while (match = search.exec(query))
 	   urlParams[decode(match[1])] = decode(match[2]);
 	return urlParams;
-/* alternatively...
-	(function(a) {
-		if (a == "") return {};
-		var b = {};
-		for (var i = 0; i < a.length; ++i)
-		{
-			var p=a[i].split('=');
-			if (p.length != 2) continue;
-			b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-		}
-		return b;
-	})(location.search.substr(1).split('&'));
-*/
 }
 
 /**
  * Sets given date to the Sunday of next week if date is Saturday; else sets date to Sunday of that week
  */
-function getSunday(date){
+function getSunday(date) {
 	if(date.getDay()>=6) date.setDate(date.getDate()+1); //set date to next Sunday if today is Saturday
 	else date.setDate(date.getDate()-date.getDay()); //else set date Sunday of this week
 	date.setHours(0,0,0,0); //set to beginning of day
@@ -260,7 +259,7 @@ function getSunday(date){
  * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
  * Assumes hours less than 7 are PM and hours 7 or greater are AM.
  */
-function getDateFromString(string,date){
+function getDateFromString(string, date) {
 	var hour = string.substring(0,string.indexOf(":"));
 	var min = string.substring(string.indexOf(":")+1);
 	if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
@@ -271,17 +270,16 @@ function getDateFromString(string,date){
  * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
  * Schedule id index is 0 if not found in schedules.
  */
-function getDayInfo(day){
+function getDayInfo(day) {
 	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
 	
 	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
-		if(!schedules[0][i].indexOf(dateString)){ //found special schedule
+		if(!schedules[0][i].indexOf(dateString)){ 
+			//found special schedule
 			var id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1)
 			if(id==0) return [0,0,dateString]; //schedule id 0 represents no school
 			for(var j=1;j<schedules.length;j++){ //find index of schedule id
-				if(id==schedules[j][0]){
-					return [j,id,dateString]; //found specified schedule id
-				}
+				if(id==schedules[j][0]) return [j,id,dateString]; //found specified schedule id
 			}
 			return [0,id,dateString]; //couldn't find specified schedule; display nothing instead
 		}
@@ -292,7 +290,7 @@ function getDayInfo(day){
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
-function createPeriod(parent,name,start,end,date){
+function createPeriod(parent, name, start, end, date){
 	startDate = getDateFromString(start,date);
 	endDate = getDateFromString(end,date);
 	
@@ -320,7 +318,7 @@ function createPeriod(parent,name,start,end,date){
 /**
  * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
  */
-function createSubPeriods(parent,name,start1,end1,start2,end2,date){
+function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 	var p1 = document.createElement("div");
 	p1.classList.add("period");
 	createPeriod(
@@ -331,7 +329,7 @@ function createSubPeriods(parent,name,start1,end1,start2,end2,date){
 			date);
 	parent.appendChild(p1);
 	
-	if(options.showPassingPeriods){
+	if(options.showPassingPeriods) {
 		var lunchPassing = document.createElement("div");
 		lunchPassing.classList.add("period");
 		createPeriod(lunchPassing,"",end1,start2,date);
@@ -354,7 +352,7 @@ function createSubPeriods(parent,name,start1,end1,start2,end2,date){
 /**
  * Navigates schedule to previous week.
  */
-function goLastWeek(){
+function goLastWeek() {
 	var week = new Date(dispWeek); //change schedule
 	week.setDate(week.getDate() - 7);
 	updateSchedule(week);
@@ -368,10 +366,11 @@ function goLastWeek(){
 	}
 	updateSearch(week);
 }
+
 /**
  * Navigates schedule to next week.
  */
-function goNextWeek(){
+function goNextWeek() {
 	var week = new Date(dispWeek); //change schedule
 	week.setDate(week.getDate() + 7);
 	updateSchedule(week);
@@ -385,10 +384,11 @@ function goNextWeek(){
 	}
 	updateSearch(week);
 }
+
 /**
  * Navigates schedule to current week.
  */
-function goCurrWeek(){
+function goCurrWeek() {
 	var week = new Date(); //The current week.
 	updateSchedule(week);
 	
@@ -403,11 +403,9 @@ function goCurrWeek(){
 /**
  * Updates GET variables to those in urlParams, pushes history state
  */
-function updateSearch(week){
+function updateSearch(week) {
 	var search = "?";
-	for(var param in urlParams){
-		search += param + "=" + urlParams[param] + "&";
-	}
+	for(var param in urlParams) search += param + "=" + urlParams[param] + "&";
 	search = search.slice(0,-1);
 	
 	history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
@@ -416,7 +414,7 @@ function updateSearch(week){
 /**
  * Highlights given date/time on the schedule; defaults to now if none is given
  */
-function setHighlightedPeriod(time){
+function setHighlightedPeriod(time) {
 	//set default time argument
 	if(!time) time = Date.now();
 	
@@ -472,28 +470,28 @@ function setHighlightedPeriod(time){
 /**
  * Updates schedule to display as it would on the given date/time; defaults to now if none is given
  */
-function updateSchedule(time,force){
+function updateSchedule(time,force) {
 	setDispWeek(time,force);
 	setHighlightedPeriod();
 }
 /**
  * Expands the options div and changes the options arrow to point down and to the right.
  */
-function expandOptions(){
+function expandOptions() {
 	document.getElementById("options").classList.add("expanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8600;";
 }
 /**
  * Contracts the options div and changes the options arrow to point up and to the left.
  */
-function contractOptions(){
+function contractOptions() {
 	document.getElementById("options").classList.remove("expanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8598;";
 }
 /**
  * Toggles the options div between extended and contracted and updates options arrow accordingly.
  */
-function toggleOptions(){
+function toggleOptions() {
 	if(document.getElementById("options").classList.contains("expanded"))
 		contractOptions();
 	else expandOptions();
@@ -504,25 +502,25 @@ function toggleOptions(){
  * Initializes automatic option saving and sets options to previously-saved values, if any.
  * If no previous saved value exists, sets current (default) value as saved value.
  */
-function initOptions(){
+function initOptions() {
 	var opt = document.getElementById("options");
 	opt.addEventListener("mouseover", expandOptions);
 	opt.addEventListener("mouseout", contractOptions);
 	
-	if(mobile) {
-		opt.classList.add("mobile");
-	}
+	if(mobile) opt.classList.add("mobile");
 	
 	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
 	
 	var inputs = opt.getElementsByTagName("input");
 	
-	if(localStorage.updateScheduleInterval) { //rename key
+	if(localStorage.updateScheduleInterval) { 
+		//rename key
 		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
 		localStorage.removeItem("updateScheduleInterval");
 	}
 	
-	for(var i=0; i<inputs.length; i++) {
+	for(var i=0; i<inputs.length; i++) 
+	{
 		var input = inputs[i];
 		//special cases because localStorage saves values as strings
 		if(input.type=="checkbox") {											//booleans
@@ -532,14 +530,16 @@ function initOptions(){
 			
 			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
 			else options[input.name] = localStorage[input.name] = input.checked;
-		} else if(input.type=="number") {										//numbers
+		} 
+		else if(input.type=="number") {										//numbers
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
 			});
 			
 			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
 			else options[input.name] = parseInt(localStorage[input.name] = input.value);
-		} else {																//strings
+		} 
+		else {																//strings
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.value;
 			});
@@ -549,10 +549,11 @@ function initOptions(){
 		}
 	}
 }
+
 /**
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
-function attachOptionActions(){
+function attachOptionActions() {
 	updateUpdateInterval();
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
 		updateUpdateInterval();
@@ -564,23 +565,25 @@ function attachOptionActions(){
 	document.addEventListener("keydown", function(event) {
 		switch (event.keyCode){ 
 			case 116 : //F5
-				if(options.interceptF5){ //enabled
+				if(options.interceptF5){ 
+					//enabled
 					event.preventDefault();
 					updateSchedule();
 				}
 				break;
 			case 82 : //R key
-				if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){ //enabled and control/cmd (meta)
+				if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){ 
+					//enabled and control/cmd (meta)
 					event.preventDefault();
 					updateSchedule();
 				}
 				break;
 			case 37 : //Left arrow
 				goLastWeek();
-			break;
+				break;
 			case 39 : //Right arrow
 				goNextWeek();
-			break;
+				break;
 			case 40 :
 				goCurrWeek();
 			break;
@@ -597,12 +600,9 @@ function attachOptionActions(){
  * Sets the correct update interval based on the current state (focus and visibility) of the document.
  */
 function updateUpdateInterval() {
-	if(document.hidden)
-		setUpdateInterval(options.hiddenUpdateInterval); //assume that hidden implies no focus
-	else if(hasFocus) {
-		setUpdateInterval(options.activeUpdateInterval);
-	} else
-		setUpdateInterval(options.inactiveUpdateInterval);
+	if(document.hidden) setUpdateInterval(options.hiddenUpdateInterval); //assume that hidden implies no focus
+	else if(hasFocus) setUpdateInterval(options.activeUpdateInterval);
+	else setUpdateInterval(options.inactiveUpdateInterval);
 }
 
 /**
