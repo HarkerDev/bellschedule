@@ -114,8 +114,14 @@ function setDispWeek(time,force){
 		
 		dispWeek = new Date(date);
 		
-		if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
-		else document.getElementById("warning").style.display = "none"; //else hide warning
+		if(date>getSunday(new Date())) {
+			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
+			document.getElementById("mistake").style.display = "none";
+		}
+		else {
+			document.getElementById("warning").style.display = "none"; //else hide warning
+			document.getElementById("mistake").style.display = "block";
+		}
 		/*
 		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
 		else document.getElementById("currWeek").style.display = "inline"; //else show the button
