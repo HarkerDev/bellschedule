@@ -120,6 +120,7 @@ function setDispWeek(time, force) {
 	}
 	
 	var date = new Date(time); //variable to keep track of current day in loop
+	if(false)
 	getSunday(date);
 	
 	if(force || !dispWeek || (date.valueOf()!=dispWeek.valueOf())){
@@ -133,89 +134,95 @@ function setDispWeek(time, force) {
 		
 		var week = schedule.insertRow(-1); //create new week (row)
 		
-		for(var d=0;d<5;d++) { 
-			//for each day Monday through Friday (inclusive)
-			date.setDate(date.getDate()+1); //increment day
-			
-			var daySchedule = getDayInfo(date); //get schedule for that day
-			
-			var col = week.insertCell(-1); //create cell for day
-			col.date = date.valueOf(); //store date in cell element
-			
-			if(date.getMonth()==9 && date.getDate()==31) //check Halloween
-				col.classList.add("halloween");
-			
-			var head = document.createElement("div"); //create header div in cell
-			head.classList.add("head");
-			var headWrapper = document.createElement("div");
-			headWrapper.classList.add("headWrapper");
-			headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
-			head.appendChild(headWrapper);
-			col.appendChild(head);
-			
-			var prevEnd = "8:00"; //set start of day to 8:00AM
-			
-			if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
-			{
-				for(var i=1;i<schedules[daySchedule[0]].length;i++) {
-					var text = schedules[daySchedule[0]][i];
-					var periodName = text.substring(0,text.indexOf("\t"))
-					var periodTime = text.substring(text.indexOf("\t")+1);
-					
-					var start = periodTime.substring(0,periodTime.indexOf("-"));
-					var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
-					
-					if(options.showPassingPeriods){
-						var passing = document.createElement("div");
-						passing.classList.add("period");
-						createPeriod(passing,"",prevEnd,start,date);
-						col.appendChild(passing);
-					}
-					
-					prevEnd = end;
-					
-					var period = document.createElement("div");
-					period.classList.add("period");
-					
-					if(periodName.indexOf("|")>=0)
-					{ 
-						//handle split periods (i.e. lunches)
-						var table = document.createElement("table");
-						table.classList.add("lunch");
-						var row = table.insertRow(-1);
-						
-						var lunch1 = row.insertCell(-1);
-						var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
-						
-						createSubPeriods(
-								lunch1,
-								periodName.substring(0,periodName.indexOf("||")),
-								start,
-								lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
-								lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
-								end,
-								date
-						);
-						
-						var lunch2 = row.insertCell(-1);
-						var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
-						
-						createSubPeriods(
-								lunch2,
-								periodName.substring(periodName.indexOf("||")+2),
-								start,
-								lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
-								lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
-								end,
-								date
-						);
-						
-						period.appendChild(table);
-					}
-					else createPeriod(period,periodName,start,end,date);
-					col.appendChild(period);
-				}
+		if(false)
+			for(var d=0;d<5;d++) { 
+				//for each day Monday through Friday (inclusive)
+				date.setDate(date.getDate()+1); //increment day
+				
+				createDay(week, date);
 			}
+		else createDay(week, date);
+	}
+}
+
+function createDay(week, date) {
+	var daySchedule = getDayInfo(date); //get schedule for that day
+	
+	var col = week.insertCell(-1); //create cell for day
+	col.date = date.valueOf(); //store date in cell element
+	
+	if(date.getMonth()==9 && date.getDate()==31) //check Halloween
+		col.classList.add("halloween");
+	
+	var head = document.createElement("div"); //create header div in cell
+	head.classList.add("head");
+	var headWrapper = document.createElement("div");
+	headWrapper.classList.add("headWrapper");
+	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
+	head.appendChild(headWrapper);
+	col.appendChild(head);
+	
+	var prevEnd = "8:00"; //set start of day to 8:00AM
+	
+	if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
+	{
+		for(var i=1;i<schedules[daySchedule[0]].length;i++) {
+			var text = schedules[daySchedule[0]][i];
+			var periodName = text.substring(0,text.indexOf("\t"))
+			var periodTime = text.substring(text.indexOf("\t")+1);
+			
+			var start = periodTime.substring(0,periodTime.indexOf("-"));
+			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
+			
+			if(options.showPassingPeriods){
+				var passing = document.createElement("div");
+				passing.classList.add("period");
+				createPeriod(passing,"",prevEnd,start,date);
+				col.appendChild(passing);
+			}
+			
+			prevEnd = end;
+			
+			var period = document.createElement("div");
+			period.classList.add("period");
+			
+			if(periodName.indexOf("|")>=0)
+			{ 
+				//handle split periods (i.e. lunches)
+				var table = document.createElement("table");
+				table.classList.add("lunch");
+				var row = table.insertRow(-1);
+				
+				var lunch1 = row.insertCell(-1);
+				var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
+				
+				createSubPeriods(
+						lunch1,
+						periodName.substring(0,periodName.indexOf("||")),
+						start,
+						lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
+						lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
+						end,
+						date
+				);
+				
+				var lunch2 = row.insertCell(-1);
+				var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
+				
+				createSubPeriods(
+						lunch2,
+						periodName.substring(periodName.indexOf("||")+2),
+						start,
+						lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
+						lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
+						end,
+						date
+				);
+				
+				period.appendChild(table);
+			}
+			else createPeriod(period,periodName,start,end,date);
+			col.appendChild(period);
 		}
 	}
 }
