@@ -128,8 +128,14 @@ function setDispWeek(time, force) {
 		
 		dispWeek = new Date(date);
 		
-		if(date>getSunday(new Date())) document.getElementById("warning").style.display = "block"; //display warning if week is in the future
+		if(date>getSunday(new Date()))
+			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 		else document.getElementById("warning").style.display = "none"; //else hide warning
+		
+		/*
+		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
+		else document.getElementById("currWeek").style.display = "inline"; //else show the button
+		*/
 		while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
 		
 		var week = schedule.insertRow(-1); //create new week (row)
