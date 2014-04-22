@@ -64,7 +64,7 @@ a{
 #leftArrow, #rightArrow{
 	cursor: pointer;
 	padding: 0 12px;
-	font-weight: normal; /*asfasdf*/
+	font-weight: normal; 
 	transition: padding .2s;
 	-webkit-transition: padding .2s;
 }
