@@ -29,7 +29,7 @@ a{
 }
 
 #header{
-	margin: .88em auto;
+	margin: .67em auto;
 	max-width: 400px;
 	width: 50%;
 }
@@ -43,20 +43,9 @@ a{
 	-ms-user-select: initial;
 	user-select: initial;
 }
-#currentTime{
-	/* text-align: center; */
-	float: left;
-	font-weight: normal;
-}
-#timeRemaining{
-	text-align: center;
-	font-weight: normal;
-}
+
 #leftArrow{
 	float: left;
-}
-#leftArrow br{
-	display: none;
 }
 #rightArrow{
 	float: right;
@@ -295,3 +284,11 @@ table{
 	-ms-user-select: none;
 	user-select: none;
 }
+#CurrentTime{
+	font-size: 1.3em;
+	text-align: left;
+	letter-spacing: .05em;
+	padding: .5em 0 0 .5em;
+	color: #AAF;
+	font-weight: bold;
+	}

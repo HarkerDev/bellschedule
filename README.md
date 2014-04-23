@@ -43,4 +43,3 @@ Bold tasks are currently being worked on.
 * [Brian Chan](http://github.com/iluvredwall)
 * [Manan Shah](http://github.com/mananshah99)
 * [Andrew Tierno](http://github.com/andrew-tierno)
-* [Sachit Agarwal](http://github.com/16sachita)
