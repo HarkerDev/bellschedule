@@ -265,7 +265,20 @@ table{
 	padding: 0 5px 3px 0;
 }
 
+#currentTime{
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding-right: 7px;
+	padding-top: 5px;
+	font-size: 1.5em;
+	font-weight: bold;
+	letter-spacing: .05em;
+	color: #333;
+}
+
 #refresh{
+	display: none;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -284,14 +297,3 @@ table{
 	-ms-user-select: none;
 	user-select: none;
 }
-#CurrentTime{
-	font-size: 1.3em;
-	letter-spacing: .05em;
-	color: #006400;
-	font-weight: bold;
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding-left: 3px;
-	padding-top: 6px;
-	}
