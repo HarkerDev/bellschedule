@@ -284,3 +284,14 @@ table{
 	-ms-user-select: none;
 	user-select: none;
 }
+#CurrentTime{
+	font-size: 1.3em;
+	letter-spacing: .05em;
+	color: #006400;
+	font-weight: bold;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-left: 3px;
+	padding-top: 6px;
+	}
