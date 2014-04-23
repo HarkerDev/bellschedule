@@ -652,7 +652,8 @@ function updateClock() {
 	var now = new Date();
 	var h = now.getHours();
 	var m = now.getMinutes();
-	document.getElementById('currentTime').innerHTML = (h%12) + ":" + addLeadingZero(m) + (h>12 ? " PM" : " AM");
+	if (h != 12) nh = h%12;
+	document.getElementById('currentTime').innerHTML = (nh) + ":" + addLeadingZero(m) + (h>12 ? " PM" : " AM");
 }
 
 /**
