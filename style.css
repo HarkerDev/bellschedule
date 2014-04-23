@@ -276,8 +276,7 @@ table{
 	letter-spacing: .05em;
 	color: #333;
 }
-#currentTime:hover{
-	
+
 #refresh{
 	display: none;
 	position: fixed;
