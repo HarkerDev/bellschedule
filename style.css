@@ -286,9 +286,12 @@ table{
 }
 #CurrentTime{
 	font-size: 1.3em;
-	text-align: left;
 	letter-spacing: .05em;
-	padding: .5em 0 0 .5em;
 	color: #006400;
 	font-weight: bold;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-left: 3px;
+	padding-top: 6px;
 	}
