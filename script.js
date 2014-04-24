@@ -9,7 +9,7 @@
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
 var urlParams; //object with GET variables as properties and their respective values as values
 var schedules; //array of schedules (each schedule is an array in this array
-var displayDate; //Sunday of week currently being displayed by the schedule
+var displayDate; //beginning of time period currently being displayed by the schedule
 var mobile = isMobile();
 var updateScheduleID; //ID of interval of updateSchedule
 var options = new Object();
@@ -651,8 +651,9 @@ function isMobile() {
 function updateClock() {
 	var now = new Date();
 	var h = now.getHours();
+	var h12 = h%12;
 	var m = now.getMinutes();
-	document.getElementById('currentTime').innerHTML = (h%12) + ":" + addLeadingZero(m) + (h>12 ? " PM" : " AM");
+	document.getElementById('currentTime').innerHTML = (h12==0 ? 12: h12) + ":" + addLeadingZero(m) + (h>=12 ? " PM" : " AM");
 }
 
 /**
