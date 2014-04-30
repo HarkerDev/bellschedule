@@ -18,14 +18,14 @@ var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes windo
 document.addEventListener("visibilitychange", function(event) {
 	if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
 		updateSchedule();
-		updateClock();
+		// updateClock();
 	}
 	updateUpdateInterval();
 });
 
 addEventListener("focus", function(event) {
 	updateSchedule();
-	updateClock();
+	//updateClock();
 	
 	hasFocus = true;
 	updateUpdateInterval();
@@ -57,7 +57,7 @@ addEventListener("load", function(event) {
 	setDisplayDate();
 	setHighlightedPeriod();
 	
-	updateClock();
+	//updateClock();
 });
 
 function initTitle() {
@@ -123,7 +123,7 @@ function setDisplayDate(time, force) {
 	}
 	
 	var date = new Date(time); //variable to keep track of current day in loop
-	if(!mobile) getSunday(date);
+	if(!mobile && options.enableDayView) getSunday(date);
 	
 	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())){
 		var schedule = document.getElementById("schedule"); //get schedule table
@@ -142,7 +142,7 @@ function setDisplayDate(time, force) {
 		
 		var week = schedule.insertRow(-1); //create new week (row)
 		
-		if(!mobile)
+		if(!mobile && options.enableDayView)
 			for(var d=0;d<5;d++) { 
 				//for each day Monday through Friday (inclusive)
 				date.setDate(date.getDate()+1); //increment day
@@ -578,6 +578,10 @@ function attachOptionActions() {
 		updateSchedule(null,true);
 	});
 	
+	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
+		updateSchedule(null,true);
+	});
+	
 	document.addEventListener("keydown", function(event) {
 		switch (event.keyCode){ 
 			case 116 : //F5
@@ -629,7 +633,7 @@ function setUpdateInterval(seconds) {
 	clearInterval(updateScheduleID);
 	if(seconds>0)
 		updateScheduleID = setInterval(function() {
-			updateClock();
+			//updateClock();
 			updateSchedule();
 		}, seconds * 1000); //convert to milliseconds
 	else updateScheduleID = null;

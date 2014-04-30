@@ -215,8 +215,8 @@ table{
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 0 .35em .1em;
-	font-size: 1.66em;
+	padding: .2em .35em;
+	font: 1.66em Arial;
 	text-align: left;
 	cursor: pointer;
 }
@@ -269,11 +269,12 @@ table{
 	position: absolute;
 	right: 0;
 	top: 0;
-	padding-right: 7px;
-	padding-top: 5px;
+	padding: 7px 10px;
+	border-bottom-left-radius: 5px;
+	background: rgba(255,255,255,.5);
 	font-size: 1.5em;
 	font-weight: bold;
-	letter-spacing: .05em;
+	/* letter-spacing: .05em; */
 	color: #333;
 }
 
