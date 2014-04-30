@@ -123,14 +123,15 @@ function setDisplayDate(time, force) {
 	}
 	
 	var date = new Date(time); //variable to keep track of current day in loop
-	if(!mobile && options.enableDayView) getSunday(date);
+	if(!mobile || !options.enableDayView) getSunday(date);
+	else getDayBegnning(date);
 	
 	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())){
 		var schedule = document.getElementById("schedule"); //get schedule table
 		
 		displayDate = new Date(date);
 		
-		if(date > (mobile ? new Date() : getSunday(new Date())))
+		if(date > (mobile ? getDayBegnning(new Date()) : getSunday(new Date())))
 			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 		else document.getElementById("warning").style.display = "none"; //else hide warning
 		
@@ -142,7 +143,7 @@ function setDisplayDate(time, force) {
 		
 		var week = schedule.insertRow(-1); //create new week (row)
 		
-		if(!mobile && options.enableDayView)
+		if(!mobile || !options.enableDayView)
 			for(var d=0;d<5;d++) { 
 				//for each day Monday through Friday (inclusive)
 				date.setDate(date.getDate()+1); //increment day
@@ -266,8 +267,15 @@ function getUrlParams() {
 function getSunday(date) {
 	if(date.getDay()>=6) date.setDate(date.getDate()+1); //set date to next Sunday if today is Saturday
 	else date.setDate(date.getDate()-date.getDay()); //else set date Sunday of this week
-	date.setHours(0,0,0,0); //set to beginning of day
+	getDayBegnning(date); //set to beginning of day
 	return date;
+}
+
+/**
+ * Sets given date to beginning of the day (12:00 AM).
+ */
+function getDayBegnning(date) {
+	date.setHours(0,0,0,0);
 }
 
 /**
