@@ -581,7 +581,7 @@ function attachOptionActions(){
 				goLastWeek();
 			break;
 			case 39 : //Right arrow
-				goNextWeek();
+				goCurrWeek(); // goNextWeek();
 			break;
 			case 40 :
 				goCurrWeek();
@@ -623,6 +623,7 @@ function setUpdateInterval(seconds) {
  * Currently checks if the useragent/vendor matches a regex string for mobile phones.
  */
 function isMobile() {
+	return false;
 	/*
 	var a = navigator.userAgent || navigator.vendor || window.opera;
 	if(window.innerWidth <= 800 && window.innerHeight <= 600) return true;
