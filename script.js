@@ -623,7 +623,7 @@ function setUpdateInterval(seconds) {
  * Currently checks if the useragent/vendor matches a regex string for mobile phones.
  */
 function isMobile() {
-	return false;
+	return true;
 	/*
 	var a = navigator.userAgent || navigator.vendor || window.opera;
 	if(window.innerWidth <= 800 && window.innerHeight <= 600) return true;
