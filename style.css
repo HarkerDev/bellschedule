@@ -31,7 +31,6 @@ a{
 #header{
 	margin: .67em auto;
 	max-width: 400px;
-	width: 50%;
 }
 
 #title{
@@ -194,7 +193,7 @@ table{
 	right: -100%;
 	bottom: -100%;
 	padding: 3.75em 0 0 3.75em;
-	font-size: 2em;
+	font-size: 1.2em;
 	width: 100%;
 	height: 100%;
 }
@@ -228,8 +227,8 @@ table{
 }
 
 #options.mobile input[type=checkbox]{
-	transform: scale(2);
-	-webkit-transform: scale(2);
+	transform: scale(1.2);
+	-webkit-transform: scale(1.2);
 }
 #options input[type=number], #options input[type=text]{
 	border: 1px solid gray;
