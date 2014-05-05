@@ -62,8 +62,8 @@ addEventListener("load", function(event) {
 
 function initTitle() {
 	document.getElementById("header").addEventListener("click", setTitleTitle);
-	document.getElementById("leftArrow").addEventListener("click", goLastWeek);
-	document.getElementById("rightArrow").addEventListener("click", goNextWeek);
+	document.getElementById("leftArrow").addEventListener("click", goLast);
+	document.getElementById("rightArrow").addEventListener("click", goNext);
 	
 	document.getElementById("refresh").addEventListener("click", function(){ updateSchedule(null,true) });
 	
@@ -306,7 +306,10 @@ function getDayInfo(day) {
 			}
 			return [0,id,dateString]; //couldn't find specified schedule; display nothing instead
 		}
-	return [day.getDay(),day.getDay(),dateString]; //default schedule for that day
+		
+	var day = day.getDay();
+	if(day==0 || day==6) return [0,0,dateString]; //no school on weekends
+	else return [day,day,dateString]; //default schedule for that day
 }
 
 /**
@@ -375,9 +378,9 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 /**
  * Navigates schedule to previous week.
  */
-function goLastWeek() {
+function goLast() {
 	var week = new Date(displayDate); //change schedule
-	week.setDate(week.getDate() - 7);
+	week.setDate(week.getDate() - ((mobile&&options.enableDayView) ? 1 : 7)); //code is hacky; fix pls
 	updateSchedule(week);
 	
 	if(isNaN(urlParams["w"])) //update url
@@ -393,9 +396,9 @@ function goLastWeek() {
 /**
  * Navigates schedule to next week.
  */
-function goNextWeek() {
+function goNext() {
 	var week = new Date(displayDate); //change schedule
-	week.setDate(week.getDate() + 7);
+	week.setDate(week.getDate() + ((mobile&&options.enableDayView) ? 1 : 7));
 	updateSchedule(week);
 	
 	if(isNaN(urlParams["w"])) //update url
@@ -411,7 +414,7 @@ function goNextWeek() {
 /**
  * Navigates schedule to current week.
  */
-function goCurrWeek() {
+function goCurr() {
 	var week = new Date(); //The current week.
 	updateSchedule(week);
 	
@@ -607,13 +610,13 @@ function attachOptionActions() {
 				}
 				break;
 			case 37 : //Left arrow
-				goLastWeek();
+				goLast();
 				break;
 			case 39 : //Right arrow
-				goNextWeek();
+				goNext();
 				break;
 			case 40 :
-				goCurrWeek();
+				goCurr();
 			break;
 		}
 	});
