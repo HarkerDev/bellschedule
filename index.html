@@ -3,15 +3,15 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta name="viewport" content="width=device-width">
 
 <link rel="shortcut icon" href="favicon.ico" />
-<title>Bell Schedule (dev)</title>
+<title>Bell Schedule</title>
 
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="doge.js"></script>
 
 <link rel="stylesheet" type="text/css" href="style.css" />
+
 </head>
 
 <body>
@@ -66,8 +66,7 @@ Incomplete sentences!
 OP!
 wow
 such title
-Now with options!
-true/false == Infinity</div>
+Now with options!</div>
 
 <div id="schedules">8/28/13	31
 8/29/13	40
@@ -126,7 +125,7 @@ true/false == Infinity</div>
 5/21/14	5
 5/22/14	48
 5/23/14	3
-5/29/14	41
+5/29/14	41a
 5/30/14	1
 
 1
@@ -263,6 +262,14 @@ P2	10:15-11:25
 Lunch|P5||P6|Lunch	11:30-12:05|12:10-1:20||11:30-12:40|12:45-1:20
 P7	1:25-2:35
 P8	2:40-3:25
+
+41a
+P1	8:00-9:10
+Assembly/Advisory	9:15-10:10
+P2	10:15-11:25
+Lunch|P5||P6|Lunch	11:30-12:05|12:10-1:20||11:30-12:40|12:45-1:20
+P7	1:25-2:35
+Extra Help	2:40-3:25
 
 41c
 P1	8:00-9:10
@@ -495,7 +502,6 @@ English	9:00-11:00
 Lunch	11:00-12:00
 Conflicts	12:00-2:00</div>
 
-<!--<div id="currentTime"></div>-->
 <h1 id="header" class="noHighlight">
 	<span id="leftArrow" title="Last Week">&#8249;</span>
 	<span id="rightArrow" title="Next Week">&#8250;</span>
@@ -507,12 +513,12 @@ Conflicts	12:00-2:00</div>
 </h2></div>-->
 <!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
 
-<div id="warning">This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
+<div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
 
 <table id="schedule"></table>
 
 <div id="refresh" class="noHighlight" title="Update Schedule">&#8635;</div><!--&#8681;-->
-<div id="version"><a href="https://github.com/HarkerDev/bellschedule/releases" title="Changelog">V1.3.01</a></div>
+<div id="version"><a href="https://github.com/HarkerDev/bellschedule/releases" title="Changelog">V1.2.04</a></div>
 
 <div id="options">
 	<div id="optionsArrow" class="noHighlight">&#8598;</div>
@@ -522,10 +528,6 @@ Conflicts	12:00-2:00</div>
 		<tr>
 			<td>Show passing periods:</td>
 			<td><input name="showPassingPeriods" type="checkbox" checked="checked" /></td>
-		</tr>
-		<tr>
-			<td>Enable day view (mobile only):</td>
-			<td><input name="enableDayView" type="checkbox" checked="checked" /></td> <!-- change to viewType later, if monthView ever becomes a thing -->
 		</tr>
 		
 		<tr><th colspan="2"><span title="Set to 0 to disable automatic updating">Automatic Updating <sup class="tooltipIndicator">?</sup></span></th></tr>
