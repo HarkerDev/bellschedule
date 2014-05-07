@@ -451,13 +451,12 @@ function setHighlightedPeriod(time) {
 	
 	//clear previous highlighted day/periods
 	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
-	var oldDay = document.getElementById("today");
-	if(oldDay){
-		//clear previous highlighted day
-		oldDay.id = "";
-		
+	var prevDay = document.getElementById("today");
+	var prevPeriods;
+	if(prevDay){
 		//clear previous highlighted periods
-		var prevPeriods = oldDay.getElementsByClassName("now");
+		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
+		
 		for(var i=prevPeriods.length-1;i>=0;i--){
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
@@ -465,6 +464,9 @@ function setHighlightedPeriod(time) {
 			var periodLength = prevPeriod.getElementsByClassName("periodLength")[0];
 			if(periodLength) prevPeriod.removeChild(periodLength);
 		}
+		
+		//clear previous highlighted day
+		prevDay.id = "";
 	}
 	
 	//set new highlighted day/period
@@ -494,9 +496,18 @@ function setHighlightedPeriod(time) {
 		}
 	}
 	
-	var newDay = document.getElementById("today");
-	if(options.enablePeriodNotifications && newDay != oldDay)
-		sendNotification("It is now " + newDay.periodName);
+	if(options.enablePeriodNotifications) {
+		var currPeriods = document.getElementsByClassName("now");
+		for(var i=0; i<currPeriods.length; i++) {
+			var changed = true;
+			for(var j=0; j<prevPeriods.length; j++) {
+				if(currPeriods[i]==prevPeriods[j]) changed = false;
+			}
+			if(changed) {
+				sendNotification("It is now " + currPeriods[0].periodName);
+			}
+		}
+	}
 }
 
 /**
