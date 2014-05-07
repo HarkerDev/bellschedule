@@ -300,6 +300,7 @@ function createPeriod(parent,name,start,end,date){
 	
 	var periodWrapper = document.createElement("div");
 	periodWrapper.classList.add("periodWrapper");
+	periodWrapper.periodName = name;
 	periodWrapper.start = startDate;
 	periodWrapper.end = endDate;
 	
@@ -427,14 +428,16 @@ function setHighlightedPeriod(time){
 	date.setHours(0,0,0,0);
 	
 	//clear previous highlighted day/periods
-	var prevDay = document.getElementById("today");
-	if(prevDay){
+	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
+	var oldDay = document.getElementById("today");
+	if(oldDay){
 		//clear previous highlighted day
-		prevDay.id = "";
+		oldDay.id = "";
 		
 		//clear previous highlighted periods
-		var prevPeriods = prevDay.getElementsByClassName("now");
+		var prevPeriods = oldDay.getElementsByClassName("now");
 		for(var i=prevPeriods.length-1;i>=0;i--){
+			console.log(prevPeriods[i].start);
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
 			//remove period length
@@ -452,7 +455,7 @@ function setHighlightedPeriod(time){
 			day.id = "today";
 			
 			//set new highlighted periods
-			var periods = document.getElementsByClassName("periodWrapper");
+			var periods = day.getElementsByClassName("periodWrapper");
 			for(var p=0;p<periods.length;p++){
 				var period = periods[p];
 				if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
@@ -469,6 +472,10 @@ function setHighlightedPeriod(time){
 			}
 		}
 	}
+	
+	var newDay = document.getElementById("today");
+	if(newDay != oldDay)
+		sendNotification(newDay.periodName);
 }
 
 /**
@@ -616,6 +623,30 @@ function setUpdateInterval(seconds) {
 	if(seconds>0)
 		updateScheduleID = setInterval("updateSchedule()", seconds * 1000); //Convert to milliseconds.
 	else updateScheduleID = null;
+}
+
+function sendNotification(text) {
+	//check if the browser supports notifications
+	console.log(Notification.permission);
+	something = new Notification("hai thar");
+	if (!("Notification" in window)) {
+		alert("This browser does not support desktop notification");
+	} else if (Notification.permission === "granted") { //check user allows notifications
+		var notification = new Notification(text);
+	} else if (Notification.permission !== 'denied') { //ask user for permission if not explicitly denied
+		Notification.requestPermission(function (permission) {
+		
+			// Whatever the user answers, we make sure we store the information
+			if(!('permission' in Notification)) {
+				Notification.permission = permission;
+			}
+		
+			// If the user is okay, let's create a notification
+			if (permission === "granted") {
+			var notification = new Notification(text);
+			}
+		});
+	}
 }
 
 /**
