@@ -1,5 +1,3 @@
-//warning: I left debug code everywhere, and much of this is still pretty messy.
-
 /**
  * Globals
  */
@@ -114,9 +112,15 @@ function setDispWeek(time,force){
 		
 		dispWeek = new Date(date);
 		
-		if(date>getSunday(new Date()))
+		if(date > (mobile ? getDayBegnning(new Date()) : getSunday(new Date()))) {
 			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
-		else document.getElementById("warning").style.display = "none"; //else hide warning
+			document.getElementById("ap").style.display = "none";
+		}
+		else 
+		{	
+			document.getElementById("warning").style.display = "none"; //else hide warning
+			document.getElementById("ap").style.display = "block";
+		}
 		
 		/*
 		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
