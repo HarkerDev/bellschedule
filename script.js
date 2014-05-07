@@ -459,7 +459,6 @@ function setHighlightedPeriod(time) {
 		//clear previous highlighted periods
 		var prevPeriods = oldDay.getElementsByClassName("now");
 		for(var i=prevPeriods.length-1;i>=0;i--){
-			console.log(prevPeriods[i].start);
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
 			//remove period length
@@ -496,8 +495,8 @@ function setHighlightedPeriod(time) {
 	}
 	
 	var newDay = document.getElementById("today");
-	if(newDay != oldDay)
-		sendNotification(newDay.periodName);
+	if(options.enablePeriodNotifications && newDay != oldDay)
+		sendNotification("It is now " + newDay.periodName);
 }
 
 /**
@@ -596,6 +595,23 @@ function attachOptionActions() {
 		updateSchedule(null,true);
 	});
 	
+	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
+		if(options.enablePeriodNotifications) {
+			var permission = Notification.permission;
+			if (!("Notification" in window)) {
+				alert("This browser does not support desktop notifications.");
+			} else if(permission == "denied") {
+				alert("Please allow desktop notifications for this site to enable this feature.");
+			} else if(permission == "default") {
+				Notification.requestPermission(function(permission) {
+					console.log(permission);
+				});
+			}
+			
+			var asdf = new Notification("test");
+		}
+	});
+	
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
 		updateSchedule(null,true);
 	});
@@ -657,28 +673,13 @@ function setUpdateInterval(seconds) {
 	else updateScheduleID = null;
 }
 
+/**
+ *
+ */
 function sendNotification(text) {
-	//check if the browser supports notifications
-	console.log(Notification.permission);
-	something = new Notification("hai thar");
-	if (!("Notification" in window)) {
-		alert("This browser does not support desktop notification");
-	} else if (Notification.permission === "granted") { //check user allows notifications
+	//if(Notification.permission === "granted") { //check user allows notifications
 		var notification = new Notification(text);
-	} else if (Notification.permission !== 'denied') { //ask user for permission if not explicitly denied
-		Notification.requestPermission(function (permission) {
-		
-			// Whatever the user answers, we make sure we store the information
-			if(!('permission' in Notification)) {
-				Notification.permission = permission;
-			}
-		
-			// If the user is okay, let's create a notification
-			if (permission === "granted") {
-			var notification = new Notification(text);
-			}
-		});
-	}
+	//} 
 }
 
 /**
