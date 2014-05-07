@@ -112,7 +112,7 @@ function setDispWeek(time,force){
 		
 		dispWeek = new Date(date);
 		
-		if(date > (mobile ? getDayBegnning(new Date()) : getSunday(new Date()))) {
+		if(date > getSunday(new Date())) {
 			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
 			document.getElementById("ap").style.display = "none";
 		}
