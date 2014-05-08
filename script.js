@@ -473,6 +473,7 @@ function setHighlightedPeriod(time) {
 		}
 		
 		//clear previous highlighted day
+		//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
 		prevDay.id = "";
 	}
 	
@@ -504,18 +505,18 @@ function setHighlightedPeriod(time) {
 	}
 	
 	if(options.enablePeriodNotifications) {
-		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now"));
+		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now")); //needs to be an array and not an HTML
 		
 		var diff1 = currPeriods.diff(prevPeriods);
 		var diff2 = prevPeriods.diff(currPeriods);
 		
 		for(var i=0; i<diff1.length; i++) {
 			var name = currPeriods[0].periodName;
-			if(name) sendNotification(name + " has started.");
+			if(name) sendNotification(name + " has started.", options.notificationDuration);
 		}
 		for(var i=0; i<diff2.length; i++) {
 			var name = prevPeriods[0].periodName;
-			if(name) sendNotification(name + " has ended.");
+			if(name) sendNotification(name + " has ended.", options.notificationDuration);
 		}
 	}
 }
@@ -691,11 +692,14 @@ function setUpdateInterval(seconds) {
 }
 
 /**
- * Creates a desktop notification with the given text for a title.
+ * Creates a desktop notification with the given text for a title and removes it after the given duration in seconds.
+ * A duration of 0 or less will disable auto-closing the notification.
  */
-function sendNotification(text) {
-	if(!("Notification" in window)) { //check that browser supports notifications
+function sendNotification(text, duration) {
+	if("Notification" in window) { //check that browser supports notifications
 		var notification = new Notification(text);
+		if(duration > 0)
+			setTimeout(function() {notification.close();}, duration*1000);
 	} 
 }
 
