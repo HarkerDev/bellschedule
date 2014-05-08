@@ -656,7 +656,7 @@ function attachOptionActions() {
 			case 39 : //Right arrow
 				goNext();
 				break;
-			case 40 :
+			case 40 : //Down arrow
 				goCurr();
 			break;
 		}
