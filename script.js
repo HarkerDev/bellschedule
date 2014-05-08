@@ -604,10 +604,6 @@ function attachOptionActions(){
 		}
 	});
 	
-	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
-		updateSchedule(null,true);
-	});
-	
 	document.addEventListener("keydown", function(event) {
 		switch (event.keyCode){ 
 			case 116 : //F5
