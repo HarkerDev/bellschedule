@@ -4,6 +4,13 @@
 **/
 
 /**
+ * Returns an array of values in the array that aren't in a.
+ */
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+};
+
+/**
  * Globals
  */
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
@@ -452,7 +459,7 @@ function setHighlightedPeriod(time) {
 	//clear previous highlighted day/periods
 	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
 	var prevDay = document.getElementById("today");
-	var prevPeriods;
+	var prevPeriods = [];
 	if(prevDay){
 		//clear previous highlighted periods
 		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
@@ -497,15 +504,18 @@ function setHighlightedPeriod(time) {
 	}
 	
 	if(options.enablePeriodNotifications) {
-		var currPeriods = document.getElementsByClassName("now");
-		for(var i=0; i<currPeriods.length; i++) {
-			var changed = true;
-			for(var j=0; j<prevPeriods.length; j++) {
-				if(currPeriods[i]==prevPeriods[j]) changed = false;
-			}
-			if(changed) {
-				sendNotification("It is now " + currPeriods[0].periodName);
-			}
+		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now"));
+		
+		var diff1 = currPeriods.diff(prevPeriods);
+		var diff2 = prevPeriods.diff(currPeriods);
+		
+		for(var i=0; i<diff1.length; i++) {
+			var name = currPeriods[0].periodName;
+			if(name) sendNotification(name + " has started.");
+		}
+		for(var i=0; i<diff2.length; i++) {
+			var name = prevPeriods[0].periodName;
+			if(name) sendNotification(name + " has ended.");
 		}
 	}
 }
@@ -609,17 +619,13 @@ function attachOptionActions() {
 	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
 		if(options.enablePeriodNotifications) {
 			var permission = Notification.permission;
-			if (!("Notification" in window)) {
+			if(!("Notification" in window)) {
 				alert("This browser does not support desktop notifications.");
 			} else if(permission == "denied") {
 				alert("Please allow desktop notifications for this site to enable this feature.");
 			} else if(permission == "default") {
-				Notification.requestPermission(function(permission) {
-					console.log(permission);
-				});
+				Notification.requestPermission();
 			}
-			
-			var asdf = new Notification("test");
 		}
 	});
 	
@@ -685,12 +691,12 @@ function setUpdateInterval(seconds) {
 }
 
 /**
- *
+ * Creates a desktop notification with the given text for a title.
  */
 function sendNotification(text) {
-	//if(Notification.permission === "granted") { //check user allows notifications
+	if(!("Notification" in window)) { //check that browser supports notifications
 		var notification = new Notification(text);
-	//} 
+	} 
 }
 
 /**
