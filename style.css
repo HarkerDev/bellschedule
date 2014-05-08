@@ -67,7 +67,7 @@ a{
 	font-weight: bold;
 }
 
-#warning{
+#warning, #news{
 	display:none;
 	margin-bottom: 5px;
 }
