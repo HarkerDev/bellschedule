@@ -54,9 +54,7 @@ addEventListener("load", function(event) {
 	
 	parseRawSchedule();
 
-	setDispWeek();
-	setHighlightedPeriod();
-	
+	updateSchedule();
 });
 
 function initTitle() {
@@ -494,11 +492,11 @@ function setHighlightedPeriod(time){
 		
 		for(var i=0; i<diff1.length; i++) {
 			var name = currPeriods[0].periodName;
-			if(name) sendNotification(name + " has started.", options.notificationDuration);
+			if(name && !hasFocus) sendNotification(name + " has started.", options.notificationDuration);
 		}
 		for(var i=0; i<diff2.length; i++) {
 			var name = prevPeriods[0].periodName;
-			if(name) sendNotification(name + " has ended.", options.notificationDuration);
+			if(name && !hasFocus) sendNotification(name + " has ended.", options.notificationDuration);
 		}
 	}
 }
