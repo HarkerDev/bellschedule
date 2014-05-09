@@ -5,12 +5,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 <link rel="shortcut icon" href="favicon.ico" />
+
+<link rel="apple-touch-icon" href="logo.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+
 <title>Bell Schedule</title>
 
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="doge.js"></script>
 
 <link rel="stylesheet" type="text/css" href="style.css" />
+
+
 
 </head>
 
@@ -523,53 +529,7 @@ Conflicts	12:00-2:00</div>
 <div id="options">
 	<div id="optionsArrow" class="noHighlight">&#8598;</div>
 	<h2 id="optionsTitle">Options</h2>
-	<table id="optionsContent">
-		<tr><th colspan="2">General</th></tr>
-		<tr>
-			<td>Show passing periods:</td>
-			<td><input name="showPassingPeriods" type="checkbox" checked="checked" /></td>
-		</tr>
-		<tr>
-			<td>Enable period change notifications</td>
-			<td><input name="enablePeriodNotifications" type="checkbox" /></td>
-		</tr>
-		<tr>
-			<td>Notification display time (seconds)</td>
-			<td><input name="notificationDuration" type="number" min="0" value="1" /></td>
-		</tr>
-		
-		<tr><th colspan="2"><span title="Set to 0 to disable automatic updating">Automatic Updating <sup class="tooltipIndicator">?</sup></span></th></tr>
-		<tr>
-			<td><span title="Applies while tab is selected and window is active">Active update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="activeUpdateInterval" type="number" min="0" value="10" /></td>
-		</tr>
-		<tr>
-			<td><span title="Applies while tab is selected, but window is not active">Inactive update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="inactiveUpdateInterval" type="number" min="0" value="60" /></td>
-		</tr>
-		<tr>
-			<td><span title="Applies while tab is not selected or window is minimized">Hidden update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="hiddenUpdateInterval" type="number" min="0" value="0" /></td>
-		</tr>
-		
-		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13;(Only really useful with automatic updating disabled.)">
-			Override refresh <sup class="tooltipIndicator">?</sup>
-		</span></th></tr>
-		<tr>
-			<td>Override F5:</td>
-			<td><input name="interceptF5" type="checkbox" /></td>
-		</tr>
-		<tr>
-			<td>Override Ctrl/Cmd-R:</td>
-			<td><input name="interceptCtrlR" type="checkbox" /></td>
-		</tr>
-		
-		<tr><th colspan="2">Miscellaneous</th></tr>
-		<tr>
-			<td>Doge mode:</td>
-			<td><input name="enableDoge" type="checkbox" /></td>
-		</tr>
-	</table>
+	<table id="optionsContent"></table>
 	<div id="repo">
 		<a href="https://github.com/HarkerDev/bellschedule" target="_blank" title="GitHub repository">GitHub repository</a>
 	</div>
