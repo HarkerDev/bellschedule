@@ -53,7 +53,7 @@ a{
 #leftArrow, #rightArrow{
 	cursor: pointer;
 	padding: 0 12px;
-	font-weight: normal; /*asfasdf*/
+	font-weight: normal;
 	transition: padding .2s;
 	-webkit-transition: padding .2s;
 }
@@ -122,7 +122,7 @@ table{
 	font-size: .7em;
 }
 
-#today .period, #today .head{
+#today .periodWrapper, #today .head{
 	background-color: rgba(208,208,208,.75); /* looks like #ddd on white background */
 }
 #today .head{
@@ -133,7 +133,7 @@ table{
 	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
 }
 
-#today.halloween .period, #today.halloween .head{
+#today.halloween .periodWrapper, #today.halloween .head{
 	background-color: #f80;
 }
 
