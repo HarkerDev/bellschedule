@@ -149,10 +149,13 @@ function setDisplayDate(time, force) {
 		time = new Date(); //set default time to now
 
 		urlParams = getUrlParams(); //adjust week shown based on url if default
-		if(urlParams["d"]>0) time.setDate(urlParams["d"]);
-		if(urlParams["m"]>0) time.setMonth(urlParams["m"]-1);
-		if(urlParams["y"]>0) time.setFullYear(urlParams["y"]);
-		if(!isNaN(urlParams["w"])) time.setDate(time.getDate() + urlParams["w"]*7);
+		if(!isNaN(urlParams["w"])) {
+			time.setDate(time.getDate() + urlParams["w"]*7);
+		} else {
+			if(urlParams["d"]>0) time.setDate(urlParams["d"]);
+			if(urlParams["m"]>0) time.setMonth(urlParams["m"]-1);
+			if(urlParams["y"]>0) time.setFullYear(urlParams["y"]);
+		}
 	}
 
 	var date = new Date(time); //variable to keep track of current day in loop
@@ -417,12 +420,13 @@ function goLast() {
 	week.setDate(week.getDate() - ((mobile&&options.enableDayView) ? 1 : 7)); //code is hacky; fix pls
 	updateSchedule(week);
 
-	if(isNaN(urlParams["w"])) //update url
-		urlParams["w"] = -1;
+    var letter = (mobile && options.enableDayView) ? "d" : "w";
+	if(isNaN(urlParams[letter])) //update url
+		urlParams[letter] = -1;
 	else {
-		urlParams["w"] -= 1;
-		if(urlParams["w"] == 0)
-			delete urlParams["w"];
+		urlParams[letter] -= 1;
+		if(urlParams[letter] == 0)
+			delete urlParams[letter];
 	}
 	updateSearch(week);
 }
@@ -435,12 +439,13 @@ function goNext() {
 	week.setDate(week.getDate() + ((mobile&&options.enableDayView) ? 1 : 7));
 	updateSchedule(week);
 
-	if(isNaN(urlParams["w"])) //update url
-		urlParams["w"] = 1;
+    var letter = (mobile && options.enableDayView) ? "d" : "w";
+	if(isNaN(urlParams[letter])) //update url
+		urlParams[letter] = 1;
 	else{
-		urlParams["w"] = parseInt(urlParams["w"]) + 1;
-		if(urlParams["w"] == 0)
-			delete urlParams["w"];
+		urlParams[letter] = parseInt(urlParams[letter]) + 1;
+		if(urlParams[letter] == 0)
+			delete urlParams[letter];
 	}
 	updateSearch(week);
 }
@@ -719,7 +724,7 @@ function attachOptionActions() {
 	});
 
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
-		updateSchedule(null,true);
+		goCurr();
 	});
 
 	if(!mobile) {
