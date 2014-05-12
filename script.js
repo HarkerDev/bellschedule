@@ -118,12 +118,8 @@ function setDispWeek(time,force){
 		dispWeek = new Date(date);
 		
 		if(date > getSunday(new Date())) {
-			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
-		}
-		else 
-		{
-			document.getElementById("warning").style.display = "none"; //else hide warning
-		}
+			warn("This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if week is in the future
+		else warn("Good luck on your AP Exams!"); //else display good luck message
 		
 		/*
 		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
@@ -138,9 +134,24 @@ function setDispWeek(time,force){
 			
 			var daySchedule = getDayInfo(date); //get schedule for that day
 			
-			var col = week.insertCell(-1); //create cell for day
-			col.date = date.valueOf(); //store date in cell element
+/**
+ * Displays the given warning or hides the warning div if no warning text is given.
+ */
+function warn(text) {
+	var warning = document.getElementById("warning")
+	
+	if(text) warning.style.display = "block";
+	else warning.style.display = "none";
+	
+	warning.innerHTML = text;
+}
 			
+/**
+ * Creates the day for the given date and appends it to the given week
+ */
+function createDay(week, date) {
+	var daySchedule = getDayInfo(date); //get schedule for that day
+
 			if(date.getMonth()==9 && date.getDate()==31) //check Halloween
 				col.classList.add("halloween");
 			
