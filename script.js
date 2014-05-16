@@ -667,10 +667,10 @@ function createOptionSectionTitle(section) {
 function createOptionSection(section) {
 	createOptionSectionTitle(section);
 	section.options.forEach(function(option) {
-		if(!option.hasOwnProperty("platforms") ||
-		   ((mobile && option.platforms.indexOf("mobile") >= 0) || !mobile)) {
+		//if(!option.hasOwnProperty("platforms") ||
+		//   ((mobile && option.platforms.indexOf("mobile") >= 0) || !mobile)) {
 			createOption(option);
-		}
+		//}
 	});
 }
 
@@ -715,7 +715,7 @@ function attachOptionActions() {
 	document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
 		updateSchedule(null,true);
 	});
-
+	
 	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
 		if(options.enablePeriodNotifications) {
 			var permission = Notification.permission;
@@ -728,17 +728,17 @@ function attachOptionActions() {
 			}
 		}
 	});
-
+	
 	document.addEventListener("keydown", function(event) {
-		switch (event.keyCode) {
+		switch (event.keyCode){ 
 			case 116 : //F5
-				if(options.interceptF5) { //enabled
+				if(options.interceptF5){ //enabled
 					event.preventDefault();
 					updateSchedule();
 				}
 				break;
 			case 82 : //R key
-				if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)) { //enabled and control/cmd (meta)
+				if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){ //enabled and control/cmd (meta)
 					event.preventDefault();
 					updateSchedule();
 				}
@@ -754,10 +754,11 @@ function attachOptionActions() {
 			break;
 		}
 	});
-	xmlhttp.ontimeout = function() {
-		errcb(true, null);
-	};
-	xmlhttp.send();
+	
+	setDoge(options.enableDoge);
+	document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
+		setDoge(event.target.checked);
+	});
 }
 
 /**
