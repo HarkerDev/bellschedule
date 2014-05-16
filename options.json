@@ -20,14 +20,7 @@
 					"type": "number",
 					"default": 1,
 					"description": "Notification display time (seconds)"
-				}/*,
-				{
-					"name": "enableDayView",
-					"type": "checkbox",
-					"default": "checked",
-					"description": "Enable day view (mobile only)",
-					"platforms": ["mobile"]
-				}*/
+				}
 			]
 		},
 		{
