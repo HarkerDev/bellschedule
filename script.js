@@ -112,14 +112,10 @@ function parseRawSchedule(){
 	var x=0; //index in schedules
 	schedules[0] = new Array(); //create array of special schedule days
 
-	while(rawSchedules.length>0)
-	{
+	while(rawSchedules.length>0) {
 		//loop through all lines in raw schedule text
-		if(rawSchedules[0].length==0)
-		{
+		if(rawSchedules[0].length==0) {
 			//if line is empty, move to next index in schedules
-	while(rawSchedules.length>0){ //loop through all lines in raw schedule text
-		if(rawSchedules[0].length==0){ //if line is empty, move to next index in schedules
 			schedules[++x] = new Array(); //could probably use id as index instead, or just properties
 			rawSchedules.shift();
 		}
@@ -163,7 +159,7 @@ function setDispWeek(time,force){
 
 		dispWeek = new Date(date);
 
-		if(date > getSunday(new Date())) {
+		if(date > getSunday(new Date()))
 			warn("This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if week is in the future
 		else warn("Good luck on your AP Exams!"); //else display good luck message
 
@@ -178,7 +174,10 @@ function setDispWeek(time,force){
 		for(var d=0;d<5;d++){ //for each day Monday through Friday (inclusive)
 			date.setDate(date.getDate()+1); //increment day
 
-			var daySchedule = getDayInfo(date); //get schedule for that day
+			createDay(week, date);
+		}
+	}
+}
 
 /**
  * Displays the given warning or hides the warning div if no warning text is given.
@@ -197,17 +196,44 @@ function warn(text) {
  */
 function createDay(week, date) {
 	var daySchedule = getDayInfo(date); //get schedule for that day
+	
+	var col = week.insertCell(-1); //create cell for day
+	col.date = date.valueOf(); //store date in cell element
+	
+	if(date.getMonth()==9 && date.getDate()==31) //check Halloween
+		col.classList.add("halloween");
 
-			if(date.getMonth()==9 && date.getDate()==31) //check Halloween
-				col.classList.add("halloween");
+	var head = document.createElement("div"); //create header div in cell
+	head.classList.add("head");
+	var headWrapper = document.createElement("div");
+	headWrapper.classList.add("headWrapper");
+	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
+	head.appendChild(headWrapper);
+	col.appendChild(head);
+	
+	var prevEnd = "8:00"; //set start of day to 8:00AM
 
-			var head = document.createElement("div"); //create header div in cell
-			head.classList.add("head");
-			var headWrapper = document.createElement("div");
-			headWrapper.classList.add("headWrapper");
-			headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
-			head.appendChild(headWrapper);
-			col.appendChild(head);
+	if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
+	{
+		for(var i=1;i<schedules[daySchedule[0]].length;i++) {
+			var text = schedules[daySchedule[0]][i];
+			var periodName = text.substring(0,text.indexOf("\t"))
+			var periodTime = text.substring(text.indexOf("\t")+1);
+
+			var start = periodTime.substring(0,periodTime.indexOf("-"));
+			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
+
+			if(options.showPassingPeriods){
+				var passing = document.createElement("div");
+				passing.classList.add("period");
+				createPeriod(passing,"",prevEnd,start,date);
+				col.appendChild(passing);
+			}
+
+			prevEnd = end;
+
+			var period = document.createElement("div");
+			period.classList.add("period");
 
 			if(periodName.indexOf("|")>=0)
 			{
@@ -361,7 +387,6 @@ function createPeriod(parent,name,start,end,date){
 
 	return parent.appendChild(periodWrapper);
 	}
-
 }
 
 /**
@@ -682,7 +707,7 @@ function createOption(option) {
 /**
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
-function attachOptionActions(){
+function attachOptionActions() {
 	updateUpdateInterval();
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
 		updateUpdateInterval();
@@ -705,15 +730,15 @@ function attachOptionActions(){
 	});
 
 	document.addEventListener("keydown", function(event) {
-		switch (event.keyCode){ 
+		switch (event.keyCode) {
 			case 116 : //F5
-				if(options.interceptF5){ //enabled
+				if(options.interceptF5) { //enabled
 					event.preventDefault();
 					updateSchedule();
 				}
 				break;
 			case 82 : //R key
-				if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){ //enabled and control/cmd (meta)
+				if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)) { //enabled and control/cmd (meta)
 					event.preventDefault();
 					updateSchedule();
 				}
@@ -727,6 +752,32 @@ function attachOptionActions(){
 			case 40 :
 				goCurrWeek();
 			break;
+		}
+	});
+	xmlhttp.ontimeout = function() {
+		errcb(true, null);
+	};
+	xmlhttp.send();
+}
+
+/**
+ * Retrieve file data via XMLHttpRequest.
+ *
+ * cb is for successful retrieval and takes a String as a parameter.
+ * errcb is for an error on retrieval and takes:
+ *    1. a boolean representing whether or not the error was a timeout.
+ *    2. an integer representing the status of the response (this is null on timeout).
+ */
+function download(url, cb, errcb) {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", url, true);
+	xmlhttp.onreadystatechange = function() {
+		if(xmlhttp.readyState == 4) {
+			if(xmlhttp.status == 200) {
+				cb(xmlhttp.responseText);
+			} else if(errcb) {
+				errcb(false, xmlhttp.status);
+			}
 		}
 	};
 	xmlhttp.ontimeout = function() {
