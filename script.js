@@ -500,11 +500,11 @@ function setHighlightedPeriod(time){
 		var diff2 = prevPeriods.diff(currPeriods);
 		
 		for(var i=0; i<diff1.length; i++) {
-			var name = currPeriods[0].periodName;
+			var name = currPeriods[i].periodName;
 			if(name && !hasFocus) sendNotification(name + " has started.", options.notificationDuration);
 		}
 		for(var i=0; i<diff2.length; i++) {
-			var name = prevPeriods[0].periodName;
+			var name = prevPeriods[i].periodName;
 			if(name && !hasFocus) sendNotification(name + " has ended.", options.notificationDuration);
 		}
 	}
