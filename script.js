@@ -54,10 +54,10 @@ addEventListener("load", function(event) {
 	download("options.json", function(data) {
 			// just assume the file has everything for now
 			JSON.parse(data).sections.forEach(function(section) {
-				if(!section.hasOwnProperty("platforms") ||
-					((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
+			//	if(!section.hasOwnProperty("platforms") ||
+			//		((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
 					createOptionSection(section);
-				}
+			//	}
 			});
 
 			initOptions();
