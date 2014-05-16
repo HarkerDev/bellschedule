@@ -151,7 +151,7 @@ table{
 	font-weight: bold;
 }
 
-.now{
+#today .now{
 	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
 }
 
