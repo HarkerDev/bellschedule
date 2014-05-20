@@ -5,29 +5,6 @@
 	100% {opacity: 0;}
 }
 
-/* iPhone */
-@media only screen and (width:320px) and (device-width:320px) and (device-height:480px) and (orientation: landscape) {
-	body {
-		-webkit-transform: scale(0.667);
-		-webkit-transform-origin: top right;
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 480px;
-	}
-}
-/* iPad */
-@media only screen and (width:768px) and (device-width:768px) and (device-height:1024px) and (orientation: landscape) {
-	body {
-		-webkit-transform: scale(0.75);
-		-webkit-transform-origin: top right;
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 1024px;
-	}
-}
-
 body{
 	font: .75em "Segoe UI", "Arial", sans-serif;
 	text-align: center;
@@ -129,6 +106,7 @@ table{
 .periodLength{
 	font-size: .8em;
 }
+
 .head{
 	height: 3.25em;
 	border-bottom: 2px solid black;
@@ -151,7 +129,7 @@ table{
 	font-weight: bold;
 }
 
-#today .now{
+.now{
 	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
 }
 

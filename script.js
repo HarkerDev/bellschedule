@@ -2,7 +2,7 @@
  * Returns an array of values in the array that aren't in a.
  */
 Array.prototype.diff = function(a) {
-	return this.filter(function(i) {return a.indexOf(i) < 0;});
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
 
 /**
@@ -26,7 +26,7 @@ document.addEventListener("visibilitychange", function(event) {
 
 addEventListener("focus", function(event) {
 	updateSchedule();
-
+	
 	hasFocus = true;
 	updateUpdateInterval();
 });
@@ -47,58 +47,23 @@ addEventListener("popstate", function(event) {
  * Parses schedules, creates schedule for correct week, sets title title on page load
  */
 addEventListener("load", function(event) {
-	initViewport();
-
-	initTitle();
-
-	download("options.json", function(data) {
-			// just assume the file has everything for now
-			JSON.parse(data).sections.forEach(function(section) {
-			//	if(!section.hasOwnProperty("platforms") ||
-			//		((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
-					createOptionSection(section);
-			//	}
-			});
-
-			initOptions();
-			attachOptionActions();
-			
-			parseRawSchedule();
-
-			updateSchedule();
-			//updateClock();
-		}, function(timeout, status) {
-			parseRawSchedule();
-
-			updateSchedule();
-			//updateClock();
-			
-			if(timeout) {
-				warn("Retrieval of options.json timed out!");
-			} else {
-				warn("Something went wrong while retrieving options.json!");
-			}
-		});
+	initOptions();
+	attachOptionActions();
 	
-});
+	initTitle();
+	
+	parseRawSchedule();
 
-function initViewport() {
-	if(mobile) {
-		var meta = document.createElement("meta");
-		meta.name = "viewport";
-		meta.content = 'user-scalable=no, initial-scale=1.0, maximum-scale=1.0';
-		document.getElementsByTagName("head")[0].appendChild(meta);
-		document.getElementsByTagName("body")[0].class = "mobile";
-	}
-}
+	updateSchedule();
+});
 
 function initTitle() {
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goLastWeek);
 	document.getElementById("rightArrow").addEventListener("click", goNextWeek);
-
+	
 	document.getElementById("refresh").addEventListener("click", function(){ updateSchedule(null,true) });
-
+	
 	setTitleTitle();
 }
 
@@ -111,21 +76,14 @@ function parseRawSchedule(){
 	schedules = new Array();
 	var x=0; //index in schedules
 	schedules[0] = new Array(); //create array of special schedule days
-
-	while(rawSchedules.length>0) {
-		//loop through all lines in raw schedule text
-		if(rawSchedules[0].length==0) {
-			//if line is empty, move to next index in schedules
+	
+	while(rawSchedules.length>0){ //loop through all lines in raw schedule text
+		if(rawSchedules[0].length==0){ //if line is empty, move to next index in schedules
 			schedules[++x] = new Array(); //could probably use id as index instead, or just properties
 			rawSchedules.shift();
-		}
-		else
-		{
-			//if line has text, save in current location in schedules
+		}else{ //if line has text, save in current location in schedules
 			var str = rawSchedules.shift();
-			if(x==0 && str.indexOf("|")>=0)
-			{
-				//behavior for blocks of dates with the same schedule
+			if(x==0 && str.indexOf("|")>=0){ //behavior for blocks of dates with the same schedule
 				var start = new Date(str.substring(0,str.indexOf("|")));
 				var end = new Date(str.substring(str.indexOf("|")+1,str.indexOf("\t")));
 				for(;start<=end;start.setDate(start.getDate()+1)){
@@ -143,135 +101,120 @@ function parseRawSchedule(){
 function setDispWeek(time,force){
 	if(!time){
 		time = new Date(); //set default time to now
-
+		
 		urlParams = getUrlParams(); //adjust week shown based on url if default
 		if(urlParams["d"]>0) time.setDate(urlParams["d"]);
 		if(urlParams["m"]>0) time.setMonth(urlParams["m"]-1);
 		if(urlParams["y"]>0) time.setFullYear(urlParams["y"]);
 		if(!isNaN(urlParams["w"])) time.setDate(time.getDate() + urlParams["w"]*7);
 	}
-
+	
 	var date = new Date(time); //variable to keep track of current day in loop
 	getSunday(date);
-
+	
 	if(force || !dispWeek || (date.valueOf()!=dispWeek.valueOf())){
 		var schedule = document.getElementById("schedule"); //get schedule table
-
+		
 		dispWeek = new Date(date);
-
-		if(date > getSunday(new Date()))
-			warn("This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if week is in the future
-		else warn("Good luck on your AP Exams!"); //else display good luck message
-
+		
+		if(date > getSunday(new Date())) {
+			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
+			document.getElementById("news").style.display = "none";
+		}
+		else 
+		{	
+			document.getElementById("warning").style.display = "none"; //else hide warning
+			document.getElementById("news").style.display = "block";
+		}
+		
 		/*
 		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
 		else document.getElementById("currWeek").style.display = "inline"; //else show the button
 		*/
 		while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
-
+		
 		var week = schedule.insertRow(-1); //create new week (row)
-
+		
 		for(var d=0;d<5;d++){ //for each day Monday through Friday (inclusive)
 			date.setDate(date.getDate()+1); //increment day
-
-			createDay(week, date);
-		}
-	}
-}
-
-/**
- * Displays the given warning or hides the warning div if no warning text is given.
- */
-function warn(text) {
-	var warning = document.getElementById("warning")
-	
-	if(text) warning.style.display = "block";
-	else warning.style.display = "none";
-	
-	warning.innerHTML = text;
-}
-
-/**
- * Creates the day for the given date and appends it to the given week
- */
-function createDay(week, date) {
-	var daySchedule = getDayInfo(date); //get schedule for that day
-	
-	var col = week.insertCell(-1); //create cell for day
-	col.date = date.valueOf(); //store date in cell element
-	
-	if(date.getMonth()==9 && date.getDate()==31) //check Halloween
-		col.classList.add("halloween");
-
-	var head = document.createElement("div"); //create header div in cell
-	head.classList.add("head");
-	var headWrapper = document.createElement("div");
-	headWrapper.classList.add("headWrapper");
-	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
-	head.appendChild(headWrapper);
-	col.appendChild(head);
-	
-	var prevEnd = "8:00"; //set start of day to 8:00AM
-
-	if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
-	{
-		for(var i=1;i<schedules[daySchedule[0]].length;i++) {
-			var text = schedules[daySchedule[0]][i];
-			var periodName = text.substring(0,text.indexOf("\t"))
-			var periodTime = text.substring(text.indexOf("\t")+1);
-
-			var start = periodTime.substring(0,periodTime.indexOf("-"));
-			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
-
-			if(options.showPassingPeriods){
-				var passing = document.createElement("div");
-				passing.classList.add("period");
-				createPeriod(passing,"",prevEnd,start,date);
-				col.appendChild(passing);
-			}
-
-			prevEnd = end;
-
-			var period = document.createElement("div");
-			period.classList.add("period");
-
-			if(periodName.indexOf("|")>=0)
-			{
-				//handle split periods (i.e. lunches)
-				var table = document.createElement("table");
-				table.classList.add("lunch");
-				var row = table.insertRow(-1);
-
-				var lunch1 = row.insertCell(-1);
-				var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
-
-				createSubPeriods(
-						lunch1,
-						periodName.substring(0,periodName.indexOf("||")),
-						start,
-						lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
-						lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
-						end,
-						date
-				);
-
-				var lunch2 = row.insertCell(-1);
-				var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
-
-				createSubPeriods(
-						lunch2,
-						periodName.substring(periodName.indexOf("||")+2),
-						start,
-						lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
-						lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
-						end,
-						date
-				);
-
-				period.appendChild(table);
-			}
-			else createPeriod(period,periodName,start,end,date);
-			col.appendChild(period);
+			
+			var daySchedule = getDayInfo(date); //get schedule for that day
+			
+			var col = week.insertCell(-1); //create cell for day
+			col.date = date.valueOf(); //store date in cell element
+			
+			if(date.getMonth()==9 && date.getDate()==31) //check Halloween
+				col.classList.add("halloween");
+			
+			var head = document.createElement("div"); //create header div in cell
+			head.classList.add("head");
+			var headWrapper = document.createElement("div");
+			headWrapper.classList.add("headWrapper");
+			headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
+			head.appendChild(headWrapper);
+			col.appendChild(head);
+			
+			var prevEnd = "8:00"; //set start of day to 8:00AM
+			
+			if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
+				for(var i=1;i<schedules[daySchedule[0]].length;i++){
+					var text = schedules[daySchedule[0]][i];
+					var periodName = text.substring(0,text.indexOf("\t"))
+					var periodTime = text.substring(text.indexOf("\t")+1);
+					
+					var start = periodTime.substring(0,periodTime.indexOf("-"));
+					var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
+					
+					if(options.showPassingPeriods){
+						var passing = document.createElement("div");
+						passing.classList.add("period");
+						createPeriod(passing,"",prevEnd,start,date);
+						col.appendChild(passing);
+					}
+					
+					prevEnd = end;
+					
+					var period = document.createElement("div");
+					period.classList.add("period");
+					
+					if(periodName.indexOf("|")>=0){ //handle split periods (i.e. lunches)
+						var table = document.createElement("table");
+						table.classList.add("lunch");
+						var row = table.insertRow(-1);
+						
+						var lunch1 = row.insertCell(-1);
+						var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
+						
+						createSubPeriods(
+								lunch1,
+								periodName.substring(0,periodName.indexOf("||")),
+								start,
+								lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
+								lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
+								end,
+								date
+						);
+						
+						var lunch2 = row.insertCell(-1);
+						var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
+						
+						createSubPeriods(
+								lunch2,
+								periodName.substring(periodName.indexOf("||")+2),
+								start,
+								lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
+								lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
+								end,
+								date
+						);
+						
+						period.appendChild(table);
+					}else{
+						createPeriod(period,periodName,start,end,date);
+					}
+					
+					col.appendChild(period);
+				}
 		}
 	}
 }
@@ -290,7 +233,7 @@ function setTitleTitle(){
 function getUrlParams(){
 	var urlParams;
 	var match,
-		pl	   = /\+/g,  // Regex for replacing addition symbol with a space
+		pl     = /\+/g,  // Regex for replacing addition symbol with a space
 		search = /([^&=]+)=?([^&]*)/g,
 		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
 		query  = location.search.substring(1);
@@ -341,10 +284,9 @@ function getDateFromString(string,date){
  */
 function getDayInfo(day){
 	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
-
+	
 	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
-		if(!schedules[0][i].indexOf(dateString)){
-			//found special schedule
+		if(!schedules[0][i].indexOf(dateString)){ //found special schedule
 			var id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1)
 			if(id==0) return [0,0,dateString]; //schedule id 0 represents no school
 			for(var j=1;j<schedules.length;j++){ //find index of schedule id
@@ -354,10 +296,7 @@ function getDayInfo(day){
 			}
 			return [0,id,dateString]; //couldn't find specified schedule; display nothing instead
 		}
-
-	var day = day.getDay();
-	if(day==0 || day==6) return [0,0,dateString]; //no school on weekends
-	else return [day,day,dateString]; //default schedule for that day
+	return [day.getDay(),day.getDay(),dateString]; //default schedule for that day
 }
 
 /**
@@ -367,26 +306,27 @@ function getDayInfo(day){
 function createPeriod(parent,name,start,end,date){
 	startDate = getDateFromString(start,date);
 	endDate = getDateFromString(end,date);
-
+	
 	var periodWrapper = document.createElement("div");
 	periodWrapper.classList.add("periodWrapper");
 	periodWrapper.periodName = name;
 	periodWrapper.start = startDate;
 	periodWrapper.end = endDate;
-
+	
 	var length = (endDate-startDate)/60000;
-
+	
 	if(length > 0) {
 		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
-
+		
 		if(length >= 15) {
 			periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + "-" + end;
 			if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
 				periodWrapper.classList.add("long");
 		}
-
+		
 	return parent.appendChild(periodWrapper);
 	}
+	
 }
 
 /**
@@ -402,14 +342,14 @@ function createSubPeriods(parent,name,start1,end1,start2,end2,date){
 			end1,
 			date);
 	parent.appendChild(p1);
-
+	
 	if(options.showPassingPeriods){
 		var lunchPassing = document.createElement("div");
 		lunchPassing.classList.add("period");
 		createPeriod(lunchPassing,"",end1,start2,date);
 		parent.appendChild(lunchPassing);
 	}
-
+	
 	var p2 = document.createElement("div");
 	p2.classList.add("period");
 	var w2 = document.createElement("div");
@@ -430,7 +370,7 @@ function goLastWeek(){
 	var week = new Date(dispWeek); //change schedule
 	week.setDate(week.getDate() - 7);
 	updateSchedule(week);
-
+	
 	if(isNaN(urlParams["w"])) //update url
 		urlParams["w"] = -1;
 	else {
@@ -447,7 +387,7 @@ function goNextWeek(){
 	var week = new Date(dispWeek); //change schedule
 	week.setDate(week.getDate() + 7);
 	updateSchedule(week);
-
+	
 	if(isNaN(urlParams["w"])) //update url
 		urlParams["w"] = 1;
 	else{
@@ -463,12 +403,12 @@ function goNextWeek(){
 function goCurrWeek(){
 	var week = new Date(); //The current week.
 	updateSchedule(week);
-
+	
 	delete urlParams["w"];
 	delete urlParams["m"];
 	delete urlParams["d"];
 	delete urlParams["y"];
-
+	
 	updateSearch(week);
 }
 
@@ -481,7 +421,7 @@ function updateSearch(week){
 		search += param + "=" + urlParams[param] + "&";
 	}
 	search = search.slice(0,-1);
-
+	
 	history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
@@ -491,11 +431,11 @@ function updateSearch(week){
 function setHighlightedPeriod(time){
 	//set default time argument
 	if(!time) time = Date.now();
-
+	
 	//set date based on time (for finding day to highlight)
 	var date = new Date(time);
 	date.setHours(0,0,0,0);
-
+	
 	//clear previous highlighted day/periods
 	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
 	var prevDay = document.getElementById("today");
@@ -503,7 +443,7 @@ function setHighlightedPeriod(time){
 	if(prevDay){
 		//clear previous highlighted periods
 		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
-
+		
 		for(var i=prevPeriods.length-1;i>=0;i--){
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
@@ -511,12 +451,12 @@ function setHighlightedPeriod(time){
 			var periodLength = prevPeriod.getElementsByClassName("periodLength")[0];
 			if(periodLength) prevPeriod.removeChild(periodLength);
 		}
-
+		
 		//clear previous highlighted day
 		//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
 		prevDay.id = "";
 	}
-
+	
 	//set new highlighted day/period
 	var days = document.getElementById("schedule").rows[0].cells;
 	for(var d=0;d<days.length;d++){
@@ -524,7 +464,7 @@ function setHighlightedPeriod(time){
 		if(date.valueOf() == day.date){ //test if date should be highlighted
 			//set new highlighted day
 			day.id = "today";
-
+			
 			//set new highlighted periods
 			var periods = day.getElementsByClassName("periodWrapper");
 			for(var p=0;p<periods.length;p++){
@@ -534,7 +474,7 @@ function setHighlightedPeriod(time){
 					//add period length if it fits
 					if((period.end-period.start)/60000>=40){
 						var length = (period.end - time) / 60000;
-						period.innerHTML += "<div class=\"periodLength\">" +
+						period.innerHTML += "<div class=\"periodLength\">" + 
 								(length>1 ?
 									Math.round(length) + " min. left</div>" :
 									Math.round(length*60) + " sec. left</div>");
@@ -543,19 +483,19 @@ function setHighlightedPeriod(time){
 			}
 		}
 	}
-
+	
 	if(options.enablePeriodNotifications) {
 		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now")); //needs to be an array and not an HTML
-
+		
 		var diff1 = currPeriods.diff(prevPeriods);
 		var diff2 = prevPeriods.diff(currPeriods);
-
+		
 		for(var i=0; i<diff1.length; i++) {
-			var name = currPeriods[i].periodName;
+			var name = currPeriods[0].periodName;
 			if(name && !hasFocus) sendNotification(name + " has started.", options.notificationDuration);
 		}
 		for(var i=0; i<diff2.length; i++) {
-			var name = prevPeriods[i].periodName;
+			var name = prevPeriods[0].periodName;
 			if(name && !hasFocus) sendNotification(name + " has ended.", options.notificationDuration);
 		}
 	}
@@ -589,7 +529,7 @@ function toggleOptions(){
 	if(document.getElementById("options").classList.contains("expanded"))
 		contractOptions();
 	else expandOptions();
-
+	
 }
 
 /**
@@ -600,17 +540,16 @@ function initOptions(){
 	var opt = document.getElementById("options");
 	opt.addEventListener("mouseover", expandOptions);
 	opt.addEventListener("mouseout", contractOptions);
-
+	
 	if(mobile) {
 		opt.classList.add("mobile");
 	}
-
+	
 	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
-
+	
 	var inputs = opt.getElementsByTagName("input");
-
-	if(localStorage.updateScheduleInterval) {
-		//rename key
+	
+	if(localStorage.updateScheduleInterval) { //rename key
 		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
 		localStorage.removeItem("updateScheduleInterval");
 	}
@@ -622,92 +561,30 @@ function initOptions(){
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.checked;
 			});
-
+			
 			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
 			else options[input.name] = localStorage[input.name] = input.checked;
 		} else if(input.type=="number") {										//numbers
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
 			});
-
+			
 			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
 			else options[input.name] = parseInt(localStorage[input.name] = input.value);
 		} else {																//strings
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.value;
 			});
-
+			
 			if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
 			else options[input.name] = localStorage[input.name] = input.value;
 		}
 	}
 }
 /**
- * Create and insert options section title.
- */
-function createOptionSectionTitle(section) {
-	var tr = document.createElement("tr");
-	var th = document.createElement("th");
-	th.colspan = 2;
-	if(section.hasOwnProperty("tooltip")) {
-		var span = document.createElement("span");
-		span.title = section["tooltip"];
-		span.innerHTML = section.name + '<sup class="tooltipIndicator">?</sup>';
-		th.appendChild(span);
-	} else {
-		th.textContent = section.name;
-	}
-	tr.appendChild(th);
-	document.getElementById("optionsContent").appendChild(tr);
-}
-
-/**
- * Create and insert options section.
- */
-function createOptionSection(section) {
-	createOptionSectionTitle(section);
-	section.options.forEach(function(option) {
-		//if(!option.hasOwnProperty("platforms") ||
-		//   ((mobile && option.platforms.indexOf("mobile") >= 0) || !mobile)) {
-			createOption(option);
-		//}
-	});
-}
-
-/**
- * Create and insert option into options.
- */
-function createOption(option) {
-	var tr = document.createElement("tr");
-	var tddesc = document.createElement("td");
-	var tdinput = document.createElement("td");
-	if(option.hasOwnProperty("tooltip")) {
-		var span = document.createElement("span");
-		span.title = option.tooltip;
-		span.innerHTML = option.description + '<sup class="tooltipIndicator">?</sup>:';
-		tddesc.appendChild(span);
-	} else {
-		tddesc.textContent = option.description + ":";
-	}
-	var input = document.createElement("input");
-	input.name = option.name;
-	input.type = option.type;
-	if(input.type == "number") {
-		input.min = 0;
-		input.value = option.default;
-	} else if(input.type == "checkbox") {
-		input.checked = option.default;
-	}
-	tdinput.appendChild(input);
-	tr.appendChild(tddesc);
-	tr.appendChild(tdinput);
-	document.getElementById("optionsContent").appendChild(tr);
-}
-
-/**
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
-function attachOptionActions() {
+function attachOptionActions(){
 	updateUpdateInterval();
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
 		updateUpdateInterval();
@@ -762,32 +639,6 @@ function attachOptionActions() {
 }
 
 /**
- * Retrieve file data via XMLHttpRequest.
- *
- * cb is for successful retrieval and takes a String as a parameter.
- * errcb is for an error on retrieval and takes:
- *    1. a boolean representing whether or not the error was a timeout.
- *    2. an integer representing the status of the response (this is null on timeout).
- */
-function download(url, cb, errcb) {
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", url, true);
-	xmlhttp.onreadystatechange = function() {
-		if(xmlhttp.readyState == 4) {
-			if(xmlhttp.status == 200) {
-				cb(xmlhttp.responseText);
-			} else if(errcb) {
-				errcb(false, xmlhttp.status);
-			}
-		}
-	};
-	xmlhttp.ontimeout = function() {
-		errcb(true, null);
-	};
-	xmlhttp.send();
-}
-
-/**
  * Sets the correct update interval based on the current state (focus and visibility) of the document.
  */
 function updateUpdateInterval() {
@@ -819,11 +670,11 @@ function sendNotification(text, duration) {
 		var notification = new Notification(text);
 		if(duration > 0)
 			setTimeout(function() {notification.close();}, duration*1000);
-	}
+	} 
 }
 
 /**
- * Function to detect whether the page is being displayed on a mobile device.
+ * Function to detect whether the page is being displayed on a mobile device. 
  * Currently checks if the useragent/vendor matches a regex string for mobile phones.
  */
 function isMobile() {
