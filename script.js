@@ -77,6 +77,8 @@ function parseRawSchedule(){
 	var x=0; //index in schedules
 	schedules[0] = new Array(); //create array of special schedule days
 	
+	while(rawSchedules.length>0){ //loop through all lines in raw schedule text
+		if(rawSchedules[0].length==0){ //if line is empty, move to next index in schedules
 			schedules[++x] = new Array(); //could probably use id as index instead, or just properties
 			rawSchedules.shift();
 		}else{ //if line has text, save in current location in schedules
