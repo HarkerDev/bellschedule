@@ -119,12 +119,10 @@ function setDispWeek(time,force){
 		
 		if(date > getSunday(new Date())) {
 			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
-			document.getElementById("news").style.display = "none";
 		}
 		else 
-		{	
+		{
 			document.getElementById("warning").style.display = "none"; //else hide warning
-			document.getElementById("news").style.display = "block";
 		}
 		
 		/*
