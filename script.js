@@ -58,6 +58,11 @@ addEventListener("load", function(event) {
 
 	initTitle();
 
+	parseRawSchedule();
+
+	updateSchedule();
+	//updateClock();
+
 	download("options.json", function(data) {
 		// just assume the file has everything for now
 		JSON.parse(data).sections.forEach(function(section) {
@@ -69,11 +74,6 @@ addEventListener("load", function(event) {
 
 		initOptions();
 		attachOptionActions();
-
-		parseRawSchedule();
-
-		updateSchedule();
-		//updateClock();
 	}, function(timeout, status) {
 		if(timeout) {
 			alert("Retrieval of options.json timed out!");
