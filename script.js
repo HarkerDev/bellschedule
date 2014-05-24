@@ -74,6 +74,8 @@ addEventListener("load", function(event) {
 
 			initOptions();
 			attachOptionActions();
+
+			updateSchedule(null, true);
 		}, function(timeout, status) {
 			if(timeout) {
 				warn("Retrieval of options.json timed out!");
