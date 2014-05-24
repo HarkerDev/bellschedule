@@ -64,23 +64,24 @@ addEventListener("load", function(event) {
 	//updateClock();
 
 	download("options.json", function(data) {
-		// just assume the file has everything for now
-		JSON.parse(data).sections.forEach(function(section) {
-			if(!section.hasOwnProperty("platforms") ||
-			   ((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
-				createOptionSection(section);
+			// just assume the file has everything for now
+			JSON.parse(data).sections.forEach(function(section) {
+				if(!section.hasOwnProperty("platforms") ||
+					((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
+					createOptionSection(section);
+				}
+			});
+
+			initOptions();
+			attachOptionActions();
+		}, function(timeout, status) {
+			if(timeout) {
+				warn("Retrieval of options.json timed out!");
+			} else {
+				warn("Something went wrong while retrieving options.json!");
 			}
 		});
-
-		initOptions();
-		attachOptionActions();
-	}, function(timeout, status) {
-		if(timeout) {
-			alert("Retrieval of options.json timed out!");
-		} else {
-			alert("Something went wrong while retrieving options.json!");
-		}
-	});
+	
 });
 
 function initViewport() {
@@ -168,8 +169,8 @@ function setDisplayDate(time, force) {
 		displayDate = new Date(date);
 
 		if(date > (mobile ? getDayBegnning(new Date()) : getSunday(new Date())))
-			document.getElementById("warning").style.display = "block"; //display warning if week is in the future
-		else document.getElementById("warning").style.display = "none"; //else hide warning
+			warn("This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if week is in the future
+		else warn("Good luck on your AP Exams!"); //else display good luck message
 
 		/*
 		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
@@ -190,6 +191,21 @@ function setDisplayDate(time, force) {
 	}
 }
 
+/**
+ * Displays the given warning or hides the warning div if no warning text is given.
+ */
+function warn(text) {
+	var warning = document.getElementById("warning")
+	
+	if(text) warning.style.display = "block";
+	else warning.style.display = "none";
+	
+	warning.innerHTML = text;
+}
+
+/**
+ * Creates the day for the given date and appends it to the given week
+ */
 function createDay(week, date) {
 	var daySchedule = getDayInfo(date); //get schedule for that day
 
@@ -542,11 +558,11 @@ function setHighlightedPeriod(time) {
 		var diff2 = prevPeriods.diff(currPeriods);
 
 		for(var i=0; i<diff1.length; i++) {
-			var name = currPeriods[0].periodName;
+			var name = currPeriods[i].periodName;
 			if(name && !hasFocus) sendNotification(name + " has started.", options.notificationDuration);
 		}
 		for(var i=0; i<diff2.length; i++) {
-			var name = prevPeriods[0].periodName;
+			var name = prevPeriods[i].periodName;
 			if(name && !hasFocus) sendNotification(name + " has ended.", options.notificationDuration);
 		}
 	}
