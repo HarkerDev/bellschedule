@@ -60,7 +60,7 @@ addEventListener("load", function(event) {
 
 	parseRawSchedule();
 
-	updateSchedule();
+	//updateSchedule();
 	//updateClock();
 
 	download("options.json", function(data) {
@@ -77,6 +77,8 @@ addEventListener("load", function(event) {
 
 			updateSchedule(null, true);
 		}, function(timeout, status) {
+			updateSchedule();
+			
 			if(timeout) {
 				warn("Retrieval of options.json timed out!");
 			} else {
