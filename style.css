@@ -25,6 +25,10 @@ a{
 		top: 0;
 		width: 480px;
 	}
+	
+	#container{
+		position: absolute;
+	}
 }
 /* iPad */
 @media only screen and (width:768px) and (device-width:768px) and (device-height:1024px) and (orientation: landscape) {
@@ -36,6 +40,10 @@ a{
 		top: 0;
 		width: 1024px;
 	}
+	
+	#container{
+		position: absolute;
+	}
 }
 
 body{
@@ -46,11 +54,10 @@ body{
 }
 
 #container{
-	position: absolute;
-	/*top: 8em;
-	width: 100%;*/
+	margin: auto;
 	padding: 5px;
 }
+
 
 #titleTitles, #schedules, #changelog{
 	display: none;
