@@ -4,6 +4,13 @@
 **/
 
 /**
+ * CSS things
+ */
+addEventListener("scroll", function(event) {
+	document.getElementById("header").style.left = scrollX + "px";
+});
+
+/**
  * Returns an array of values in the array that aren't in a.
  */
 Array.prototype.diff = function(a) {
