@@ -508,18 +508,21 @@ English	9:00-11:00
 Lunch	11:00-12:00
 Conflicts	12:00-2:00</div>
 
-<h1 id="header" class="noHighlight">
-	<span id="leftArrow" title="Last Week">&#8249;</span>
-	<span id="rightArrow" title="Next Week">&#8250;</span>
-	<span id="title">Bell Schedule</span>
-</h1>
+<div id="header" class="noHighlight">
+	<h1>
+		<span id="leftArrow" title="Last Week">&#8249;</span>
+		<span id="rightArrow" title="Next Week">&#8250;</span>
+		<span id="title">Bell Schedule</span>
+	</h1>
+	<div id="warning"></div>
+</div>
 
 <!--<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
 	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
 </h2></div>-->
 <!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
 
-<div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
+<div id="container">
 
 <table id="schedule"></table>
 
@@ -533,6 +536,8 @@ Conflicts	12:00-2:00</div>
 	<div id="repo">
 		<a href="https://github.com/HarkerDev/bellschedule" target="_blank" title="GitHub repository">GitHub repository</a>
 	</div>
+</div>
+
 </div>
 
 </body>

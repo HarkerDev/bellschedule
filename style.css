@@ -1,3 +1,7 @@
+a{
+	color: #555;
+}
+
 @-webkit-keyframes fadeIO {
 	0% {opacity: 0;}
 	30% {opacity: 100%;}
@@ -29,13 +33,18 @@
 }
 
 body{
+	margin: 0;
 	font: .75em "Segoe UI", "Arial", sans-serif;
 	text-align: center;
 	background-position-x: center;
 }
 
-a{
-	color: #555;
+#container{
+	/*position: absolute;
+	top: 8em;*/
+	width: 100%;
+	/*padding: 5px;*/
+	overflow: auto;
 }
 
 #titleTitles, #schedules, #changelog{
@@ -52,7 +61,9 @@ a{
 }
 
 #header{
+	/*position: fixed;*/
 	margin: .67em auto;
+	width: 100%;
 	max-width: 400px;
 }
 
@@ -91,7 +102,6 @@ a{
 
 #warning{
 	display:none;
-	margin-bottom: 5px;
 }
 
 table{
