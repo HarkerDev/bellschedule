@@ -212,6 +212,9 @@ table{
 }
 
 #options{
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
 	position: fixed;
 	right: -50%;
 	bottom: -70%;
