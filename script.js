@@ -83,10 +83,6 @@ addEventListener("load", function(event) {
 			attachOptionActions();
 
 			updateSchedule(null, true);
-			
-			
-			warn("screen: " + window.matchMedia( "screen" ).matches + "; handheld: " + window.matchMedia( "handheld" ).matches);
-			
 		}, function(timeout, status) {
 			updateSchedule();
 			
@@ -95,7 +91,6 @@ addEventListener("load", function(event) {
 			} else {
 				warn("Something went wrong while retrieving options.json!");
 			}
-			warn("screen: " + window.matchMedia( "screen" ).matches + "; handheld: " + window.matchMedia( "handheld" ).matches);
 		});
 });
 
