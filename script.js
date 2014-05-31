@@ -119,8 +119,8 @@ function setDispWeek(time,force){
 		
 		if(date > getSunday(new Date()))
 			warn("This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if week is in the future
-		else warn(""); //else display good luck message
-		
+		else warn("Good luck on your finals!"); //else display good luck message
+
 		/*
 		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
 		else document.getElementById("currWeek").style.display = "inline"; //else show the button
