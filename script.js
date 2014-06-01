@@ -712,7 +712,7 @@ function createOption(option) {
 	var input = document.createElement("input");
 	input.name = option.name;
 	input.type = option.type;
-	var defaultValue = (mobile && option.hasOwnProperty(mobileDefault)) ? option.mobileDefault : option.default; //choose desktop or mobile default value
+	var defaultValue = (mobile && option.hasOwnProperty("mobileDefault")) ? option.mobileDefault : option.default; //choose desktop or mobile default value
 	if(input.type == "number") {
 		input.min = 0; //may as well keep this here until any options can take negative
 		input.value = defaultValue;
