@@ -750,8 +750,13 @@ function attachOptionActions() {
 		}
 	});
 
+	document.body.classList.add(options.enableDayView ? "day" : "week");
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
 		goCurr();
+		
+		document.body.classList.remove("week");
+		document.body.classList.remove("day");
+		document.body.classList.add(options.enableDayView ? "day" : "week");
 	});
 
 	if(!mobile) {

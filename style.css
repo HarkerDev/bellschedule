@@ -52,7 +52,7 @@ body{
 
 /* apply absolute formatting on small screens so that there's padding on both sides of the schedule */
 @media only screen and (max-width:814px){
-	#container{
+	.week #container{
 		position: absolute;
 	}
 }
