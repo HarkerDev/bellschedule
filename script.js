@@ -170,7 +170,7 @@ function setDisplayDate(time, force) {
 	}
 
 	var date = new Date(time); //variable to keep track of current day in loop
-	if(!mobile || !options.enableDayView) getSunday(date);
+	if(!options.enableDayView) getSunday(date);
 	else getDayBegnning(date);
 
 	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())){
@@ -190,7 +190,7 @@ function setDisplayDate(time, force) {
 
 		var week = schedule.insertRow(-1); //create new week (row)
 
-		if(!mobile || !options.enableDayView)
+		if(!options.enableDayView)
 			for(var d=0;d<5;d++) {
 				//for each day Monday through Friday (inclusive)
 				date.setDate(date.getDate()+1); //increment day
@@ -443,10 +443,10 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
  */
 function goLast() {
 	var week = new Date(displayDate); //change schedule
-	week.setDate(week.getDate() - ((mobile&&options.enableDayView) ? 1 : 7)); //code is hacky; fix pls
+	week.setDate(week.getDate() - (options.enableDayView ? 1 : 7)); //code is hacky; fix pls
 	updateSchedule(week);
 
-    var letter = (mobile && options.enableDayView) ? "d" : "w";
+    var letter = options.enableDayView ? "d" : "w";
 	if(isNaN(urlParams[letter])) //update url
 		urlParams[letter] = -1;
 	else {
@@ -462,10 +462,10 @@ function goLast() {
  */
 function goNext() {
 	var week = new Date(displayDate); //change schedule
-	week.setDate(week.getDate() + ((mobile&&options.enableDayView) ? 1 : 7));
+	week.setDate(week.getDate() + (options.enableDayView ? 1 : 7));
 	updateSchedule(week);
 
-    var letter = (mobile && options.enableDayView) ? "d" : "w";
+    var letter = options.enableDayView ? "d" : "w";
 	if(isNaN(urlParams[letter])) //update url
 		urlParams[letter] = 1;
 	else{
@@ -712,11 +712,12 @@ function createOption(option) {
 	var input = document.createElement("input");
 	input.name = option.name;
 	input.type = option.type;
+	var defaultValue = (mobile && option.hasOwnProperty(mobileDefault)) ? option.mobileDefault : option.default; //choose desktop or mobile default value
 	if(input.type == "number") {
-		input.min = 0;
-		input.value = option.default;
+		input.min = 0; //may as well keep this here until any options can take negative
+		input.value = defaultValue;
 	} else if(input.type == "checkbox") {
-		input.checked = option.default;
+		if(defaultValue) input.checked = "checked";
 	}
 	tdinput.appendChild(input);
 	tr.appendChild(tddesc);
