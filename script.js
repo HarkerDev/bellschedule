@@ -757,6 +757,8 @@ function attachOptionActions() {
 		document.body.classList.remove("week");
 		document.body.classList.remove("day");
 		document.body.classList.add(options.enableDayView ? "day" : "week");
+		
+		scrollTo(0,0); //scroll back to top-left corner
 	});
 
 	if(!mobile) {
