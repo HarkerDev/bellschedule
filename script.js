@@ -21,13 +21,17 @@ Array.prototype.diff = function(a) {
  * Globals
  */
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
-var urlParams; //object with GET variables as properties and their respective values as values
+var urlParams = getUrlParams(); //object with GET variables as properties and their respective values as values
 var schedules; //array of schedules (each schedule is an array in this array
 var displayDate; //beginning of time period currently being displayed by the schedule
 var mobile = isMobile();
 var updateScheduleID; //ID of interval of updateSchedule
 var options = new Object();
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
+
+/**
+ * Event listeners
+ */
 
 document.addEventListener("visibilitychange", function(event) {
 	if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
@@ -155,31 +159,26 @@ function parseRawSchedule() {
  * Displays schedule of the week of the given date/time
  */
 function setDisplayDate(time, force) {
-	if(!time)
-	{
-		time = new Date(); //set default time to now
-
-		urlParams = getUrlParams(); //adjust week shown based on url if default
-		if(!isNaN(urlParams["w"])) {
-			time.setDate(time.getDate() + urlParams["w"]*7);
-		} else {
-			if(urlParams["d"]>0) time.setDate(urlParams["d"]);
-			if(urlParams["m"]>0) time.setMonth(urlParams["m"]-1);
-			if(urlParams["y"]>0) time.setFullYear(urlParams["y"]);
-		}
+	var date = (time ? new Date(time) : new Date()); //variable to keep track of current day in loop
+	
+	if(!time) {
+		//adjust week shown based on url if default
+		if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
+		if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
+		
+		if(options.enableDayView) date = getSunday(date);
+		if(urlParams["d"]>0) date.setDate(urlParams["d"]);
 	}
 
-	var date = new Date(time); //variable to keep track of current day in loop
-	if(!options.enableDayView) getSunday(date);
-	else getDayBegnning(date);
+	setDayBeginning(date);
 
-	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())){
+	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())) {
 		var schedule = document.getElementById("schedule"); //get schedule table
 
 		displayDate = new Date(date);
 
-		if(date > (mobile ? getDayBegnning(new Date()) : getSunday(new Date())))
-			warn("This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if week is in the future
+		if(getSunday(date) > getSunday(new Date()))
+			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
 		else warn("Good luck on your finals!"); //else display good luck message
 
 		/*
@@ -190,14 +189,15 @@ function setDisplayDate(time, force) {
 
 		var week = schedule.insertRow(-1); //create new week (row)
 
-		if(!options.enableDayView)
+		if(!options.enableDayView) {
+			date = getSunday(date);
 			for(var d=0;d<5;d++) {
 				//for each day Monday through Friday (inclusive)
 				date.setDate(date.getDate()+1); //increment day
 
 				createDay(week, date);
 			}
-		else createDay(week, date);
+		} else createDay(week, date);
 	}
 }
 
@@ -312,31 +312,33 @@ function setTitleTitle() {
 function getUrlParams() {
 	var urlParams;
 	var match,
-		pl	   = /\+/g,  // Regex for replacing addition symbol with a space
+		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
 		search = /([^&=]+)=?([^&]*)/g,
 		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query  = location.search.substring(1);
+		query = location.search.substring(1);
 
 	urlParams = {};
 	while (match = search.exec(query))
-	   urlParams[decode(match[1])] = decode(match[2]);
+		urlParams[decode(match[1])] = decode(match[2]);
+	
 	return urlParams;
 }
 
 /**
- * Sets given date to the Sunday of next week if date is Saturday; else sets date to Sunday of that week
+ * Returns the Sunday of next week if date is Saturday; else returns the Sunday of that week
  */
-function getSunday(date) {
+function getSunday(d) {
+	var date = new Date(d);
 	if(date.getDay()>=6) date.setDate(date.getDate()+1); //set date to next Sunday if today is Saturday
 	else date.setDate(date.getDate()-date.getDay()); //else set date Sunday of this week
-	getDayBegnning(date); //set to beginning of day
+	setDayBeginning(date); //set to beginning of day
 	return date;
 }
 
 /**
  * Sets given date to beginning of the day (12:00 AM).
  */
-function getDayBegnning(date) {
+function setDayBeginning(date) {
 	date.setHours(0,0,0,0);
 }
 
@@ -439,66 +441,57 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 }
 
 /**
- * Navigates schedule to previous week.
+ * Navigates schedule to previous date.
  */
 function goLast() {
-	var week = new Date(displayDate); //change schedule
-	week.setDate(week.getDate() - (options.enableDayView ? 1 : 7)); //code is hacky; fix pls
-	updateSchedule(week);
-
-    var letter = options.enableDayView ? "d" : "w";
-	if(isNaN(urlParams[letter])) //update url
-		urlParams[letter] = -1;
-	else {
-		urlParams[letter] -= 1;
-		if(urlParams[letter] == 0)
-			delete urlParams[letter];
-	}
-	updateSearch(week);
+	var date = new Date(displayDate);
+	date.setDate(date.getDate() - (options.enableDayView ? 1 : 7));
+	updateSchedule(date);
+	
+	updateSearch(date);
 }
 
 /**
- * Navigates schedule to next week.
+ * Navigates schedule to next date.
  */
 function goNext() {
-	var week = new Date(displayDate); //change schedule
-	week.setDate(week.getDate() + (options.enableDayView ? 1 : 7));
-	updateSchedule(week);
-
-    var letter = options.enableDayView ? "d" : "w";
-	if(isNaN(urlParams[letter])) //update url
-		urlParams[letter] = 1;
-	else{
-		urlParams[letter] = parseInt(urlParams[letter]) + 1;
-		if(urlParams[letter] == 0)
-			delete urlParams[letter];
-	}
-	updateSearch(week);
+	var date = new Date(displayDate);
+	date.setDate(date.getDate() + (options.enableDayView ? 1 : 7));
+	updateSchedule(date);
+	
+	updateSearch(date);
 }
 
 /**
- * Navigates schedule to current week.
+ * Navigates schedule to current date.
  */
 function goCurr() {
-	var week = new Date(); //The current week.
-	updateSchedule(week);
+	var date = new Date();
+	updateSchedule(date);
 
-	delete urlParams["w"];
-	delete urlParams["m"];
-	delete urlParams["d"];
-	delete urlParams["y"];
-
-	updateSearch(week);
+	updateSearch(date);
 }
 
 /**
- * Updates GET variables to those in urlParams, pushes history state
+ * Updates GET variables and urlParams to reflect date in week and pushes corresponding history state.
  */
-function updateSearch(week) {
+function updateSearch(week, noHistory) {
+	var today = new Date();
+	
+	if(week.getDate() != today.getDate()) {
+		urlParams["m"] = week.getMonth()+1;
+		urlParams["d"] = week.getDate();
+	} else {
+		delete urlParams["m"];
+		delete urlParams["d"];
+	}
+	if(week.getYear() != today.getYear()) urlParams["y"] = week.getFullYear().toString().substr(-2);
+	else delete urlParams["y"];
+	
 	var search = "?";
 	for(var param in urlParams) search += param + "=" + urlParams[param] + "&";
 	search = search.slice(0,-1);
-
+	
 	history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
