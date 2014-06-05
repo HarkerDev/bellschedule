@@ -375,7 +375,7 @@ function createPeriod(parent, name, start, end, date){
 		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
 
 		if(length >= 15) {
-			periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + "-" + end;
+			if(name) periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + " – " + end;
 			if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
 				periodWrapper.classList.add("long");
 		}
