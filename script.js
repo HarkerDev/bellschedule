@@ -74,28 +74,7 @@ addEventListener("load", function(event) {
 	//updateSchedule();
 	//updateClock();
 
-	download("options.json", function(data) {
-			// just assume the file has everything for now
-			JSON.parse(data).sections.forEach(function(section) {
-				if(!section.hasOwnProperty("platforms") ||
-					((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
-					createOptionSection(section);
-				}
-			});
-
-			initOptions();
-			attachOptionActions();
-
-			updateSchedule(null, true);
-		}, function(timeout, status) {
-			updateSchedule();
-			
-			if(timeout) {
-				warn("Retrieval of options.json timed out!");
-			} else {
-				warn("Something went wrong while retrieving options.json!");
-			}
-		});
+	download("options.json", createOptions, displayOptionsError);
 });
 
 function initViewport() {
@@ -165,9 +144,9 @@ function setDisplayDate(time, force) {
 		//adjust week shown based on url if default
 		if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
 		if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
-		
-		if(options.enableDayView) date = getSunday(date);
 		if(urlParams["d"]>0) date.setDate(urlParams["d"]);
+		
+		if(!options.enableDayView) date = getMonday(date);
 	}
 
 	setDayBeginning(date);
@@ -177,12 +156,12 @@ function setDisplayDate(time, force) {
 
 		displayDate = new Date(date);
 
-		if(getSunday(date) > getSunday(new Date()))
+		if(getMonday(date) > getMonday(new Date()))
 			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
 		else warn("Good luck on your finals!"); //else display good luck message
 
 		/*
-		if(date.valueOf()==getSunday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
+		if(date.valueOf()==getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
 		else document.getElementById("currWeek").style.display = "inline"; //else show the button
 		*/
 		while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
@@ -190,12 +169,12 @@ function setDisplayDate(time, force) {
 		var week = schedule.insertRow(-1); //create new week (row)
 
 		if(!options.enableDayView) {
-			date = getSunday(date);
+			date = getMonday(date);
 			for(var d=0;d<5;d++) {
 				//for each day Monday through Friday (inclusive)
-				date.setDate(date.getDate()+1); //increment day
-
 				createDay(week, date);
+
+				date.setDate(date.getDate()+1); //increment day
 			}
 		} else createDay(week, date);
 	}
@@ -325,12 +304,12 @@ function getUrlParams() {
 }
 
 /**
- * Returns the Sunday of next week if date is Saturday; else returns the Sunday of that week
+ * Returns the Monday of next week if date is Saturday; else returns the Monday of that week
  */
-function getSunday(d) {
+function getMonday(d) {
 	var date = new Date(d);
-	if(date.getDay()>=6) date.setDate(date.getDate()+1); //set date to next Sunday if today is Saturday
-	else date.setDate(date.getDate()-date.getDay()); //else set date Sunday of this week
+	if(date.getDay()>=6) date.setDate(date.getDate()+2); //set date to next Monday if today is Saturday
+	else date.setDate(date.getDate()-date.getDay()+1); //else set date Monday of this week
 	setDayBeginning(date); //set to beginning of day
 	return date;
 }
@@ -476,16 +455,18 @@ function goCurr() {
  * Updates GET variables and urlParams to reflect date in week and pushes corresponding history state.
  */
 function updateSearch(week, noHistory) {
-	var today = new Date();
+	var curr = new Date();
 	
-	if(week.getDate() != today.getDate()) {
+	if(!options.enableDayView) curr = getMonday(curr);
+	
+	if(week.getDate() != curr.getDate()) {
 		urlParams["m"] = week.getMonth()+1;
 		urlParams["d"] = week.getDate();
 	} else {
 		delete urlParams["m"];
 		delete urlParams["d"];
 	}
-	if(week.getYear() != today.getYear()) urlParams["y"] = week.getFullYear().toString().substr(-2);
+	if(week.getYear() != curr.getYear()) urlParams["y"] = week.getFullYear().toString().substr(-2);
 	else delete urlParams["y"];
 	
 	var search = "?";
@@ -656,6 +637,50 @@ function initOptions() {
 }
 
 /**
+ * Creates options in the options div.
+ */
+function createOptions(data) {
+	// just assume the file has everything for now
+	JSON.parse(data).sections.forEach(function(section) {
+		if(!section.hasOwnProperty("platforms") ||
+			((mobile && section.platforms.indexOf("mobile") >= 0) || !mobile)) {
+			createOptionSection(section);
+		}
+	});
+
+	initOptions();
+	attachOptionActions();
+
+	updateSchedule(null, true);
+}
+
+/**
+ * Displays error about retrieving schedule.
+ */
+function displayOptionsError(timeout, status) {
+	updateSchedule();
+	
+	if(timeout) {
+		warn("Retrieval of options.json timed out!");
+	} else {
+		warn("Something went wrong while retrieving options.json!");
+	}
+}
+
+/**
+ * Create and insert options section.
+ */
+function createOptionSection(section) {
+	createOptionSectionTitle(section);
+	section.options.forEach(function(option) {
+		if(!option.hasOwnProperty("platforms") ||
+		   ((mobile && option.platforms.indexOf("mobile") >= 0) || !mobile)) {
+			createOption(option);
+		}
+	});
+}
+
+/**
  * Create and insert options section title.
  */
 function createOptionSectionTitle(section) {
@@ -672,19 +697,6 @@ function createOptionSectionTitle(section) {
 	}
 	tr.appendChild(th);
 	document.getElementById("optionsContent").appendChild(tr);
-}
-
-/**
- * Create and insert options section.
- */
-function createOptionSection(section) {
-	createOptionSectionTitle(section);
-	section.options.forEach(function(option) {
-		if(!option.hasOwnProperty("platforms") ||
-		   ((mobile && option.platforms.indexOf("mobile") >= 0) || !mobile)) {
-			createOption(option);
-		}
-	});
 }
 
 /**
@@ -745,7 +757,7 @@ function attachOptionActions() {
 
 	document.body.classList.add(options.enableDayView ? "day" : "week");
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
-		goCurr();
+		updateSchedule(null, true);
 		
 		document.body.classList.remove("week");
 		document.body.classList.remove("day");
