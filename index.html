@@ -4,13 +4,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <link rel="shortcut icon" href="favicon.ico" />
+
+<link rel="apple-touch-icon" href="logo.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
 <title>Bell Schedule</title>
 
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="doge.js"></script>
 
 <link rel="stylesheet" type="text/css" href="style.css" />
+
+
 
 </head>
 
@@ -126,8 +134,10 @@ Now with options!</div>
 5/22/14	48
 5/23/14	3
 5/26/14	Memorial Day
+5/27/14	2a
 5/29/14	41a
 5/30/14	1
+6/2/14	1a
 6/3/14	F14 s2d1
 6/4/14	F14 s2d2
 6/5/14	F14 s2d3
@@ -522,73 +532,30 @@ Foreign Language	9:00-11:00
 Lunch	11:00-12:00
 Science	12:00-2:00</div>
 
-<h1 id="header" class="noHighlight">
-	<span id="leftArrow" title="Last Week">&#8249;</span>
-	<span id="rightArrow" title="Next Week">&#8250;</span>
-	<span id="title">Bell Schedule</span>
-</h1>
+<div id="header" class="noHighlight">
+	<h1>
+		<span id="leftArrow" title="Last Week">&#8249;</span>
+		<span id="rightArrow" title="Next Week">&#8250;</span>
+		<span id="title">Bell Schedule</span>
+	</h1>
+	<div id="warning"></div>
+</div>
 
 <!--<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
 	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
 </h2></div>-->
 <!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
 
-<div id="warning">This is a future week, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)</div>
-<table id="schedule"></table>
-
+<div id="container">
+	<table id="schedule"></table>
+</div>
 <div id="refresh" class="noHighlight" title="Update Schedule">&#8635;</div><!--&#8681;-->
 <div id="version"><a href="https://github.com/HarkerDev/bellschedule/releases" title="Changelog">V1.3.06</a></div>
 
 <div id="options">
 	<div id="optionsArrow" class="noHighlight">&#8598;</div>
 	<h2 id="optionsTitle">Options</h2>
-	<table id="optionsContent">
-		<tr><th colspan="2">General</th></tr>
-		<tr>
-			<td>Show passing periods:</td>
-			<td><input name="showPassingPeriods" type="checkbox" checked="checked" /></td>
-		</tr>
-		<tr>
-			<td>Enable period change notifications</td>
-			<td><input name="enablePeriodNotifications" type="checkbox" /></td>
-		</tr>
-		<tr>
-			<td>Notification display time (seconds)</td>
-			<td><input name="notificationDuration" type="number" min="0" value="1" /></td>
-		</tr>
-		
-		<tr><th colspan="2"><span title="Set to 0 to disable automatic updating">Automatic Updating <sup class="tooltipIndicator">?</sup></span></th></tr>
-		<tr>
-			<td><span title="Applies while tab is selected and window is active">Active update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="activeUpdateInterval" type="number" min="0" value="10" /></td>
-		</tr>
-		<tr>
-			<td><span title="Applies while tab is selected, but window is not active">Inactive update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="inactiveUpdateInterval" type="number" min="0" value="60" /></td>
-		</tr>
-		<tr>
-			<td><span title="Applies while tab is not selected or window is minimized">Hidden update interval (seconds): <sup class="tooltipIndicator">?</sup></span></td>
-			<td><input name="hiddenUpdateInterval" type="number" min="0" value="0" /></td>
-		</tr>
-		
-		<tr><th colspan="2"><span title="Override default keyboard shortcuts for refresh and update the schedule instead.&#13;(Only really useful with automatic updating disabled.)">
-			Override refresh <sup class="tooltipIndicator">?</sup>
-		</span></th></tr>
-		<tr>
-			<td>Override F5:</td>
-			<td><input name="interceptF5" type="checkbox" /></td>
-		</tr>
-		<tr>
-			<td>Override Ctrl/Cmd-R:</td>
-			<td><input name="interceptCtrlR" type="checkbox" /></td>
-		</tr>
-		
-		<tr><th colspan="2">Miscellaneous</th></tr>
-		<tr>
-			<td>Doge mode:</td>
-			<td><input name="enableDoge" type="checkbox" /></td>
-		</tr>
-	</table>
+	<table id="optionsContent"></table>
 	<div id="repo">
 		<a href="https://github.com/HarkerDev/bellschedule" target="_blank" title="GitHub repository">GitHub repository</a>
 	</div>
