@@ -45,9 +45,13 @@ body{
 	background-position-x: center;
 }
 
+h1{
+	margin-bottom: .25em;
+}
+
 #container{
 	margin: auto;
-	padding: 10px;
+	padding: 0 10px;
 }
 
 /* apply absolute formatting on small screens so that there's padding on both sides of the schedule */
@@ -73,7 +77,7 @@ body{
 
 #header{
 	position: relative;
-	margin: auto;
+	margin: 1.25em auto;
 	width: 100%;
 	max-width: 400px;
 }
@@ -111,8 +115,9 @@ body{
 	font-weight: bold;
 }
 
-#warning, #news{
+#warning{
 	display:none;
+	margin-bottom: 1em;
 }
 
 table{
