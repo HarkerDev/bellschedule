@@ -3,9 +3,9 @@
  * Hosted at http://harkerdev.github.io/bellschedule
 **/
 
-/**
- * CSS things
- */
+// ------------------------------
+//  CSS things
+// ------------------------------
 addEventListener("scroll", function(event) {
 	document.getElementById("header").style.left = scrollX + "px";
 });
@@ -17,9 +17,9 @@ Array.prototype.diff = function(a) {
 	return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
 
-/**
- * Globals
- */
+// ------------------------------
+//  Globals
+// ------------------------------
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
 var urlParams = getUrlParams(); //object with GET variables as properties and their respective values as values
 var schedules; //array of schedules (each schedule is an array in this array
@@ -29,9 +29,9 @@ var updateScheduleID; //ID of interval of updateSchedule
 var options = new Object();
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
 
-/**
- * Event listeners
- */
+// ------------------------------
+//  Event listeners
+// ------------------------------
 
 document.addEventListener("visibilitychange", function(event) {
 	if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
@@ -87,6 +87,25 @@ function initViewport() {
 	}
 }
 
+/**
+ * Gets GET variables from URL and returns them as properties of an object.
+ */
+function getUrlParams() {
+	var urlParams;
+	var match,
+		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
+		search = /([^&=]+)=?([^&]*)/g,
+		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+		query = location.search.substring(1);
+
+	urlParams = {};
+	while (match = search.exec(query))
+		urlParams[decode(match[1])] = decode(match[2]);
+	
+	return urlParams;
+}
+
+
 function initTitle() {
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goLast);
@@ -95,6 +114,115 @@ function initTitle() {
 	document.getElementById("refresh").addEventListener("click", function(){ updateSchedule(null,true) });
 
 	setTitleTitle();
+}
+
+/**
+ * Sets the title of the title to a random line from the title titles list
+ */
+function setTitleTitle() {
+	var titles = document.getElementById("titleTitles").textContent.split("\n");
+	document.getElementById("title").title=titles[Math.floor(Math.random()*titles.length)];
+}
+
+/**
+ * Displays the given warning or hides the warning div if no warning text is given.
+ */
+function warn(text) {
+	var warning = document.getElementById("warning")
+	
+	if(text) warning.style.display = "block";
+	else warning.style.display = "none";
+	
+	warning.innerHTML = text;
+}
+
+// ------------------------------
+//  Schedule creation
+// ------------------------------
+
+/**
+ * Updates schedule to display as it would on the given date/time; defaults to now if none is given.
+ * Also updates
+ */
+function updateSchedule(time,force) {
+	setDisplayDate(time,force);
+	setHighlightedPeriod();
+}
+
+/**
+ * Highlights given date/time on the schedule; defaults to now if none is given
+ */
+function setHighlightedPeriod(time) {
+	//set default time argument
+	if(!time) time = Date.now();
+
+	//set date based on time (for finding day to highlight)
+	var date = new Date(time);
+	date.setHours(0,0,0,0);
+
+	//clear previous highlighted day/periods
+	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
+	var prevDay = document.getElementById("today");
+	var prevPeriods = [];
+	if(prevDay){
+		//clear previous highlighted periods
+		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
+
+		for(var i=prevPeriods.length-1;i>=0;i--){
+			var prevPeriod = prevPeriods[i];
+			prevPeriod.classList.remove("now");
+			//remove period length
+			var periodLength = prevPeriod.getElementsByClassName("periodLength")[0];
+			if(periodLength) prevPeriod.removeChild(periodLength);
+		}
+
+		//clear previous highlighted day
+		//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
+		prevDay.id = "";
+	}
+
+	//set new highlighted day/period
+	var days = document.getElementById("schedule").rows[0].cells;
+	for(var d=0;d<days.length;d++){
+		var day = days[d];
+		if(date.valueOf() == day.date){ //test if date should be highlighted
+			//set new highlighted day
+			day.id = "today";
+
+			//set new highlighted periods
+			var periods = day.getElementsByClassName("periodWrapper");
+			for(var p=0;p<periods.length;p++){
+				var period = periods[p];
+				if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
+					period.classList.add("now");
+					//add period length if it fits
+					if((period.end-period.start)/60000>=40){
+						var length = (period.end - time) / 60000;
+						period.innerHTML += "<div class=\"periodLength\">" +
+								(length>1 ?
+									Math.round(length) + " min. left</div>" :
+									Math.round(length*60) + " sec. left</div>");
+					}
+				}
+			}
+		}
+	}
+
+	if(options.enablePeriodNotifications) {
+		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now")); //needs to be an array and not an HTML
+
+		var diff1 = currPeriods.diff(prevPeriods);
+		var diff2 = prevPeriods.diff(currPeriods);
+
+		for(var i=0; i<diff1.length; i++) {
+			var name = currPeriods[i].periodName;
+			if(name && !hasFocus) sendNotification(name + " has started.", options.notificationDuration);
+		}
+		for(var i=0; i<diff2.length; i++) {
+			var name = prevPeriods[i].periodName;
+			if(name && !hasFocus) sendNotification(name + " has ended.", options.notificationDuration);
+		}
+	}
 }
 
 /**
@@ -178,18 +306,6 @@ function setDisplayDate(time, force) {
 			}
 		} else createDay(week, date);
 	}
-}
-
-/**
- * Displays the given warning or hides the warning div if no warning text is given.
- */
-function warn(text) {
-	var warning = document.getElementById("warning")
-	
-	if(text) warning.style.display = "block";
-	else warning.style.display = "none";
-	
-	warning.innerHTML = text;
 }
 
 /**
@@ -278,84 +394,6 @@ function createDay(week, date) {
 }
 
 /**
- * Sets the title of the title to a random line from the title titles list
- */
-function setTitleTitle() {
-	var titles = document.getElementById("titleTitles").textContent.split("\n");
-	document.getElementById("title").title=titles[Math.floor(Math.random()*titles.length)];
-}
-
-/**
- * Gets GET variables from URL and returns them as properties of an object.
- */
-function getUrlParams() {
-	var urlParams;
-	var match,
-		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
-		search = /([^&=]+)=?([^&]*)/g,
-		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query = location.search.substring(1);
-
-	urlParams = {};
-	while (match = search.exec(query))
-		urlParams[decode(match[1])] = decode(match[2]);
-	
-	return urlParams;
-}
-
-/**
- * Returns the Monday of next week if date is Saturday; else returns the Monday of that week
- */
-function getMonday(d) {
-	var date = new Date(d);
-	if(date.getDay()>=6) date.setDate(date.getDate()+2); //set date to next Monday if today is Saturday
-	else date.setDate(date.getDate()-date.getDay()+1); //else set date Monday of this week
-	setDayBeginning(date); //set to beginning of day
-	return date;
-}
-
-/**
- * Sets given date to beginning of the day (12:00 AM).
- */
-function setDayBeginning(date) {
-	date.setHours(0,0,0,0);
-}
-
-/**
- * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
- * Assumes hours less than 7 are PM and hours 7 or greater are AM.
- */
-function getDateFromString(string, date) {
-	var hour = string.substring(0,string.indexOf(":"));
-	var min = string.substring(string.indexOf(":")+1);
-	if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
-	return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
-}
-
-/**
- * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
- * Schedule id index is 0 if not found in schedules.
- */
-function getDayInfo(day) {
-	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
-
-	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
-		if(!schedules[0][i].indexOf(dateString)){
-			//found special schedule
-			var id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1)
-			if(id==0) return [0,0,dateString]; //schedule id 0 represents no school
-			for(var j=1;j<schedules.length;j++){ //find index of schedule id
-				if(id==schedules[j][0]) return [j,id,dateString]; //found specified schedule id
-			}
-			return [0,id,dateString]; //couldn't find specified schedule; display nothing instead
-		}
-
-	var day = day.getDay();
-	if(day==0 || day==6) return [0,0,dateString]; //no school on weekends
-	else return [day,day,dateString]; //default schedule for that day
-}
-
-/**
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
@@ -420,6 +458,62 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 }
 
 /**
+ * Returns the Monday of next week if date is Saturday; else returns the Monday of that week
+ */
+function getMonday(d) {
+	var date = new Date(d);
+	if(date.getDay()>=6) date.setDate(date.getDate()+2); //set date to next Monday if today is Saturday
+	else date.setDate(date.getDate()-date.getDay()+1); //else set date Monday of this week
+	setDayBeginning(date); //set to beginning of day
+	return date;
+}
+
+/**
+ * Sets given date to beginning of the day (12:00 AM).
+ */
+function setDayBeginning(date) {
+	date.setHours(0,0,0,0);
+}
+
+/**
+ * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
+ * Assumes hours less than 7 are PM and hours 7 or greater are AM.
+ */
+function getDateFromString(string, date) {
+	var hour = string.substring(0,string.indexOf(":"));
+	var min = string.substring(string.indexOf(":")+1);
+	if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
+	return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
+}
+
+/**
+ * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
+ * Schedule id index is 0 if not found in schedules.
+ */
+function getDayInfo(day) {
+	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
+
+	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
+		if(!schedules[0][i].indexOf(dateString)){
+			//found special schedule
+			var id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1)
+			if(id==0) return [0,0,dateString]; //schedule id 0 represents no school
+			for(var j=1;j<schedules.length;j++){ //find index of schedule id
+				if(id==schedules[j][0]) return [j,id,dateString]; //found specified schedule id
+			}
+			return [0,id,dateString]; //couldn't find specified schedule; display nothing instead
+		}
+
+	var day = day.getDay();
+	if(day==0 || day==6) return [0,0,dateString]; //no school on weekends
+	else return [day,day,dateString]; //default schedule for that day
+}
+
+// ------------------------------
+//  Navigation
+// ------------------------------
+
+/**
  * Navigates schedule to previous date.
  */
 function goLast() {
@@ -476,90 +570,11 @@ function updateSearch(week, noHistory) {
 	history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
-/**
- * Highlights given date/time on the schedule; defaults to now if none is given
- */
-function setHighlightedPeriod(time) {
-	//set default time argument
-	if(!time) time = Date.now();
 
-	//set date based on time (for finding day to highlight)
-	var date = new Date(time);
-	date.setHours(0,0,0,0);
+// ------------------------------
+//  Options
+// ------------------------------
 
-	//clear previous highlighted day/periods
-	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
-	var prevDay = document.getElementById("today");
-	var prevPeriods = [];
-	if(prevDay){
-		//clear previous highlighted periods
-		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
-
-		for(var i=prevPeriods.length-1;i>=0;i--){
-			var prevPeriod = prevPeriods[i];
-			prevPeriod.classList.remove("now");
-			//remove period length
-			var periodLength = prevPeriod.getElementsByClassName("periodLength")[0];
-			if(periodLength) prevPeriod.removeChild(periodLength);
-		}
-
-		//clear previous highlighted day
-		//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
-		prevDay.id = "";
-	}
-
-	//set new highlighted day/period
-	var days = document.getElementById("schedule").rows[0].cells;
-	for(var d=0;d<days.length;d++){
-		var day = days[d];
-		if(date.valueOf() == day.date){ //test if date should be highlighted
-			//set new highlighted day
-			day.id = "today";
-
-			//set new highlighted periods
-			var periods = day.getElementsByClassName("periodWrapper");
-			for(var p=0;p<periods.length;p++){
-				var period = periods[p];
-				if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
-					period.classList.add("now");
-					//add period length if it fits
-					if((period.end-period.start)/60000>=40){
-						var length = (period.end - time) / 60000;
-						period.innerHTML += "<div class=\"periodLength\">" +
-								(length>1 ?
-									Math.round(length) + " min. left</div>" :
-									Math.round(length*60) + " sec. left</div>");
-					}
-				}
-			}
-		}
-	}
-
-	if(options.enablePeriodNotifications) {
-		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now")); //needs to be an array and not an HTML
-
-		var diff1 = currPeriods.diff(prevPeriods);
-		var diff2 = prevPeriods.diff(currPeriods);
-
-		for(var i=0; i<diff1.length; i++) {
-			var name = currPeriods[i].periodName;
-			if(name && !hasFocus) sendNotification(name + " has started.", options.notificationDuration);
-		}
-		for(var i=0; i<diff2.length; i++) {
-			var name = prevPeriods[i].periodName;
-			if(name && !hasFocus) sendNotification(name + " has ended.", options.notificationDuration);
-		}
-	}
-}
-
-/**
- * Updates schedule to display as it would on the given date/time; defaults to now if none is given.
- * Also updates
- */
-function updateSchedule(time,force) {
-	setDisplayDate(time,force);
-	setHighlightedPeriod();
-}
 /**
  * Expands the options div and changes the options arrow to point down and to the right.
  */
