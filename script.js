@@ -285,7 +285,7 @@ function makePeriodNameReplacements(periodName, replacements) {
 	if(replacements.length > 0)
 		for(var i=0;i<replacements.length;i++) {
 			if(!replacements[i].indexOf(periodName))
-				return replacements[i].substring("->")+2);
+				return replacements[i].substring("->")+2;
 		}
 	return periodName;
 }
