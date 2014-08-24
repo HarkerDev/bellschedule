@@ -282,11 +282,15 @@ function createDay(week, date) {
  * replacements is an array of strings of the form "OldName->NewName"
  */
 function makePeriodNameReplacements(periodName, replacements) {
-	if(replacements.length > 0)
+console.log("hi");
+	if(replacements.length > 0) {
+	
+	console.log(replacements);
 		for(var i=0;i<replacements.length;i++) {
 			if(!replacements[i].indexOf(periodName))
-				return replacements[i].substring("->")+2;
+				return replacements[i].substring(replacements[i].indexOf("->")+2);
 		}
+	}
 	return periodName;
 }
 
@@ -361,11 +365,14 @@ function getDayInfo(day) {
 			//found special schedule
 			if(schedules[0][i].indexOf("[") >= 0) { //check for period replacements
 				//cut replacements and space character out of id and save separately
-				id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1,schedules[0][i].indexOf("[")-1)
-				replacements = schedules[0][i].substr(schedules[0][i].indexOf("[")+1,schedules[0][i].indexOf("]")).split(",");
+				id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1,schedules[0][i].indexOf("[")-1)
+				replacements = schedules[0][i].substring(schedules[0][i].indexOf("[")+1,schedules[0][i].indexOf("]")).split(",");
+				
+				console.log(replacements)
+				console.log(id);
 			} else {
 				// no replacements to be made
-				id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1);
+				id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1);
 			}
 			
 			index = getScheduleIndex(id);
