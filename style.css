@@ -1,3 +1,13 @@
+*{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+a{
+	color: #555;
+}
+
 @-webkit-keyframes fadeIO {
 	0% {opacity: 0;}
 	30% {opacity: 100%;}
@@ -5,15 +15,52 @@
 	100% {opacity: 0;}
 }
 
+/* iPhone */
+@media only screen and (width:320px) and (device-width:320px) and (device-height:480px) and (orientation: landscape) {
+	body {
+		-webkit-transform: scale(0.667);
+		-webkit-transform-origin: top right;
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 480px;
+	}
+}
+/* iPad */
+@media only screen and (width:768px) and (device-width:768px) and (device-height:1024px) and (orientation: landscape) {
+	body {
+		-webkit-transform: scale(0.75);
+		-webkit-transform-origin: top right;
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 1024px;
+	}
+}
+
 body{
+	margin: 0;
 	font: .75em "Segoe UI", "Arial", sans-serif;
 	text-align: center;
 	background-position-x: center;
 }
 
-a{
-	color: #555;
+h1{
+	margin-bottom: .25em;
 }
+
+#container{
+	margin: auto;
+	padding: 0 10px;
+}
+
+/* apply absolute formatting on small screens so that there's padding on both sides of the schedule */
+@media only screen and (max-width:814px){
+	.week #container{
+		position: absolute;
+	}
+}
+
 
 #titleTitles, #schedules, #changelog{
 	display: none;
@@ -29,9 +76,10 @@ a{
 }
 
 #header{
-	margin: .67em auto;
+	position: relative;
+	margin: 1.25em auto;
+	width: 100%;
 	max-width: 400px;
-	width: 50%;
 }
 
 #title{
@@ -67,9 +115,9 @@ a{
 	font-weight: bold;
 }
 
-#warning, #news{
+#warning{
 	display:none;
-	margin-bottom: 5px;
+	margin-bottom: 1em;
 }
 
 table{
@@ -91,9 +139,6 @@ table{
 
 .period, .head{
 	width: inherit;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	overflow: hidden;
 	line-height: 110%;
 }
@@ -106,7 +151,6 @@ table{
 .periodLength{
 	font-size: .8em;
 }
-
 .head{
 	height: 3.25em;
 	border-bottom: 2px solid black;
@@ -173,6 +217,9 @@ table{
 }
 
 #options{
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
 	position: fixed;
 	right: -50%;
 	bottom: -70%;
@@ -194,7 +241,7 @@ table{
 	right: -100%;
 	bottom: -100%;
 	padding: 3.75em 0 0 3.75em;
-	font-size: 2em;
+	font-size: 1.2em;
 	width: 100%;
 	height: 100%;
 }
@@ -218,8 +265,8 @@ table{
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 0 .35em .1em;
-	font-size: 1.66em;
+	padding: .2em .35em;
+	font: 1.66em Arial;
 	text-align: left;
 	cursor: pointer;
 }
@@ -228,8 +275,8 @@ table{
 }
 
 #options.mobile input[type=checkbox]{
-	transform: scale(2);
-	-webkit-transform: scale(2);
+	transform: scale(1.2);
+	-webkit-transform: scale(1.2);
 }
 #options input[type=number], #options input[type=text]{
 	border: 1px solid gray;
@@ -268,7 +315,21 @@ table{
 	padding: 0 5px 3px 0;
 }
 
+#currentTime{
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 7px 10px;
+	border-bottom-left-radius: 5px;
+	background: rgba(255,255,255,.5);
+	font-size: 1.5em;
+	font-weight: bold;
+	/* letter-spacing: .05em; */
+	color: #333;
+}
+
 #refresh{
+	display: none;
 	position: fixed;
 	top: 0;
 	right: 0;
