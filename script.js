@@ -165,7 +165,7 @@ function createDay(week, date) {
 	head.classList.add("head");
 	var headWrapper = document.createElement("div");
 	headWrapper.classList.add("headWrapper");
-	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + " (" + daySchedule[1] + ")</div>";
+	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + /*" (" + daySchedule[1] + ")*/"</div>"; //Portion commented out represents schedule id of that day
 	head.appendChild(headWrapper);
 	col.appendChild(head);
 	
