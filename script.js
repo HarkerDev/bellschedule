@@ -208,18 +208,18 @@ function createDay(week, date) {
 	head.classList.add("head");
 	var headWrapper = document.createElement("div");
 	headWrapper.classList.add("headWrapper");
-	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule[2] + /*" (" + daySchedule[1] + ")*/"</div>"; //Portion commented out represents schedule id of that day
+	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule.dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
 	head.appendChild(headWrapper);
 	col.appendChild(head);
 
 	var prevEnd = "8:00"; //set start of day to 8:00AM
 
-	if(daySchedule[0] > 0) //populates cell with day's schedule (a bit messily)
-	{
-		for(var i=1;i<schedules[daySchedule[0]].length;i++) {
-			var text = schedules[daySchedule[0]][i];
-			var periodName = text.substring(0,text.indexOf("\t"))
+	if(daySchedule.index > 0) { //populates cell with day's schedule (a bit messily)
+		for(var i=1;i<schedules[daySchedule.index].length;i++) {
+			var text = schedules[daySchedule.index][i];
+			var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
 			var periodTime = text.substring(text.indexOf("\t")+1);
+			
 
 			var start = periodTime.substring(0,periodTime.indexOf("-"));
 			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
@@ -236,8 +236,7 @@ function createDay(week, date) {
 			var period = document.createElement("div");
 			period.classList.add("period");
 
-			if(periodName.indexOf("|")>=0)
-			{
+			if(periodName.indexOf("|")>=0) {
 				//handle split periods (i.e. lunches)
 				var table = document.createElement("table");
 				table.classList.add("lunch");
@@ -275,6 +274,20 @@ function createDay(week, date) {
 			col.appendChild(period);
 		}
 	}
+}
+
+/**
+ * Returns new name for period based on array of replacements.
+ * If the current period name is listed in the array of replacements, returns the new, replaced name; otherwise, returns current name.
+ * replacements is an array of strings of the form "OldName->NewName"
+ */
+function makePeriodNameReplacements(periodName, replacements) {
+	if(replacements.length > 0)
+		for(var i=0;i<replacements.length;i++) {
+			if(!replacements[i].indexOf(periodName))
+				return replacements[i].substring("->")+2);
+		}
+	return periodName;
 }
 
 /**
@@ -339,20 +352,43 @@ function getDateFromString(string, date) {
 function getDayInfo(day) {
 	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
 
+	var id;
+	var index = 0;
+	var replacements = [];
+	
 	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
 		if(!schedules[0][i].indexOf(dateString)){
 			//found special schedule
-			var id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1)
-			if(id==0) return [0,0,dateString]; //schedule id 0 represents no school
-			for(var j=1;j<schedules.length;j++){ //find index of schedule id
-				if(id==schedules[j][0]) return [j,id,dateString]; //found specified schedule id
+			if(schedules[0][i].indexOf("[") >= 0) { //check for period replacements
+				//cut replacements and space character out of id and save separately
+				id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1,schedules[0][i].indexOf("[")-1)
+				replacements = schedules[0][i].substr(schedules[0][i].indexOf("[")+1,schedules[0][i].indexOf("]")).split(",");
+			} else {
+				// no replacements to be made
+				id = schedules[0][i].substr(schedules[0][i].indexOf("\t")+1);
 			}
-			return [0,id,dateString]; //couldn't find specified schedule; display nothing instead
+			
+			index = getScheduleIndex(id);
 		}
+	
+	if(id === undefined) { //no special schedule found
+		id = day.getDay();
+		if(id==0 || id==6) index = id = 0; //no school on weekends
+		else index = id; //default schedule for that day
+	}
+	
+	return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
+}
 
-	var day = day.getDay();
-	if(day==0 || day==6) return [0,0,dateString]; //no school on weekends
-	else return [day,day,dateString]; //default schedule for that day
+/**
+ * Gets the index in the list of schedules of the schedule with the given schedule id (or 0 if no matching schedules were found)
+ */
+function getScheduleIndex(id) {
+	if(id==0) return 0; //schedule id 0 represents no school
+	for(var i=1;i<schedules.length;i++) { //find index of schedule id
+		if(id==schedules[i][0]) return i; //found specified schedule id
+	}
+	return 0; //couldn't find specified schedule
 }
 
 /**
