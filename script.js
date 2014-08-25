@@ -32,7 +32,7 @@ var updateScheduleID; //ID of interval of updateSchedule
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
 var options = {};
 
-var urlParams = {}; //object with GET variables as properties and their respective values as values
+var urlParams; //object with GET variables as properties and their respective values as values
 
 /**
  * Gets GET variables from URL and sets them as properties of the urlParams object.
@@ -40,14 +40,7 @@ var urlParams = {}; //object with GET variables as properties and their respecti
  */
 (function() {
 	//decode GET vars in URL
-	var match,
-		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
-		search = /([^&=]+)=?([^&]*)/g,
-		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query = location.search.substring(1);
-	
-	while (match = search.exec(query))
-		urlParams[decode(match[1])] = decode(match[2]);
+	updateUrlParams();
 	
 	//update history state
 	window.history.replaceState( getDateFromUrlParams() );
@@ -81,11 +74,29 @@ addEventListener("blur", function(event) {
  * (onload event will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
 addEventListener("popstate", function(event) {
+	updateUrlParams();
 	updateSchedule(event.state);
 });
 
 /**
- * Parses schedules, creates schedule for correct week, sets title title on page load
+ * Updates urlParams object based on the GET variables in the URL.
+ * (variables as properties and values as values)
+ */
+function updateUrlParams() {
+	urlParams = {};
+	
+	var match,
+		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
+		search = /([^&=]+)=?([^&]*)/g,
+		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+		query = location.search.substring(1);
+	
+	while (match = search.exec(query))
+		urlParams[decode(match[1])] = decode(match[2]);
+}
+
+/**
+ * Parses schedules, creates schedule for correct week, sets title title on page load.
  */
 addEventListener("load", function(event) {
 	initViewport();
@@ -110,6 +121,9 @@ function initViewport() {
 	}
 }
 
+/**
+ * Adds appropriate event listeners to items in the schedule title.
+ */
 function initTitle() {
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goLast);
