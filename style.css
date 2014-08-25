@@ -1,3 +1,7 @@
+/* ------------------------------ */
+/*  General                       */
+/* ------------------------------ */
+
 *{
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -66,6 +70,10 @@ h1{
 	display: none;
 }
 
+/* ------------------------------ */
+/*  Header                        */
+/* ------------------------------ */
+
 .noHighlight{
 	/*-webkit-touch-callout: none; (disables context menu on mobile? perhaps this also disables highlighting on mobile?)*/
 	-webkit-user-select: none;
@@ -119,6 +127,10 @@ h1{
 	display:none;
 	margin-bottom: 1em;
 }
+
+/* ------------------------------ */
+/*  Schedule                      */
+/* ------------------------------ */
 
 table{
 	border-collapse: collapse;
@@ -203,6 +215,10 @@ table{
 	border-right: 1px solid black;
 }
 
+/* ------------------------------ */
+/*  Version                       */
+/* ------------------------------ */
+
 #version{
 	position: fixed;
 	bottom: 0px;
@@ -215,6 +231,10 @@ table{
 #version a{
 	text-decoration: none;
 }
+
+/* ------------------------------ */
+/*  Options                       */
+/* ------------------------------ */
 
 #options{
 	box-sizing: content-box;
@@ -315,6 +335,10 @@ table{
 	padding: 0 5px 3px 0;
 }
 
+/* ------------------------------ */
+/*  Clock                         */
+/* ------------------------------ */
+
 #currentTime{
 	position: absolute;
 	right: 0;
@@ -327,6 +351,10 @@ table{
 	/* letter-spacing: .05em; */
 	color: #333;
 }
+
+/* ------------------------------ */
+/*  Refresh                       */
+/* ------------------------------ */
 
 #refresh{
 	display: none;
