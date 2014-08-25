@@ -18,21 +18,44 @@ Array.prototype.diff = function(a) {
 };
 
 /**
- * Globals
+ * Constants
  */
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
-var urlParams = getUrlParams(); //object with GET variables as properties and their respective values as values
 var schedules; //array of schedules (each schedule is an array in this array
-var displayDate; //beginning of time period currently being displayed by the schedule
 var mobile = isMobile();
+
+/**
+ * Globals
+ */
+var displayDate; //beginning of time period currently being displayed by the schedule
 var updateScheduleID; //ID of interval of updateSchedule
-var options = new Object();
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
+var options = {};
+
+var urlParams = {}; //object with GET variables as properties and their respective values as values
+
+/**
+ * Gets GET variables from URL and sets them as properties of the urlParams object.
+ * Then updates the state of the current history entry with the appropriate week.
+ */
+(function() {
+	//decode GET vars in URL
+	var match,
+		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
+		search = /([^&=]+)=?([^&]*)/g,
+		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+		query = location.search.substring(1);
+	
+	while (match = search.exec(query))
+		urlParams[decode(match[1])] = decode(match[2]);
+	
+	//update history state
+	window.history.replaceState( getDateFromUrlParams() );
+}());
 
 /**
  * Event listeners
  */
-
 document.addEventListener("visibilitychange", function(event) {
 	if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
 		updateSchedule();
@@ -138,16 +161,7 @@ function parseRawSchedule() {
  * Displays schedule of the week of the given date/time
  */
 function setDisplayDate(time, force) {
-	var date = (time ? new Date(time) : new Date()); //variable to keep track of current day in loop
-	
-	if(!time) {
-		//adjust week shown based on url if default
-		if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
-		if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
-		if(urlParams["d"]>0) date.setDate(urlParams["d"]);
-		
-		if(!options.enableDayView) date = getMonday(date);
-	}
+	var date = (time ? new Date(time) : getDateFromUrlParams()); //variable to keep track of current day in loop
 
 	setDayBeginning(date);
 
@@ -178,6 +192,23 @@ function setDisplayDate(time, force) {
 			}
 		} else createDay(week, date);
 	}
+}
+
+/**
+ * Returns a Date object based on the current urlParams (GET variables in the URL).
+ * If any part of the date is not specified, defaults to the current date/month/year.
+ * If in week view, uses the Monday of the week instead of the day.
+ */
+function getDateFromUrlParams() {
+	var date = new Date();
+	
+	if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
+	if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
+	if(urlParams["d"]>0) date.setDate(urlParams["d"]);
+	
+	if(!options.enableDayView) date = getMonday(date);
+	
+	return date;
 }
 
 /**
@@ -297,24 +328,6 @@ function makePeriodNameReplacements(periodName, replacements) {
 function setTitleTitle() {
 	var titles = document.getElementById("titleTitles").textContent.split("\n");
 	document.getElementById("title").title=titles[Math.floor(Math.random()*titles.length)];
-}
-
-/**
- * Gets GET variables from URL and returns them as properties of an object.
- */
-function getUrlParams() {
-	var urlParams;
-	var match,
-		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
-		search = /([^&=]+)=?([^&]*)/g,
-		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query = location.search.substring(1);
-
-	urlParams = {};
-	while (match = search.exec(query))
-		urlParams[decode(match[1])] = decode(match[2]);
-	
-	return urlParams;
 }
 
 /**
