@@ -140,6 +140,8 @@ function parseRawSchedule() {
 function setDisplayDate(time, force) {
 	var date = (time ? new Date(time) : new Date()); //variable to keep track of current day in loop
 	
+	urlParams = getUrlParams();
+	
 	if(!time) {
 		//adjust week shown based on url if default
 		if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
