@@ -1,0 +1,16 @@
+{
+  "name": "bellschedule",
+  "version": "v1.5.01",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HarkerDev/bellschedule.git"
+  },
+  "scripts": {},
+  "devDependencies": {
+    "browserify": "^5.11.1",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.0.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "minifyify": "^4.1.2"
+  }
+}
