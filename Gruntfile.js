@@ -21,8 +21,8 @@ module.exports = function(grunt) {
 								var path = require("path");
 								return path.relative(__dirname, p);
 							},
-							uglify: {
-								mangle: true
+							minify: {
+								mangle: "eval"
 							}
 						}
 					]],
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-browserify");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	
-	grunt.registerTask("develop", [ "watch" ]);
+	grunt.registerTask("default", [ "build", "watch" ]);
 	grunt.registerTask("build", [ "browserify" ]);
 	
 };

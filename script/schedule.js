@@ -1,7 +1,7 @@
 var nav = require("./nav.js");
 var dateUtil = require("./dateUtil.js");
 var options = require("./options.js");
-var opts;
+var opts = options.options;
 
 /**
  * Constants
@@ -19,8 +19,6 @@ var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes windo
 var updateScheduleID; //ID of interval of updateSchedule
 
 exports.init = function() {
-	opts = options.options;
-	
 	document.addEventListener("visibilitychange", function(event) {
 		if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
 			updateSchedule();

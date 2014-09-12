@@ -1,3 +1,6 @@
+var options = exports.options = {}; //needs to be initialized before requiring schedule
+
+
 var mobile = require("./mobile.js");
 var nav = require("./nav.js");
 var schedule = require("./schedule.js");
@@ -5,8 +8,6 @@ var schedule = require("./schedule.js");
 var isMobile = mobile.isMobile;
 
 
-var options = {};
-exports.options = options;
 
 exports.init = function() {
 	download("options.json", createOptions, displayOptionsError);
