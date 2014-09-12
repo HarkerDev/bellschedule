@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 								return path.relative(__dirname, p);
 							},
 							minify: {
-								mangle: "eval"
+								mangle: true
 							}
 						}
 					]],
