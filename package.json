@@ -13,4 +13,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "minifyify": "^4.1.2"
   }
+  "author": "manan <manan.shah.777@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md"
 }
