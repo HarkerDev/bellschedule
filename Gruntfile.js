@@ -3,20 +3,20 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
 		watch: {
-			files: [ "**.js", "!Gruntfile.js", "!script.js" ],
+			files: [ "script/**.js", "!script/script.js" ],
 			tasks: [ "browserify" ]
 		},
 		browserify: {
 			js: {
-				src: 'main.js',
-				dest: 'script.js',
+				src: "script/main.js",
+				dest: "script/script.js",
 				options: {
 //					watch: true,
 //					keepAlive: true,
 					plugin: [[
 						"minifyify", {
 							map: "script.js.map",
-							output: "script.js.map",
+							output: "script/script.js.map",
 							compressPath: function (p) {
 								var path = require("path");
 								return path.relative(__dirname, p);
