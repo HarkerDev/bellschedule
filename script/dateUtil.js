@@ -7,7 +7,7 @@ exports.getMonday = function(d) {
 	else date.setDate(date.getDate()-date.getDay()+1); //else set date Monday of this week
 	setDayBeginning(date); //set to beginning of day
 	return date;
-}
+};
 
 /**
  * Sets given date to beginning of the day (12:00 AM).

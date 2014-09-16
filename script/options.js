@@ -45,13 +45,13 @@ function initOptions() {
 	var opt = document.getElementById("options");
 	opt.addEventListener("mouseover", expandOptions);
 	opt.addEventListener("mouseout", contractOptions);
-
+	
 	if(isMobile) opt.classList.add("mobile");
-
+	
 	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
-
+	
 	var inputs = opt.getElementsByTagName("input");
-
+	
 	if(localStorage.updateScheduleInterval) {
 		//rename key
 		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
@@ -62,7 +62,7 @@ function initOptions() {
 	{
 		var input = inputs[i];
 		//special cases because localStorage saves values as strings
-		if(input.type=="checkbox") {											//booleans
+		if(input.type=="checkbox") {                                      //booleans
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.checked;
 			});
@@ -70,7 +70,7 @@ function initOptions() {
 			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
 			else options[input.name] = localStorage[input.name] = input.checked;
 		}
-		else if(input.type=="number") {										//numbers
+		else if(input.type=="number") {                                   //numbers
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
 			});
@@ -78,7 +78,7 @@ function initOptions() {
 			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
 			else options[input.name] = parseInt(localStorage[input.name] = input.value);
 		}
-		else {																//strings
+		else {                                                                //strings
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.value;
 			});
@@ -227,14 +227,14 @@ function attachOptionActions() {
 		document.addEventListener("keydown", function(event) {
 			switch (event.keyCode){
 				case 116 : //F5
-					if(options.interceptF5){
+					if(options.interceptF5) {
 						//enabled
 						event.preventDefault();
 						schedule.updateSchedule();
 					}
 					break;
 				case 82 : //R key
-					if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){
+					if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)) {
 						//enabled and control/cmd (meta)
 						event.preventDefault();
 						schedule.updateSchedule();

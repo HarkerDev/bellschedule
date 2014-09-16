@@ -83,9 +83,9 @@ function setUpdateInterval(seconds) {
  */
 function parseRawSchedules() {
 	var rawSchedules=document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
-	schedules = new Array();
+	schedules = [];
 	var x=0; //index in schedules
-	schedules[0] = new Array(); //create array of special schedule days
+	schedules[0] = []; //create array of special schedule days
 
 	while(rawSchedules.length>0)
 	{
@@ -93,7 +93,7 @@ function parseRawSchedules() {
 		if(rawSchedules[0].length==0)
 		{
 			//if line is empty, move to next index in schedules
-			schedules[++x] = new Array(); //could probably use id as index instead, or just properties
+			schedules[++x] = []; //could probably use id as index instead, or just properties
 			rawSchedules.shift();
 		}
 		else
@@ -105,7 +105,7 @@ function parseRawSchedules() {
 				//behavior for blocks of dates with the same schedule
 				var start = new Date(str.substring(0,str.indexOf("|")));
 				var end = new Date(str.substring(str.indexOf("|")+1,str.indexOf("\t")));
-				for(;start<=end;start.setDate(start.getDate()+1)){
+				for(;start<=end;start.setDate(start.getDate()+1)) {
 					schedules[0].push(start.getMonth().valueOf()+1+"/"+start.getDate()+"/"+start.getFullYear().toString().substr(-2)+str.substring(str.indexOf("\t")));
 				}
 			}
@@ -156,7 +156,7 @@ function setDisplayDate(time, force) {
  * Displays the given warning or hides the warning div if no warning text is given.
  */
 function warn(text) {
-	var warning = document.getElementById("warning")
+	var warning = document.getElementById("warning");
 	
 	if(text) warning.style.display = "block";
 	else warning.style.display = "none";
@@ -196,7 +196,7 @@ function createDay(week, date) {
 			var start = periodTime.substring(0,periodTime.indexOf("-"));
 			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
 
-			if(opts.showPassingPeriods){
+			if(opts.showPassingPeriods) {
 				var passing = document.createElement("div");
 				passing.classList.add("period");
 				createPeriod(passing,"",prevEnd,start,date);
@@ -288,11 +288,11 @@ function getDayInfo(day) {
 	var replacements = [];
 	
 	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
-		if(!schedules[0][i].indexOf(dateString)){
+		if(!schedules[0][i].indexOf(dateString)) {
 			//found special schedule
 			if(schedules[0][i].indexOf("[") >= 0) { //check for period replacements
 				//cut replacements and space character out of id and save separately
-				id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1,schedules[0][i].indexOf("[")-1)
+				id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1,schedules[0][i].indexOf("[")-1);
 				replacements = schedules[0][i].substring(schedules[0][i].indexOf("[")+1,schedules[0][i].indexOf("]")).split(",");
 			} else {
 				// no replacements to be made
@@ -326,7 +326,7 @@ function getScheduleIndex(id) {
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
-function createPeriod(parent, name, start, end, date){
+function createPeriod(parent, name, start, end, date) {
 	startDate = getDateFromString(start,date);
 	endDate = getDateFromString(end,date);
 
@@ -400,11 +400,11 @@ function setHighlightedPeriod(time) {
 	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
 	var prevDay = document.getElementById("today");
 	var prevPeriods = [];
-	if(prevDay){
+	if(prevDay) {
 		//clear previous highlighted periods
 		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
 
-		for(var i=prevPeriods.length-1;i>=0;i--){
+		for(var i=prevPeriods.length-1;i>=0;i--) {
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
 			//remove period length
@@ -419,20 +419,20 @@ function setHighlightedPeriod(time) {
 
 	//set new highlighted day/period
 	var days = document.getElementById("schedule").rows[0].cells;
-	for(var d=0;d<days.length;d++){
+	for(var d=0;d<days.length;d++) {
 		var day = days[d];
-		if(date.valueOf() == day.date){ //test if date should be highlighted
+		if(date.valueOf() == day.date) { //test if date should be highlighted
 			//set new highlighted day
 			day.id = "today";
 
 			//set new highlighted periods
 			var periods = day.getElementsByClassName("periodWrapper");
-			for(var p=0;p<periods.length;p++){
+			for(var p=0;p<periods.length;p++) {
 				var period = periods[p];
-				if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
+				if(time-period.start>=0 && time-period.end<0) { //test if period should be highlighted
 					period.classList.add("now");
 					//add period length if it fits
-					if((period.end-period.start)/60000>=40){
+					if((period.end-period.start)/60000>=40) {
 						var length = (period.end - time) / 60000;
 						period.innerHTML += "<div class=\"periodLength\">" +
 								(length>1 ?

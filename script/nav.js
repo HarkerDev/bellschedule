@@ -18,25 +18,25 @@ exports.init = function() {
 	updateUrlParams();
 	
 	//update history state
-	window.history.replaceState( getDateFromUrlParams() );
+	window.history.replaceState(getDateFromUrlParams());
 	
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goPrev);
 	document.getElementById("rightArrow").addEventListener("click", goNext);
 
-	document.getElementById("refresh").addEventListener("click", function(){ updateSchedule(null,true); });
+	document.getElementById("refresh").addEventListener("click", function() { updateSchedule(null,true); });
 
 	setTitleTitle();
 };
 
 exports.setViewType = function(type) {
 	viewType = type;
-}
+};
 
 var viewTypes = exports.viewTypes = {
 	DAY: "day",
 	WEEK: "week"
-}
+};
 
 
 /**
@@ -66,7 +66,7 @@ function updateUrlParams() {
 	var match,
 		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
 		search = /([^&=]+)=?([^&]*)/g,
-		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+		decode = function(s) { return decodeURIComponent(s.replace(pl, " ")); },
 		query = location.search.substring(1);
 	
 	while (match = search.exec(query))
@@ -81,9 +81,9 @@ function updateUrlParams() {
 function getDateFromUrlParams() {
 	var date = new Date();
 	
-	if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
-	if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
-	if(urlParams["d"]>0) date.setDate(urlParams["d"]);
+	if(urlParams.y>0) date.setFullYear(urlParams.y);
+	if(urlParams.m>0) date.setMonth(urlParams.m-1);
+	if(urlParams.d>0) date.setDate(urlParams.d);
 	
 	if(viewType == viewTypes.WEEK) date = dateUtil.getMonday(date);
 	
@@ -99,7 +99,7 @@ function goPrev() {
 	date.setDate(date.getDate() - (viewType == viewTypes.DAY ? 1 : 7));
 	updateSchedule(date);
 	
-	updateSearch(date);
+	updateSearch (date);
 }
 
 /**
@@ -132,14 +132,14 @@ function updateSearch(week, noHistory) {
 	if(viewType == viewTypes.WEEK) curr = dateUtil.getMonday(curr);
 	
 	if(week.getDate() != curr.getDate()) {
-		urlParams["m"] = week.getMonth()+1;
-		urlParams["d"] = week.getDate();
+		urlParams.m = week.getMonth()+1;
+		urlParams.d = week.getDate();
 	} else {
-		delete urlParams["m"];
-		delete urlParams["d"];
+		delete urlParams.m;
+		delete urlParams.d;
 	}
-	if(week.getYear() != curr.getYear()) urlParams["y"] = week.getFullYear().toString().substr(-2);
-	else delete urlParams["y"];
+	if(week.getYear() != curr.getYear()) urlParams.y = week.getFullYear().toString().substr(-2);
+	else delete urlParams.y;
 	
 	var search = "?";
 	for(var param in urlParams) search += param + "=" + urlParams[param] + "&";
