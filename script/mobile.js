@@ -1,3 +1,4 @@
+var mobile = exports.isMobile = isMobile();
 
 /**
  * Function to detect whether the page is being displayed on a mobile device.
@@ -11,7 +12,6 @@ function isMobile() {
 
 
 exports.init = function() {
-	var mobile = exports.isMobile = isMobile();
 	if(mobile) {
 		var meta = document.createElement("meta");
 		meta.name = "viewport";
@@ -20,4 +20,3 @@ exports.init = function() {
 		document.getElementsByTagName("body")[0].class = "mobile";
 	}
 };
-

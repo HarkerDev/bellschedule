@@ -104,14 +104,14 @@ function createOptions(data) {
 	initOptions();
 	attachOptionActions();
 
-	schedule.updateSchedule(null, true);
+	schedule.update(null, true);
 }
 
 /**
  * Displays error about retrieving schedule.
  */
 function displayOptionsError(timeout, status) {
-	schedule.updateSchedule();
+	schedule.update();
 	
 	if(timeout) {
 		warn("Retrieval of options.json timed out!");
@@ -192,7 +192,7 @@ function attachOptionActions() {
 		schedule.updateUpdateInterval();
 	});
 	document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
-		schedule.updateSchedule(null,true);
+		schedule.update(null,true);
 	});
 
 	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
@@ -211,7 +211,7 @@ function attachOptionActions() {
 	document.body.classList.add(options.enableDayView ? "day" : "week");
 	nav.setViewType(options.enableDayView ? nav.viewTypes.DAY : nav.viewTypes.WEEK);
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
-		schedule.updateSchedule(null, true);
+		schedule.update(null, true);
 		
 		document.body.classList.remove("week");
 		document.body.classList.remove("day");
@@ -230,14 +230,14 @@ function attachOptionActions() {
 					if(options.interceptF5) {
 						//enabled
 						event.preventDefault();
-						schedule.updateSchedule();
+						schedule.update();
 					}
 					break;
 				case 82 : //R key
 					if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)) {
 						//enabled and control/cmd (meta)
 						event.preventDefault();
-						schedule.updateSchedule();
+						schedule.update();
 					}
 					break;
 				case 37 : //Left arrow

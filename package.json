@@ -15,5 +15,8 @@
   },
   "author": "manan <manan.shah.777@gmail.com>",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "jquery": "^2.1.1"
+  }
 }

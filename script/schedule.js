@@ -1,13 +1,16 @@
 var nav = require("./nav.js");
 var dateUtil = require("./dateUtil.js");
 var options = require("./options.js");
+var parser = require("./scheduleParser.js");
+window.parser = parser;
+
 var opts = options.options;
 
 /**
  * Constants
  */
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
-var schedules; //array of schedules (each schedule is an array in this array
+
 
 /**
  * Globals
@@ -21,14 +24,14 @@ var updateScheduleID; //ID of interval of updateSchedule
 exports.init = function() {
 	document.addEventListener("visibilitychange", function(event) {
 		if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
-			updateSchedule();
+			update();
 			// updateClock();
 		}
 		updateUpdateInterval();
 	});
 
 	addEventListener("focus", function(event) {
-		updateSchedule();
+		update();
 		//updateClock();
 
 		hasFocus = true;
@@ -40,8 +43,12 @@ exports.init = function() {
 	});
 	
 	
-	parseRawSchedules();
+	parser.init();
 };
+
+exports.getDisplayDate = function() {
+	return new Date(displayDate);
+}
 
 //exports.setHiddenUpdateInterval = function(interval) {
 //	opts.hiddenUpdateInterval = interval;
@@ -72,47 +79,20 @@ function setUpdateInterval(seconds) {
 	if(seconds>0)
 		updateScheduleID = setInterval(function() {
 			//updateClock();
-			updateSchedule();
+			update();
 		}, seconds * 1000); //convert to milliseconds
 	else updateScheduleID = null;
 }
 
 /**
- * Parses raw schedule in body of page into schedule array
- * Code is questionable
+ * Updates schedule to display as it would on the given date/time; defaults to now if none is given.
+ * Also updates
  */
-function parseRawSchedules() {
-	var rawSchedules=document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
-	schedules = [];
-	var x=0; //index in schedules
-	schedules[0] = []; //create array of special schedule days
-
-	while(rawSchedules.length>0)
-	{
-		//loop through all lines in raw schedule text
-		if(rawSchedules[0].length==0)
-		{
-			//if line is empty, move to next index in schedules
-			schedules[++x] = []; //could probably use id as index instead, or just properties
-			rawSchedules.shift();
-		}
-		else
-		{
-			//if line has text, save in current location in schedules
-			var str = rawSchedules.shift();
-			if(x==0 && str.indexOf("|")>=0)
-			{
-				//behavior for blocks of dates with the same schedule
-				var start = new Date(str.substring(0,str.indexOf("|")));
-				var end = new Date(str.substring(str.indexOf("|")+1,str.indexOf("\t")));
-				for(;start<=end;start.setDate(start.getDate()+1)) {
-					schedules[0].push(start.getMonth().valueOf()+1+"/"+start.getDate()+"/"+start.getFullYear().toString().substr(-2)+str.substring(str.indexOf("\t")));
-				}
-			}
-			else schedules[x].push(str);
-		}
-	}
+function update(time,force) {
+	setDisplayDate(time,force);
+	setHighlightedPeriod();
 }
+exports.update = update;
 
 /**
  * Displays schedule of the week of the given date/time
@@ -168,83 +148,81 @@ function warn(text) {
  * Creates the day for the given date and appends it to the given week
  */
 function createDay(week, date) {
-	var daySchedule = getDayInfo(date); //get schedule for that day
-
+	var daySchedule = parser.getDayInfo(date); //get schedule for that day
+	
+	var dateString = date.getMonth().valueOf()+1 + "/" + date.getDate().valueOf() + "/" + date.getFullYear().toString().substr(-2);
+	
 	var col = week.insertCell(-1); //create cell for day
 	col.date = date.valueOf(); //store date in cell element
-
+	
 	if(date.getMonth()==9 && date.getDate()==31) //check Halloween
 		col.classList.add("halloween");
-
+	
 	var head = document.createElement("div"); //create header div in cell
 	head.classList.add("head");
 	var headWrapper = document.createElement("div");
 	headWrapper.classList.add("headWrapper");
-	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule.dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
+	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
 	head.appendChild(headWrapper);
 	col.appendChild(head);
-
+	
 	var prevEnd = "8:00"; //set start of day to 8:00AM
+	
 
-	if(daySchedule.index > 0) { //populates cell with day's schedule (a bit messily)
-		for(var i=1;i<schedules[daySchedule.index].length;i++) {
-			var text = schedules[daySchedule.index][i];
-			var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
-			var periodTime = text.substring(text.indexOf("\t")+1);
-			
+	for(var i=0;i<daySchedule.length;i++) {
+		var periodObj = daySchedule[i];
 
-			var start = periodTime.substring(0,periodTime.indexOf("-"));
-			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
 
+		var passing = document.createElement("div");
+		passing.classList.add("period");
+
+		
+
+		var period = document.createElement("div");
+		period.classList.add("period");
+		
+		if(daySchedule[i].compound) {
 			if(opts.showPassingPeriods) {
-				var passing = document.createElement("div");
-				passing.classList.add("period");
-				createPeriod(passing,"",prevEnd,start,date);
+				createPeriod(passing,"",prevEnd,periodObj.left[0].start,date);
 				col.appendChild(passing);
+				prevEnd = periodObj.left[1].end;
 			}
+			
+			//handle split periods (i.e. lunches)
+			var table = document.createElement("table");
+			table.classList.add("lunch");
+			var row = table.insertRow(-1);
 
-			prevEnd = end;
+			var lunch1 = row.insertCell(-1);
 
-			var period = document.createElement("div");
-			period.classList.add("period");
+			createCompoundPeriod(
+					lunch1,
+					periodObj.left,
+					date
+			);
 
-			if(periodName.indexOf("|")>=0) {
-				//handle split periods (i.e. lunches)
-				var table = document.createElement("table");
-				table.classList.add("lunch");
-				var row = table.insertRow(-1);
+			var lunch2 = row.insertCell(-1);
 
-				var lunch1 = row.insertCell(-1);
-				var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
+			createCompoundPeriod(
+					lunch2,
+					periodObj.right,
+					date
+			);
 
-				createSubPeriods(
-						lunch1,
-						periodName.substring(0,periodName.indexOf("||")),
-						start,
-						lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
-						lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
-						end,
-						date
-				);
-
-				var lunch2 = row.insertCell(-1);
-				var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
-
-				createSubPeriods(
-						lunch2,
-						periodName.substring(periodName.indexOf("||")+2),
-						start,
-						lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
-						lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
-						end,
-						date
-				);
-
-				period.appendChild(table);
-			}
-			else createPeriod(period,periodName,start,end,date);
-			col.appendChild(period);
+			period.appendChild(table);
 		}
+		else {
+			if(opts.showPassingPeriods) {
+				createPeriod(passing,"",prevEnd,periodObj.period.start,date);
+				col.appendChild(passing);
+				prevEnd = periodObj.period.end;
+			}
+			
+			var start = periodObj.period.start;
+			var end = periodObj.period.end;
+			createPeriod(period,periodObj.period.name,start,end,date);
+		}
+		col.appendChild(period);
 	}
 }
 
@@ -263,69 +241,15 @@ function makePeriodNameReplacements(periodName, replacements) {
 	return periodName;
 }
 
-
-
-/**
- * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
- * Assumes hours less than 7 are PM and hours 7 or greater are AM.
- */
-function getDateFromString(string, date) {
-	var hour = string.substring(0,string.indexOf(":"));
-	var min = string.substring(string.indexOf(":")+1);
-	if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
-	return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
-}
-
-/**
- * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
- * Schedule id index is 0 if not found in schedules.
- */
-function getDayInfo(day) {
-	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
-
-	var id;
-	var index = 0;
-	var replacements = [];
-	
-	for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
-		if(!schedules[0][i].indexOf(dateString)) {
-			//found special schedule
-			if(schedules[0][i].indexOf("[") >= 0) { //check for period replacements
-				//cut replacements and space character out of id and save separately
-				id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1,schedules[0][i].indexOf("[")-1);
-				replacements = schedules[0][i].substring(schedules[0][i].indexOf("[")+1,schedules[0][i].indexOf("]")).split(",");
-			} else {
-				// no replacements to be made
-				id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1);
-			}
-			
-			index = getScheduleIndex(id);
-		}
-	
-	if(id === undefined) { //no special schedule found
-		id = day.getDay();
-		if(id==0 || id==6) index = id = 0; //no school on weekends
-		else index = id; //default schedule for that day
-	}
-	
-	return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
-}
-
-/**
- * Gets the index in the list of schedules of the schedule with the given schedule id (or 0 if no matching schedules were found)
- */
-function getScheduleIndex(id) {
-	if(id==0) return 0; //schedule id 0 represents no school
-	for(var i=1;i<schedules.length;i++) { //find index of schedule id
-		if(id==schedules[i][0]) return i; //found specified schedule id
-	}
-	return 0; //couldn't find specified schedule
-}
-
 /**
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
+//function createPeriod(parent, periodObj, date) {
+//	console.log(periodObj + "per");
+//	createPeriod(parent, periodObj.name, periodObj.start, periodObj.end, date);
+//}
+	
 function createPeriod(parent, name, start, end, date) {
 	startDate = getDateFromString(start,date);
 	endDate = getDateFromString(end,date);
@@ -352,23 +276,34 @@ function createPeriod(parent, name, start, end, date) {
 }
 
 /**
+ * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
+ * Assumes hours less than 7 are PM and hours 7 or greater are AM.
+ */
+function getDateFromString(string, date) {
+	var hour = string.substring(0,string.indexOf(":"));
+	var min = string.substring(string.indexOf(":")+1);
+	if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
+	return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
+}
+
+/**
  * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
  */
-function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
+function createCompoundPeriod(parent, periods, date) {
 	var p1 = document.createElement("div");
 	p1.classList.add("period");
 	createPeriod(
 			p1,
-			name.substring(0,name.indexOf("|")),
-			start1,
-			end1,
+			periods[0].name,
+			periods[0].start,
+			periods[0].end,
 			date);
 	parent.appendChild(p1);
 
 	if(opts.showPassingPeriods) {
 		var lunchPassing = document.createElement("div");
 		lunchPassing.classList.add("period");
-		createPeriod(lunchPassing,"",end1,start2,date);
+		createPeriod(lunchPassing,"",periods[0].end,periods[1].start,date);
 		parent.appendChild(lunchPassing);
 	}
 
@@ -378,9 +313,9 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 	w2.classList.add("periodWrapper");
 	createPeriod(
 			p2,
-			name.substring(name.indexOf("|")+1),
-			start2,
-			end2,
+			periods[1].name,
+			periods[1].start,
+			periods[1].end,
 			date);
 	parent.appendChild(p2);
 }
@@ -460,16 +395,6 @@ function setHighlightedPeriod(time) {
 		}
 	}
 }
-
-/**
- * Updates schedule to display as it would on the given date/time; defaults to now if none is given.
- * Also updates
- */
-function updateSchedule(time,force) {
-	setDisplayDate(time,force);
-	setHighlightedPeriod();
-}
-exports.updateSchedule = updateSchedule;
 
 /**
  * Creates a desktop notification with the given text for a title and removes it after the given duration in seconds.

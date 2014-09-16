@@ -1,9 +1,13 @@
 var dateUtil = require("./dateUtil.js");
+var schedule = require("./schedule.js");
 
+var viewTypes = exports.viewTypes = {
+	DAY: "day",
+	WEEK: "week"
+};
 
 var urlParams; //object with GET variables as properties and their respective values as values
 var viewType;
-
 
 /**
  * Gets GET variables from URL and sets them as properties of the urlParams object.
@@ -15,7 +19,7 @@ var viewType;
  */
 exports.init = function() {
 	//decode GET vars in URL
-	updateUrlParams();
+	getUrlParams();
 	
 	//update history state
 	window.history.replaceState(getDateFromUrlParams());
@@ -23,19 +27,14 @@ exports.init = function() {
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goPrev);
 	document.getElementById("rightArrow").addEventListener("click", goNext);
-
-	document.getElementById("refresh").addEventListener("click", function() { updateSchedule(null,true); });
-
+	
+	document.getElementById("refresh").addEventListener("click", function() { schedule.update(null,true); });
+	
 	setTitleTitle();
 };
 
 exports.setViewType = function(type) {
 	viewType = type;
-};
-
-var viewTypes = exports.viewTypes = {
-	DAY: "day",
-	WEEK: "week"
 };
 
 
@@ -44,8 +43,8 @@ var viewTypes = exports.viewTypes = {
  * (onload event will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
 addEventListener("popstate", function(event) {
-	updateUrlParams();
-	updateSchedule(event.state);
+	getUrlParams();
+	schedule.update(event.state);
 });
 
 /**
@@ -60,7 +59,7 @@ function setTitleTitle() {
  * Updates urlParams object based on the GET variables in the URL.
  * (variables as properties and values as values)
  */
-function updateUrlParams() {
+function getUrlParams() {
 	urlParams = {};
 	
 	var match,
@@ -95,9 +94,9 @@ exports.getDateFromUrlParams = getDateFromUrlParams; //TODO: remove web of depen
  * Navigates schedule to previous date.
  */
 function goPrev() {
-	var date = new Date(displayDate);
+	var date = schedule.getDisplayDate();
 	date.setDate(date.getDate() - (viewType == viewTypes.DAY ? 1 : 7));
-	updateSchedule(date);
+	schedule.update(date);
 	
 	updateSearch (date);
 }
@@ -106,9 +105,9 @@ function goPrev() {
  * Navigates schedule to next date.
  */
 function goNext() {
-	var date = new Date(displayDate);
+	var date = schedule.getDisplayDate();
 	date.setDate(date.getDate() + (viewType == viewTypes.DAY ? 1 : 7));
-	updateSchedule(date);
+	schedule.update(date);
 	
 	updateSearch(date);
 }
@@ -118,7 +117,7 @@ function goNext() {
  */
 function goCurr() {
 	var date = new Date();
-	updateSchedule(date);
+	schedule.update(date);
 
 	updateSearch(date);
 }

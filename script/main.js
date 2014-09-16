@@ -3,11 +3,10 @@
  * Hosted at http://harkerdev.github.io/bellschedule
 **/
 
-var options = require("./options.js");
-var mobile = require("./mobile.js");
-var nav = require("./nav.js");
-var dateUtil = require("./dateUtil.js");
-var schedule = require("./schedule.js");
+window.options = require("./options.js");
+window.mobile = require("./mobile.js");
+window.nav = require("./nav.js");
+window.schedule = require("./schedule.js");
 
 /**
  * CSS things
@@ -33,9 +32,6 @@ addEventListener("load", function(event) {
 	nav.init();
 
 	schedule.init();
-
-	//updateSchedule();
-	//updateClock();
 	
 	options.init();
 });
