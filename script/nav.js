@@ -1,5 +1,5 @@
-var dateUtil = require("./dateUtil.js");
-var schedule = require("./schedule.js");
+var DateUtil = require("./dateUtil.js");
+var Schedule = require("./schedule.js");
 
 var viewTypes = exports.viewTypes = {
 	DAY: "day",
@@ -22,13 +22,13 @@ exports.init = function() {
 	getUrlParams();
 	
 	//update history state
-	window.history.replaceState(getDateFromUrlParams());
+	window.history.replaceState(getDateFromUrlParams(), document.title, document.location);
 	
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goPrev);
 	document.getElementById("rightArrow").addEventListener("click", goNext);
 	
-	document.getElementById("refresh").addEventListener("click", function() { schedule.update(null,true); });
+	document.getElementById("refresh").addEventListener("click", function() { Schedule.update(null,true); });
 	
 	setTitleTitle();
 };
@@ -44,7 +44,7 @@ exports.setViewType = function(type) {
  */
 addEventListener("popstate", function(event) {
 	getUrlParams();
-	schedule.update(event.state);
+	Schedule.update(event.state);
 });
 
 /**
@@ -84,7 +84,7 @@ function getDateFromUrlParams() {
 	if(urlParams.m>0) date.setMonth(urlParams.m-1);
 	if(urlParams.d>0) date.setDate(urlParams.d);
 	
-	if(viewType == viewTypes.WEEK) date = dateUtil.getMonday(date);
+	if(viewType == viewTypes.WEEK) date = DateUtil.getMonday(date);
 	
 	return date;
 }
@@ -94,20 +94,20 @@ exports.getDateFromUrlParams = getDateFromUrlParams; //TODO: remove web of depen
  * Navigates schedule to previous date.
  */
 function goPrev() {
-	var date = schedule.getDisplayDate();
+	var date = Schedule.getDisplayDate();
 	date.setDate(date.getDate() - (viewType == viewTypes.DAY ? 1 : 7));
-	schedule.update(date);
+	Schedule.update(date);
 	
-	updateSearch (date);
+	updateSearch(date);
 }
 
 /**
  * Navigates schedule to next date.
  */
 function goNext() {
-	var date = schedule.getDisplayDate();
+	var date = Schedule.getDisplayDate();
 	date.setDate(date.getDate() + (viewType == viewTypes.DAY ? 1 : 7));
-	schedule.update(date);
+	Schedule.update(date);
 	
 	updateSearch(date);
 }
@@ -117,8 +117,8 @@ function goNext() {
  */
 function goCurr() {
 	var date = new Date();
-	schedule.update(date);
-
+	Schedule.update(date);
+	
 	updateSearch(date);
 }
 
@@ -128,7 +128,7 @@ function goCurr() {
 function updateSearch(week, noHistory) {
 	var curr = new Date();
 	
-	if(viewType == viewTypes.WEEK) curr = dateUtil.getMonday(curr);
+	if(viewType == viewTypes.WEEK) curr = DateUtil.getMonday(curr);
 	
 	if(week.getDate() != curr.getDate()) {
 		urlParams.m = week.getMonth()+1;
@@ -144,5 +144,6 @@ function updateSearch(week, noHistory) {
 	for(var param in urlParams) search += param + "=" + urlParams[param] + "&";
 	search = search.slice(0,-1);
 	
-	history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
+	var loc = document.location;
+	history.pushState(week, document.title, loc.protocol + "//" + loc.host + loc.pathname + search + loc.hash);
 }

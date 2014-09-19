@@ -202,16 +202,16 @@ table {
 	font-weight: bold;
 }
 
-#schedule .lunch {
+#schedule .compound {
 	width:100%;
 	height:100%;
 }
-#schedule .lunch td {
-	width: 80px;  /* half of day width */
+#schedule .compound td {
+	width: 79px;  /* half of day width */
 	padding: 0px;
 	border-width: 0;
 }
-#schedule .lunch td:first-child {
+#schedule .compound td:first-child {
 	border-right: 1px solid black;
 }
 

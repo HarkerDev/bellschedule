@@ -1,10 +1,12 @@
-var nav = require("./nav.js");
-var dateUtil = require("./dateUtil.js");
-var options = require("./options.js");
-var parser = require("./scheduleParser.js");
-window.parser = parser;
+var $ = require("jquery");
+var Nav = require("./nav.js");
+var DateUtil = require("./dateUtil.js");
+var Options = require("./options.js");
+var Parser = require("./scheduleParser.js");
+window.Parser = Parser;
+var Period = require("./period.js");
 
-var opts = options.options;
+var opts = Options.options;
 
 /**
  * Constants
@@ -33,7 +35,7 @@ exports.init = function() {
 	addEventListener("focus", function(event) {
 		update();
 		//updateClock();
-
+		
 		hasFocus = true;
 		updateUpdateInterval();
 	});
@@ -43,12 +45,12 @@ exports.init = function() {
 	});
 	
 	
-	parser.init();
+	Parser.init();
 };
 
 exports.getDisplayDate = function() {
 	return new Date(displayDate);
-}
+};
 
 //exports.setHiddenUpdateInterval = function(interval) {
 //	opts.hiddenUpdateInterval = interval;
@@ -98,33 +100,33 @@ exports.update = update;
  * Displays schedule of the week of the given date/time
  */
 function setDisplayDate(time, force) {
-	var date = (time ? new Date(time) : nav.getDateFromUrlParams()); //variable to keep track of current day in loop
-
-	dateUtil.setDayBeginning(date);
-
+	var date = (time ? new Date(time) : Nav.getDateFromUrlParams()); //variable to keep track of current day in loop
+	
+	DateUtil.setDayBeginning(date);
+	
 	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())) {
 		var schedule = document.getElementById("schedule"); //get schedule table
-
+		
 		displayDate = new Date(date);
-
-		if(dateUtil.getMonday(date) > dateUtil.getMonday(new Date()))
+		
+		if(DateUtil.getMonday(date) > DateUtil.getMonday(new Date()))
 			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
 		else warn(""); //else display message
-
+		
 		/*
 		if(date.valueOf()==dateUtil.getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
 		else document.getElementById("currWeek").style.display = "inline"; //else show the button
 		*/
 		while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
-
+		
 		var week = schedule.insertRow(-1); //create new week (row)
-
+		
 		if(!opts.enableDayView) {
-			date = dateUtil.getMonday(date);
+			date = DateUtil.getMonday(date);
 			for(var d=0;d<5;d++) {
 				//for each day Monday through Friday (inclusive)
 				createDay(week, date);
-
+				
 				date.setDate(date.getDate()+1); //increment day
 			}
 		} else createDay(week, date);
@@ -148,7 +150,7 @@ function warn(text) {
  * Creates the day for the given date and appends it to the given week
  */
 function createDay(week, date) {
-	var daySchedule = parser.getDayInfo(date); //get schedule for that day
+	var daySchedule = Parser.getDayInfo(date); //get schedule for that day
 	
 	var dateString = date.getMonth().valueOf()+1 + "/" + date.getDate().valueOf() + "/" + date.getFullYear().toString().substr(-2);
 	
@@ -171,153 +173,21 @@ function createDay(week, date) {
 
 	for(var i=0;i<daySchedule.length;i++) {
 		var periodObj = daySchedule[i];
-
-
-		var passing = document.createElement("div");
-		passing.classList.add("period");
-
-		
+		var passing = $("<div>").addClass("period");
 
 		var period = document.createElement("div");
 		period.classList.add("period");
 		
-		if(daySchedule[i].compound) {
-			if(opts.showPassingPeriods) {
-				createPeriod(passing,"",prevEnd,periodObj.left[0].start,date);
-				col.appendChild(passing);
-				prevEnd = periodObj.left[1].end;
-			}
-			
-			//handle split periods (i.e. lunches)
-			var table = document.createElement("table");
-			table.classList.add("lunch");
-			var row = table.insertRow(-1);
-
-			var lunch1 = row.insertCell(-1);
-
-			createCompoundPeriod(
-					lunch1,
-					periodObj.left,
-					date
-			);
-
-			var lunch2 = row.insertCell(-1);
-
-			createCompoundPeriod(
-					lunch2,
-					periodObj.right,
-					date
-			);
-
-			period.appendChild(table);
+		if(opts.showPassingPeriods) {
+			passing.append(Period.createPeriod("",prevEnd,periodObj.start,date));
+			col.appendChild(passing.get(0));
+			prevEnd = periodObj.end;
 		}
-		else {
-			if(opts.showPassingPeriods) {
-				createPeriod(passing,"",prevEnd,periodObj.period.start,date);
-				col.appendChild(passing);
-				prevEnd = periodObj.period.end;
-			}
+		
+		period.appendChild(periodObj.getHTML(date));
 			
-			var start = periodObj.period.start;
-			var end = periodObj.period.end;
-			createPeriod(period,periodObj.period.name,start,end,date);
-		}
 		col.appendChild(period);
 	}
-}
-
-/**
- * Returns new name for period based on array of replacements.
- * If the current period name is listed in the array of replacements, returns the new, replaced name; otherwise, returns current name.
- * replacements is an array of strings of the form "OldName->NewName"
- */
-function makePeriodNameReplacements(periodName, replacements) {
-	if(replacements.length > 0) {
-		for(var i=0;i<replacements.length;i++) {
-			if(!replacements[i].indexOf(periodName))
-				return replacements[i].substring(replacements[i].indexOf("->")+2);
-		}
-	}
-	return periodName;
-}
-
-/**
- * Creates and returns a new period wrapper with the given content and start/end times.
- * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
- */
-//function createPeriod(parent, periodObj, date) {
-//	console.log(periodObj + "per");
-//	createPeriod(parent, periodObj.name, periodObj.start, periodObj.end, date);
-//}
-	
-function createPeriod(parent, name, start, end, date) {
-	startDate = getDateFromString(start,date);
-	endDate = getDateFromString(end,date);
-
-	var periodWrapper = document.createElement("div");
-	periodWrapper.classList.add("periodWrapper");
-	periodWrapper.periodName = name;
-	periodWrapper.start = startDate;
-	periodWrapper.end = endDate;
-
-	var length = (endDate-startDate)/60000;
-
-	if(length > 0) {
-		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
-
-		if(length >= 15) {
-			if(name) periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + " – " + end;
-			if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
-				periodWrapper.classList.add("long");
-		}
-
-	return parent.appendChild(periodWrapper);
-	}
-}
-
-/**
- * Takes in a date and a string of form "hh:MM" and turns it into a time on the day of the given date.
- * Assumes hours less than 7 are PM and hours 7 or greater are AM.
- */
-function getDateFromString(string, date) {
-	var hour = string.substring(0,string.indexOf(":"));
-	var min = string.substring(string.indexOf(":")+1);
-	if(hour<7) hour = parseInt(hour,10)+12; //assumes hours less than seven are PM and hours 7 or greater are AM
-	return new Date(date.getFullYear(),date.getMonth(),date.getDate(),hour,min);
-}
-
-/**
- * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
- */
-function createCompoundPeriod(parent, periods, date) {
-	var p1 = document.createElement("div");
-	p1.classList.add("period");
-	createPeriod(
-			p1,
-			periods[0].name,
-			periods[0].start,
-			periods[0].end,
-			date);
-	parent.appendChild(p1);
-
-	if(opts.showPassingPeriods) {
-		var lunchPassing = document.createElement("div");
-		lunchPassing.classList.add("period");
-		createPeriod(lunchPassing,"",periods[0].end,periods[1].start,date);
-		parent.appendChild(lunchPassing);
-	}
-
-	var p2 = document.createElement("div");
-	p2.classList.add("period");
-	var w2 = document.createElement("div");
-	w2.classList.add("periodWrapper");
-	createPeriod(
-			p2,
-			periods[1].name,
-			periods[1].start,
-			periods[1].end,
-			date);
-	parent.appendChild(p2);
 }
 
 /**

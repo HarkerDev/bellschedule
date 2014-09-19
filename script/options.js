@@ -1,11 +1,11 @@
 var options = exports.options = {}; //needs to be initialized before requiring schedule
 
 
-var mobile = require("./mobile.js");
-var nav = require("./nav.js");
-var schedule = require("./schedule.js");
+var Mobile = require("./mobile.js");
+var Nav = require("./nav.js");
+var Schedule = require("./schedule.js");
 
-var isMobile = mobile.isMobile;
+var isMobile = Mobile.isMobile;
 
 
 
@@ -104,14 +104,14 @@ function createOptions(data) {
 	initOptions();
 	attachOptionActions();
 
-	schedule.update(null, true);
+	Schedule.update(null, true);
 }
 
 /**
  * Displays error about retrieving schedule.
  */
 function displayOptionsError(timeout, status) {
-	schedule.update();
+	Schedule.update();
 	
 	if(timeout) {
 		warn("Retrieval of options.json timed out!");
@@ -187,12 +187,12 @@ function createOption(option) {
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
 function attachOptionActions() {
-	schedule.updateUpdateInterval();
+	Schedule.updateUpdateInterval();
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
-		schedule.updateUpdateInterval();
+		Schedule.updateUpdateInterval();
 	});
 	document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
-		schedule.update(null,true);
+		Schedule.update(null,true);
 	});
 
 	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
@@ -209,16 +209,16 @@ function attachOptionActions() {
 	});
 
 	document.body.classList.add(options.enableDayView ? "day" : "week");
-	nav.setViewType(options.enableDayView ? nav.viewTypes.DAY : nav.viewTypes.WEEK);
+	Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
-		schedule.update(null, true);
+		Schedule.update(null, true);
 		
 		document.body.classList.remove("week");
 		document.body.classList.remove("day");
 		
-		nav.setViewType(options.enableDayView ? nav.viewTypes.DAY : nav.viewTypes.WEEK);
+		Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
 		
-		nav.setViewType(options.enableDayView ? "day" : "week");
+		Nav.setViewType(options.enableDayView ? "day" : "week");
 		
 		scrollTo(0,0); //scroll back to top-left corner
 	});
@@ -230,14 +230,14 @@ function attachOptionActions() {
 					if(options.interceptF5) {
 						//enabled
 						event.preventDefault();
-						schedule.update();
+						Schedule.update();
 					}
 					break;
 				case 82 : //R key
 					if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)) {
 						//enabled and control/cmd (meta)
 						event.preventDefault();
-						schedule.update();
+						Schedule.update();
 					}
 					break;
 				case 37 : //Left arrow

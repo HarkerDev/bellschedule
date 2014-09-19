@@ -11,7 +11,6 @@ module.exports = function(grunt) {
 				src: "script/main.js",
 				dest: "script/script.js",
 				options: {
-					noParse: ["script/jquery.js"],
 					plugin: [[
 						"minifyify", {
 							map: "script.js.map",

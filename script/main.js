@@ -3,10 +3,10 @@
  * Hosted at http://harkerdev.github.io/bellschedule
 **/
 
-window.options = require("./options.js");
-window.mobile = require("./mobile.js");
-window.nav = require("./nav.js");
-window.schedule = require("./schedule.js");
+window.Options = require("./options.js");
+window.Mobile = require("./mobile.js");
+window.Nav = require("./nav.js");
+window.Schedule = require("./schedule.js");
 
 /**
  * CSS things
@@ -27,11 +27,11 @@ Array.prototype.diff = function(a) {
  * Parses schedules, creates schedule for correct week, sets title title on page load.
  */
 addEventListener("load", function(event) {
-	mobile.init();
-
-	nav.init();
-
-	schedule.init();
+	window.Mobile.init();
 	
-	options.init();
+	window.Nav.init();
+	
+	window.Schedule.init();
+	
+	window.Options.init();
 });
