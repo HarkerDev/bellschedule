@@ -43,7 +43,7 @@ var urlParams; //object with GET variables as properties and their respective va
 	updateUrlParams();
 	
 	//update history state
-	window.history.replaceState( getDateFromUrlParams() );
+	window.history.replaceState(getDateFromUrlParams(), document.title, document.location);
 }());
 
 /**
