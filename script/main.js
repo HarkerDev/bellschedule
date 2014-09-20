@@ -16,22 +16,14 @@ addEventListener("scroll", function(event) {
 });
 
 /**
- * Returns an array of values in the array that aren't in a.
- */
-Array.prototype.diff = function(a) {
-	return this.filter(function(i) {return a.indexOf(i) < 0;});
-};
-
-
-/**
  * Parses schedules, creates schedule for correct week, sets title title on page load.
  */
 addEventListener("load", function(event) {
+	//order does matter here
+	//TODO enforce order by making schedule/nav take options as an argument?
+	
 	window.Mobile.init();
-	
-	window.Nav.init();
-	
-	window.Schedule.init();
-	
 	window.Options.init();
+	window.Schedule.init();
+	window.Nav.init();
 });

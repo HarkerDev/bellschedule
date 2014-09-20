@@ -6,7 +6,6 @@ var viewTypes = exports.viewTypes = {
 	WEEK: "week"
 };
 
-var urlParams; //object with GET variables as properties and their respective values as values
 var viewType;
 
 /**
@@ -18,11 +17,13 @@ var viewType;
  * Adds appropriate event listeners to items in the schedule title.
  */
 exports.init = function() {
-	//decode GET vars in URL
-	getUrlParams();
+	
+	var initialDate = getDateFromUrlParams();
+	
+	Schedule.setDate(initialDate);
 	
 	//update history state
-	window.history.replaceState(getDateFromUrlParams(), document.title, document.location);
+	window.history.replaceState(initialDate, document.title, document.location);
 	
 	document.getElementById("header").addEventListener("click", setTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goPrev);
@@ -56,11 +57,31 @@ function setTitleTitle() {
 }
 
 /**
+ * Returns a Date object based on the current urlParams (GET variables in the URL).
+ * If any part of the date is not specified, defaults to the current date/month/year.
+ * If in week view, uses the Monday of the week instead of the day.
+ */
+function getDateFromUrlParams() {
+	var urlParams = getUrlParams();
+	
+	var date = new Date();
+	
+	if(urlParams.y>0) date.setFullYear(urlParams.y);
+	if(urlParams.m>0) date.setMonth(urlParams.m-1);
+	if(urlParams.d>0) date.setDate(urlParams.d);
+	
+	if(viewType == viewTypes.WEEK) date = DateUtil.getMonday(date);
+	else date = DateUtil.getDayBeginning(date);
+	
+	return date;
+}
+
+/**
  * Updates urlParams object based on the GET variables in the URL.
  * (variables as properties and values as values)
  */
 function getUrlParams() {
-	urlParams = {};
+	var urlParams = {};
 	
 	var match,
 		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
@@ -70,25 +91,9 @@ function getUrlParams() {
 	
 	while (match = search.exec(query))
 		urlParams[decode(match[1])] = decode(match[2]);
+	
+	return urlParams;
 }
-
-/**
- * Returns a Date object based on the current urlParams (GET variables in the URL).
- * If any part of the date is not specified, defaults to the current date/month/year.
- * If in week view, uses the Monday of the week instead of the day.
- */
-function getDateFromUrlParams() {
-	var date = new Date();
-	
-	if(urlParams.y>0) date.setFullYear(urlParams.y);
-	if(urlParams.m>0) date.setMonth(urlParams.m-1);
-	if(urlParams.d>0) date.setDate(urlParams.d);
-	
-	if(viewType == viewTypes.WEEK) date = DateUtil.getMonday(date);
-	
-	return date;
-}
-exports.getDateFromUrlParams = getDateFromUrlParams; //TODO: remove web of dependencies
 
 /**
  * Navigates schedule to previous date.
@@ -96,9 +101,8 @@ exports.getDateFromUrlParams = getDateFromUrlParams; //TODO: remove web of depen
 function goPrev() {
 	var date = Schedule.getDisplayDate();
 	date.setDate(date.getDate() - (viewType == viewTypes.DAY ? 1 : 7));
-	Schedule.update(date);
 	
-	updateSearch(date);
+	navigate(date);
 }
 
 /**
@@ -107,9 +111,8 @@ function goPrev() {
 function goNext() {
 	var date = Schedule.getDisplayDate();
 	date.setDate(date.getDate() + (viewType == viewTypes.DAY ? 1 : 7));
-	Schedule.update(date);
 	
-	updateSearch(date);
+	navigate(date);
 }
 
 /**
@@ -117,28 +120,32 @@ function goNext() {
  */
 function goCurr() {
 	var date = new Date();
-	Schedule.update(date);
-	
+	navigate(date);
+}
+
+function navigate(date) {
 	updateSearch(date);
+	Schedule.setDate(date);
 }
 
 /**
  * Updates GET variables and urlParams to reflect date in week and pushes corresponding history state.
  */
-function updateSearch(week, noHistory) {
+function updateSearch(week) {
+	var urlParams = {};
 	var curr = new Date();
 	
-	if(viewType == viewTypes.WEEK) curr = DateUtil.getMonday(curr);
+	if(viewType == viewTypes.WEEK)
+		curr = DateUtil.getMonday(curr);
+	else
+		curr = DateUtil.getDayBeginning(curr);
 	
 	if(week.getDate() != curr.getDate()) {
 		urlParams.m = week.getMonth()+1;
 		urlParams.d = week.getDate();
-	} else {
-		delete urlParams.m;
-		delete urlParams.d;
 	}
-	if(week.getYear() != curr.getYear()) urlParams.y = week.getFullYear().toString().substr(-2);
-	else delete urlParams.y;
+	if(week.getYear() != curr.getYear())
+		urlParams.y = week.getFullYear().toString().substr(-2);
 	
 	var search = "?";
 	for(var param in urlParams) search += param + "=" + urlParams[param] + "&";

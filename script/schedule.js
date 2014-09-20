@@ -1,27 +1,21 @@
 var $ = require("jquery");
-var Nav = require("./nav.js");
 var DateUtil = require("./dateUtil.js");
 var Options = require("./options.js");
 var Parser = require("./scheduleParser.js");
-window.Parser = Parser;
 var Period = require("./period.js");
 
 var opts = Options.options;
 
-/**
- * Constants
- */
-var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
+
+var DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 
-/**
- * Globals
- */
 var displayDate; //beginning of time period currently being displayed by the schedule
+var isCurrent = true;
 
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
 
-var updateScheduleID; //ID of interval of updateSchedule
+var updateScheduleIntervalID;
 
 exports.init = function() {
 	document.addEventListener("visibilitychange", function(event) {
@@ -77,60 +71,88 @@ exports.updateUpdateInterval = updateUpdateInterval;
  * seconds is the new interval in seconds.
  */
 function setUpdateInterval(seconds) {
-	clearInterval(updateScheduleID);
+	clearInterval(updateScheduleIntervalID);
 	if(seconds>0)
-		updateScheduleID = setInterval(function() {
+		updateScheduleIntervalID = setInterval(function() {
 			//updateClock();
 			update();
 		}, seconds * 1000); //convert to milliseconds
-	else updateScheduleID = null;
+	else updateScheduleIntervalID = null;
 }
 
-/**
- * Updates schedule to display as it would on the given date/time; defaults to now if none is given.
- * Also updates
- */
-function update(time,force) {
-	setDisplayDate(time,force);
-	setHighlightedPeriod();
-}
+exports.setDate = function(date) {
+	isCurrent = onSameDisplayUnit(date, new Date());
+	update(date);
+};
+
 exports.update = update;
+function update(date) {
+	var newDate;
+	if(isCurrent)
+		newDate = new Date();
+	else if(date)
+		newDate = date;
+	else
+		newDate = displayDate;
+	
+	if(!onSameDisplayUnit(newDate, displayDate)) {
+		updateSchedule(newDate);
+	}
+	
+	updateHighlightedPeriod();
+}
+
+exports.forceUpdate = forceUpdate;
+function forceUpdate(date) {
+	var newDate;
+	if(isCurrent)
+		newDate = new Date();
+	else if(date)
+		newDate = date;
+	else
+		newDate = displayDate;
+	
+	updateSchedule(newDate);
+	
+	updateHighlightedPeriod();
+}
+
+function onSameDisplayUnit(date1, date2) {
+	return opts.enableDayView ?
+		DateUtil.getDayBeginning(date1) == DateUtil.getDayBegninning(date2) :
+		DateUtil.getMonday(date1) == DateUtil.getMonday(date2)
+}
 
 /**
  * Displays schedule of the week of the given date/time
  */
-function setDisplayDate(time, force) {
-	var date = (time ? new Date(time) : Nav.getDateFromUrlParams()); //variable to keep track of current day in loop
+function updateSchedule(date) {
+	date = DateUtil.getDayBeginning(date);
+	displayDate = new Date(date);
 	
-	DateUtil.setDayBeginning(date);
+	var schedule = document.getElementById("schedule"); //get schedule table
 	
-	if(force || !displayDate || (date.valueOf()!=displayDate.valueOf())) {
-		var schedule = document.getElementById("schedule"); //get schedule table
-		
-		displayDate = new Date(date);
-		
-		if(DateUtil.getMonday(date) > DateUtil.getMonday(new Date()))
-			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-		else warn(""); //else display message
-		
-		/*
-		if(date.valueOf()==dateUtil.getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
-		else document.getElementById("currWeek").style.display = "inline"; //else show the button
-		*/
-		while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
-		
-		var week = schedule.insertRow(-1); //create new week (row)
-		
-		if(!opts.enableDayView) {
-			date = DateUtil.getMonday(date);
-			for(var d=0;d<5;d++) {
-				//for each day Monday through Friday (inclusive)
-				createDay(week, date);
-				
-				date.setDate(date.getDate()+1); //increment day
-			}
-		} else createDay(week, date);
-	}
+	if(DateUtil.getMonday(date) > DateUtil.getMonday(new Date()))
+		warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
+	else warn(""); //else display message
+	
+	/*
+	if(date.valueOf()==dateUtil.getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
+	else document.getElementById("currWeek").style.display = "inline"; //else show the button
+	*/
+	while(schedule.rows.length) schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
+	
+	var week = schedule.insertRow(-1); //create new week (row)
+	
+	if(!opts.enableDayView) {
+		date = DateUtil.getMonday(date);
+		for(var d=0;d<5;d++) {
+			//for each day Monday through Friday (inclusive)
+			createDay(week, date);
+			
+			date.setDate(date.getDate()+1); //increment day
+		}
+	} else createDay(week, date);
 }
 
 
@@ -164,7 +186,7 @@ function createDay(week, date) {
 	head.classList.add("head");
 	var headWrapper = document.createElement("div");
 	headWrapper.classList.add("headWrapper");
-	headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
+	headWrapper.innerHTML = DAYS_OF_WEEK[date.getDay()] + "<div class=\"headDate\">" + dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
 	head.appendChild(headWrapper);
 	col.appendChild(head);
 	
@@ -193,7 +215,7 @@ function createDay(week, date) {
 /**
  * Highlights given date/time on the schedule; defaults to now if none is given
  */
-function setHighlightedPeriod(time) {
+function updateHighlightedPeriod(time) {
 	//set default time argument
 	if(!time) time = Date.now();
 
@@ -252,8 +274,8 @@ function setHighlightedPeriod(time) {
 	if(opts.enablePeriodNotifications) {
 		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now")); //needs to be an array and not an HTML
 
-		var diff1 = currPeriods.diff(prevPeriods);
-		var diff2 = prevPeriods.diff(currPeriods);
+		var diff1 = getArrayDiff(currPeriods, prevPeriods);
+		var diff2 = getArrayDiff(prevPeriods, currPeriods);
 
 		for(var i=0; i<diff1.length; i++) {
 			var name = currPeriods[i].periodName;
@@ -265,6 +287,13 @@ function setHighlightedPeriod(time) {
 		}
 	}
 }
+
+/**
+ * Returns an array of values in array1 that arent in array2
+ */
+function getArrayDiff(array1, array2) {
+	return array1.filter(function(i) {return array2.indexOf(i) < 0;});
+};
 
 /**
  * Creates a desktop notification with the given text for a title and removes it after the given duration in seconds.

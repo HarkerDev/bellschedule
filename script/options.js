@@ -11,6 +11,8 @@ var isMobile = Mobile.isMobile;
 
 exports.init = function() {
 	download("options.json", createOptions, displayOptionsError);
+	initOptionsSection();
+	applyInitialSettings();
 };
 
 /**
@@ -37,11 +39,7 @@ function toggleOptions() {
 
 }
 
-/**
- * Initializes automatic option saving and sets options to previously-saved values, if any.
- * If no previous saved value exists, sets current (default) value as saved value.
- */
-function initOptions() {
+function initOptionsSection() {
 	var opt = document.getElementById("options");
 	opt.addEventListener("mouseover", expandOptions);
 	opt.addEventListener("mouseout", contractOptions);
@@ -50,14 +48,20 @@ function initOptions() {
 	
 	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
 	
-	var inputs = opt.getElementsByTagName("input");
 	
 	if(localStorage.updateScheduleInterval) {
 		//rename key
 		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
 		localStorage.removeItem("updateScheduleInterval");
 	}
+}
 
+/**
+ * Initializes automatic option saving and sets options to previously-saved values, if any.
+ * If no previous saved value exists, sets current (default) value as saved value.
+ */
+function initIndividualOptions() {
+	var inputs = document.getElementById("options").getElementsByTagName("input");
 	for(var i=0; i<inputs.length; i++)
 	{
 		var input = inputs[i];
@@ -66,7 +70,7 @@ function initOptions() {
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.checked;
 			});
-
+			
 			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
 			else options[input.name] = localStorage[input.name] = input.checked;
 		}
@@ -74,7 +78,7 @@ function initOptions() {
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
 			});
-
+			
 			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
 			else options[input.name] = parseInt(localStorage[input.name] = input.value);
 		}
@@ -82,7 +86,7 @@ function initOptions() {
 			input.addEventListener("change", function(event) {
 				options[event.target.name] = localStorage[event.target.name] = event.target.value;
 			});
-
+			
 			if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
 			else options[input.name] = localStorage[input.name] = input.value;
 		}
@@ -100,10 +104,10 @@ function createOptions(data) {
 			createOptionSection(section);
 		}
 	});
-
-	initOptions();
+	
+	initIndividualOptions();
 	attachOptionActions();
-
+	
 	Schedule.update(null, true);
 }
 
@@ -183,18 +187,27 @@ function createOption(option) {
 	document.getElementById("optionsContent").appendChild(tr);
 }
 
+function applyInitialSettings() {
+	Schedule.updateUpdateInterval();
+	
+	document.body.classList.add(options.enableDayView ? "day" : "week");
+	Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
+	
+	setDoge(options.enableDoge);
+}
+
 /**
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
 function attachOptionActions() {
-	Schedule.updateUpdateInterval();
+	
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
 		Schedule.updateUpdateInterval();
 	});
 	document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
 		Schedule.update(null,true);
 	});
-
+	
 	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
 		if(options.enablePeriodNotifications) {
 			var permission = Notification.permission;
@@ -207,9 +220,8 @@ function attachOptionActions() {
 			}
 		}
 	});
-
-	document.body.classList.add(options.enableDayView ? "day" : "week");
-	Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
+	
+	
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
 		Schedule.update(null, true);
 		
@@ -222,7 +234,7 @@ function attachOptionActions() {
 		
 		scrollTo(0,0); //scroll back to top-left corner
 	});
-
+	
 	if(!isMobile) {
 		document.addEventListener("keydown", function(event) {
 			switch (event.keyCode){
@@ -251,8 +263,7 @@ function attachOptionActions() {
 				break;
 			}
 		});
-
-		setDoge(options.enableDoge);
+		
 		document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
 			setDoge(event.target.checked);
 		});

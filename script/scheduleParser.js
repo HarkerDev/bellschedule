@@ -7,22 +7,15 @@ var $ = require("jquery");
 var Period = require("./period.js");
 var CompoundPeriod = require("./compoundPeriod.js");
 
-window.Period = Period;
-
 var REPLACEMENT_SEPARATOR = /, ?/; // , with or without following space
 var REPLACEMENT_SYMBOL = / ?-> ?/; // -> with or without surrounding spaces
 
 var dates = {};
 var schedules = {}; //array of schedules (each schedule is an array in this array
-exports.dates = dates;
-exports.schedules = schedules;
 
 exports.init = function() {
-	console.log("parse dates");
 	parseDates();
-	console.log("parse sched");
 	parseSchedules();
-	console.log(dates);
 };
 
 function parseDates() {
@@ -114,8 +107,6 @@ function createPeriodPart(name, span) {
 exports.getDayInfo = function(day) {
 	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
 	var date = dates[dateString];
-	
-	console.log(date);
 
 	var id;
 	var replacements;
