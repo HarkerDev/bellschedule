@@ -1,6 +1,5 @@
 var options = exports.options = {}; //needs to be initialized before requiring schedule
 
-
 var Mobile = require("./mobile.js");
 var Nav = require("./nav.js");
 var Schedule = require("./schedule.js");
@@ -8,18 +7,16 @@ var OptionsObject = require("./optionsObject.js");
 
 var isMobile = Mobile.isMobile;
 
-
-
 exports.init = function() {
 	makeLocalStorageChanges();
 	initOptionsSection();
 	applyInitialSettings();
-	createOptions(OptionsObject);
+	createIndividualOptions(OptionsObject);
 };
 
 function makeLocalStorageChanges() {
+	//rename updateScheduleInterval to activeUpdateInterval
 	if(localStorage.updateScheduleInterval) {
-		//rename key
 		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
 		localStorage.removeItem("updateScheduleInterval");
 	}
@@ -30,27 +27,20 @@ function initOptionsSection() {
 	
 	opt.addEventListener("mouseover", expandOptions);
 	opt.addEventListener("mouseout", contractOptions);
-	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
+	document.getElementById("optionsArrow").addEventListener("click", toggleOptionsState);
 }
 
-/**
- * Expands the options div and changes the options arrow to point down and to the right.
- */
 function expandOptions() {
 	document.getElementById("options").classList.add("expanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8600;";
 }
-/**
- * Contracts the options div and changes the options arrow to point up and to the left.
- */
+
 function contractOptions() {
 	document.getElementById("options").classList.remove("expanded");
 	document.getElementById("optionsArrow").innerHTML = "&#8598;";
 }
-/**
- * Toggles the options div between extended and contracted and updates options arrow accordingly.
- */
-function toggleOptions() {
+
+function toggleOptionsState() {
 	if(document.getElementById("options").classList.contains("expanded"))
 		contractOptions();
 	else expandOptions();
@@ -66,10 +56,7 @@ function applyInitialSettings() {
 	setDoge(options.enableDoge);
 }
 
-/**
- * Creates options in the options div.
- */
-function createOptions(data) {
+function createIndividualOptions(data) {
 	data.sections.forEach(function(section) {
 		if(!section.hasOwnProperty("platforms") ||
 			((isMobile && section.platforms.indexOf("mobile") >= 0) || !isMobile)) {
@@ -77,13 +64,9 @@ function createOptions(data) {
 		}
 	});
 	
-	initIndividualOptions();
-	attachOptionActions();
+	attachIndividualOptionActions();
 }
 
-/**
- * Create and insert options section.
- */
 function createOptionSection(section) {
 	createOptionSectionTitle(section);
 	section.options.forEach(function(option) {
@@ -94,9 +77,6 @@ function createOptionSection(section) {
 	});
 }
 
-/**
- * Create and insert options section title.
- */
 function createOptionSectionTitle(section) {
 	var tr = document.createElement("tr");
 	var th = document.createElement("th");
@@ -113,9 +93,6 @@ function createOptionSectionTitle(section) {
 	document.getElementById("optionsContent").appendChild(tr);
 }
 
-/**
- * Create and insert option into options.
- */
 function createOption(option) {
 	var tr = document.createElement("tr");
 	var tddesc = document.createElement("td");
@@ -129,14 +106,28 @@ function createOption(option) {
 		tddesc.textContent = option.description + ":";
 	}
 	var input = document.createElement("input");
-	input.name = option.name;
-	input.type = option.type;
-	var defaultValue = (isMobile && option.hasOwnProperty("mobileDefault")) ? option.mobileDefault : option.default; //choose desktop or mobile default value
-	if(input.type == "number") {
-		input.min = 0; //may as well keep this here until any options can take negative
-		input.value = defaultValue;
-	} else if(input.type == "checkbox") {
-		if(defaultValue) input.checked = "checked";
+	var name = input.name = option.name;
+	var type = input.type = option.type;
+	var defaultValue = (isMobile && option.hasOwnProperty("mobileDefault")) ? option.mobileDefault : option.default;
+	if(type == "number") {                                                              //numbers
+		input.min = 0; //may as well keep this here until any options take negative values
+		input.addEventListener("change", function(event) {
+			options[name] = parseInt(localStorage[name] = input.value);
+		});
+		if(localStorage[name]) options[name] = input.value = parseInt(localStorage[name]);
+		else localStorage[name] = input.value = options[name] = defaultValue;
+	} else if(type == "checkbox") {                                                     //booleans
+		input.addEventListener("change", function(event) {
+			options[name] = localStorage[name] = input.checked;
+		});
+		if(localStorage[name]) options[name] = input.checked = localStorage[name]=="true";
+		else localStorage[name] = options[name] = input.checked = defaultValue;
+	} else {                                                                            //strings
+		input.addEventListener("change", function(event) {
+			options[name] = localStorage[name] = input.value;
+		});
+		if(localStorage[name]) options[name] = input.value = localStorage[name];
+		else localStorage[name] = options[name] = input.value = defaultValue;
 	}
 	tdinput.appendChild(input);
 	tr.appendChild(tddesc);
@@ -145,47 +136,9 @@ function createOption(option) {
 }
 
 /**
- * Initializes automatic option saving and sets options to previously-saved values, if any.
- * If no previous saved value exists, sets current (default) value as saved value.
- */
-function initIndividualOptions() {
-	var inputs = document.getElementById("options").getElementsByTagName("input");
-	for(var i=0; i<inputs.length; i++)
-	{
-		var input = inputs[i];
-		//special cases because localStorage saves values as strings
-		if(input.type=="checkbox") {                                      //booleans
-			input.addEventListener("change", function(event) {
-				options[event.target.name] = localStorage[event.target.name] = event.target.checked;
-			});
-			
-			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
-			else options[input.name] = localStorage[input.name] = input.checked;
-		}
-		else if(input.type=="number") {                                   //numbers
-			input.addEventListener("change", function(event) {
-				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
-			});
-			
-			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
-			else options[input.name] = parseInt(localStorage[input.name] = input.value);
-		}
-		else {                                                                //strings
-			input.addEventListener("change", function(event) {
-				options[event.target.name] = localStorage[event.target.name] = event.target.value;
-			});
-			
-			if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
-			else options[input.name] = localStorage[input.name] = input.value;
-		}
-	}
-}
-
-/**
  * Creates event listeners for option-specific actions on option change and applies option-specific actions on page load.
  */
-function attachOptionActions() {
-	
+function attachIndividualOptionActions() {
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
 		Schedule.updateUpdateInterval();
 	});
@@ -205,7 +158,6 @@ function attachOptionActions() {
 			}
 		}
 	});
-	
 	
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
 		Schedule.forceUpdate();
@@ -250,7 +202,7 @@ function attachOptionActions() {
 		});
 		
 		document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
-			setDoge(event.target.checked);
+			setDoge(options.enableDoge);
 		});
 	}
 }

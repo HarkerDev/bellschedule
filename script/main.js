@@ -3,10 +3,10 @@
  * Hosted at http://harkerdev.github.io/bellschedule
 **/
 
-window.Options = require("./options.js");
 window.Mobile = require("./mobile.js");
-window.Nav = require("./nav.js");
+window.Options = require("./options.js");
 window.Schedule = require("./schedule.js");
+window.Nav = require("./nav.js");
 
 /**
  * CSS things
@@ -21,7 +21,6 @@ addEventListener("scroll", function(event) {
 addEventListener("load", function(event) {
 	//order does matter here
 	//TODO enforce order by making schedule/nav take options as an argument?
-	
 	window.Mobile.init();
 	window.Options.init();
 	window.Schedule.init();

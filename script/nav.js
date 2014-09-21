@@ -8,59 +8,42 @@ var viewTypes = exports.viewTypes = {
 
 var viewType;
 
-/**
- * Gets GET variables from URL and sets them as properties of the urlParams object.
- * Then updates the state of the current history entry with the appropriate week.
- */
-
-/**
- * Adds appropriate event listeners to items in the schedule title.
- */
 exports.init = function() {
 	
-	var initialDate = getDateFromUrlParams();
+	var initialDate = getDateFromURL();
 	
 	Schedule.setDate(initialDate);
 	
 	//update history state
 	window.history.replaceState(initialDate, document.title, document.location);
 	
-	document.getElementById("header").addEventListener("click", setTitleTitle);
+	document.getElementById("header").addEventListener("click", randomizeTitleTitle);
 	document.getElementById("leftArrow").addEventListener("click", goPrev);
 	document.getElementById("rightArrow").addEventListener("click", goNext);
 	
-	setTitleTitle();
+	randomizeTitleTitle();
 };
 
 exports.setViewType = function(type) {
 	viewType = type;
 };
 
-
 /**
  * Event listener for navigating through history.
  * (onload event will not fire when navigating through history items pushed by history.pushState, because the page does not reload)
  */
 addEventListener("popstate", function(event) {
-	getUrlParams();
+	getURLParams();
 	Schedule.setSchedule(event.state);
 });
 
-/**
- * Sets the title of the title to a random line from the title titles list
- */
-function setTitleTitle() {
+function randomizeTitleTitle() {
 	var titles = document.getElementById("titleTitles").textContent.split("\n");
 	document.getElementById("title").title=titles[Math.floor(Math.random()*titles.length)];
 }
 
-/**
- * Returns a Date object based on the current urlParams (GET variables in the URL).
- * If any part of the date is not specified, defaults to the current date/month/year.
- * If in week view, uses the Monday of the week instead of the day.
- */
-function getDateFromUrlParams() {
-	var urlParams = getUrlParams();
+function getDateFromURL() {
+	var urlParams = getURLParams();
 	
 	var date = new Date();
 	
@@ -78,7 +61,7 @@ function getDateFromUrlParams() {
  * Updates urlParams object based on the GET variables in the URL.
  * (variables as properties and values as values)
  */
-function getUrlParams() {
+function getURLParams() {
 	var NON_LEADING_PLUS = /(?!^)\+/g;  //regex for replacing non-leading + with space
 	var SEARCH = /([^&=]+)=?([^&]*)/g;
 	var decode = function(s) { return decodeURIComponent(s.replace(NON_LEADING_PLUS, " ")); };
@@ -95,9 +78,6 @@ function getUrlParams() {
 	return urlParams;
 }
 
-/**
- * Navigates schedule to previous date.
- */
 exports.goPrev = goPrev;
 function goPrev() {
 	var date = Schedule.getDisplayDate();
@@ -106,9 +86,6 @@ function goPrev() {
 	navigate(date);
 }
 
-/**
- * Navigates schedule to next date.
- */
 exports.goNext = goNext;
 function goNext() {
 	var date = Schedule.getDisplayDate();
@@ -117,9 +94,6 @@ function goNext() {
 	navigate(date);
 }
 
-/**
- * Navigates schedule to current date.
- */
 exports.goCurr = goCurr;
 function goCurr() {
 	var date = (viewType == viewTypes.DAY ? DateUtil.getDayBeginning(new Date()) : DateUtil.getMonday(new Date()));
@@ -127,14 +101,11 @@ function goCurr() {
 }
 
 function navigate(date) {
-	updateSearch(date);
+	updateURL(date);
 	Schedule.setDate(date);
 }
 
-/**
- * Updates GET variables and urlParams to reflect date in week and pushes corresponding history state.
- */
-function updateSearch(week) {
+function updateURL(week) {
 	var urlParams = {};
 	var curr = new Date();
 	

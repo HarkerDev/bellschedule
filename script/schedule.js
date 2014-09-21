@@ -59,12 +59,12 @@ exports.getDisplayDate = function() {
 /**
  * Sets the correct update interval based on the current state (focus and visibility) of the document.
  */
+exports.updateUpdateInterval = updateUpdateInterval;
 function updateUpdateInterval() {
 	if(document.hidden) setUpdateInterval(opts.hiddenUpdateInterval); //assume that hidden implies no focus
 	else if(hasFocus) setUpdateInterval(opts.activeUpdateInterval);
 	else setUpdateInterval(opts.inactiveUpdateInterval);
 }
-exports.updateUpdateInterval = updateUpdateInterval;
 
 /**
  * Updates the interval for automatically refreshing the page.
@@ -123,7 +123,7 @@ function onSameDisplayUnit(date1, date2) {
  * Displays schedule of the week of the given date/time
  */
 function updateSchedule(date) {
-	var schedule = document.getElementById("schedule"); //get schedule table
+	var schedule = document.getElementById("schedule");
 	
 	if(isDateInFuture(date))
 		displayWarning("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)");
@@ -142,9 +142,7 @@ function updateSchedule(date) {
 		displayDate = new Date(date);
 		
 		for(var d=0;d<5;d++) {
-			//for each day Monday through Friday (inclusive)
 			createDay(week, date);
-			
 			date.setDate(date.getDate()+1); //increment day
 		}
 	} else {
@@ -174,18 +172,18 @@ function displayWarning(text) {
 /**
  * Creates the day for the given date and appends it to the given week
  */
-function createDay(week, date) {
-	var daySchedule = Parser.getSchedule(date); //get schedule for that day
+function createDay(week, date) { //TODO: remove week from parameters
+	var daySchedule = Parser.getSchedule(date);
 	
 	var dateString = date.getMonth().valueOf()+1 + "/" + date.getDate().valueOf() + "/" + date.getFullYear().toString().substr(-2);
 	
-	var col = week.insertCell(-1); //create cell for day
+	var col = week.insertCell(-1);
 	col.date = date.valueOf(); //store date in cell element
 	
 	if(date.getMonth()==9 && date.getDate()==31) //check Halloween
 		col.classList.add("halloween");
 	
-	var head = document.createElement("div"); //create header div in cell
+	var head = document.createElement("div");
 	head.classList.add("head");
 	var headWrapper = document.createElement("div");
 	headWrapper.classList.add("headWrapper");
@@ -195,7 +193,6 @@ function createDay(week, date) {
 	
 	var prevEnd = "8:00"; //set start of day to 8:00AM
 	
-
 	for(var i=0;i<daySchedule.length;i++) {
 		var periodObj = daySchedule[i];
 		var passing = $("<div>").addClass("period");
@@ -218,13 +215,9 @@ function createDay(week, date) {
  * Highlights given date/time on the schedule; defaults to now if none is given
  */
 function updateHighlightedPeriod(time) {
-	//set default time argument
-	if(!time) time = Date.now();
-
-	//set date based on time (for finding day to highlight)
-	var date = new Date(time);
-	date.setHours(0,0,0,0);
-
+	if(!time) time = new Date();
+	var date = DateUtil.getDayBeginning(time);
+	
 	//clear previous highlighted day/periods
 	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
 	var prevDay = document.getElementById("today");
@@ -232,7 +225,7 @@ function updateHighlightedPeriod(time) {
 	if(prevDay) {
 		//clear previous highlighted periods
 		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
-
+		
 		for(var i=prevPeriods.length-1;i>=0;i--) {
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
@@ -245,7 +238,7 @@ function updateHighlightedPeriod(time) {
 		//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
 		prevDay.id = "";
 	}
-
+	
 	//set new highlighted day/period
 	var days = document.getElementById("schedule").rows[0].cells;
 	for(var d=0;d<days.length;d++) {
@@ -253,40 +246,47 @@ function updateHighlightedPeriod(time) {
 		if(date.valueOf() == day.date) { //test if date should be highlighted
 			//set new highlighted day
 			day.id = "today";
-
+			
 			//set new highlighted periods
 			var periods = day.getElementsByClassName("periodWrapper");
 			for(var p=0;p<periods.length;p++) {
 				var period = periods[p];
-				if(time-period.start>=0 && time-period.end<0) { //test if period should be highlighted
-					period.classList.add("now");
-					//add period length if it fits
-					if((period.end-period.start)/60000>=40) {
-						var length = (period.end - time) / 60000;
-						period.innerHTML += "<div class=\"periodLength\">" +
-								(length>1 ?
-									Math.round(length) + " min. left</div>" :
-									Math.round(length*60) + " sec. left</div>");
-					}
-				}
+				if(shouldHighlightPeriodAtTime(period, time))
+					highlightPeriod(period);
 			}
 		}
 	}
 
 	if(opts.enablePeriodNotifications) {
-		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now")); //needs to be an array and not an HTML
+		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now"));
 
 		var diff1 = getArrayDiff(currPeriods, prevPeriods);
 		var diff2 = getArrayDiff(prevPeriods, currPeriods);
 
 		for(var i=0; i<diff1.length; i++) {
 			var name = currPeriods[i].periodName;
-			if(name && !hasFocus) sendNotification(name + " has started.", opts.notificationDuration);
+			if(name && !hasFocus) createDesktopNotification(name + " has started.", opts.notificationDuration);
 		}
 		for(var i=0; i<diff2.length; i++) {
 			var name = prevPeriods[i].periodName;
-			if(name && !hasFocus) sendNotification(name + " has ended.", opts.notificationDuration);
+			if(name && !hasFocus) createDesktopNotification(name + " has ended.", opts.notificationDuration);
 		}
+	}
+}
+
+function shouldHighlightPeriodAtTime(period, time) {
+	return time-period.start>=0 && time-period.end<0
+}
+
+function highlightPeriod(period) { //TODO magic numbers everywhere?
+	period.classList.add("now");
+	//add period length if it fits
+	if((period.end-period.start)/60000>=40) {
+		var length = (period.end - time) / 60000;
+		period.innerHTML += "<div class=\"periodLength\">" +
+				(length>1 ?
+					Math.round(length) + " min. left</div>" :
+					Math.round(length*60) + " sec. left</div>");
 	}
 }
 
@@ -301,7 +301,7 @@ function getArrayDiff(array1, array2) {
  * Creates a desktop notification with the given text for a title and removes it after the given duration in seconds.
  * A duration of 0 or less will disable auto-closing the notification.
  */
-function sendNotification(text, duration) {
+function createDesktopNotification(text, duration) {
 	if("Notification" in window) { //check that browser supports notifications
 		var notification = new Notification(text);
 		if(duration > 0)
