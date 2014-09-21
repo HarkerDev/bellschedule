@@ -1,17 +1,23 @@
+var $ = require("jquery");
 var Period = require("./period.js");
 var Options = require("./options.js");
 
 module.exports = CompoundPeriod;
-function CompoundPeriod(names, spans) {
+function CompoundPeriod(names, starts, ends) {
+	this.names = names;
+	this.starts = starts;
+	this.ends = ends;
+	
 	this.sections = [];
 	
 	for(var i=0; i<names.length; i++) {
 		var sectionNames = names[i];
-		var sectionSpans = spans[i];
+		var sectionStarts = starts[i];
+		var sectionEnds = ends[i];
 		
 		var section = [];
 		for(var j=0; j<sectionNames.length; j++) {
-			section.push(new Period(sectionNames[j], sectionSpans[j]));
+			section.push(new Period(sectionNames[j], sectionStarts[j], sectionEnds[j]));
 		}
 		
 		this.sections.push(section);
@@ -22,11 +28,15 @@ function CompoundPeriod(names, spans) {
 };
 
 CompoundPeriod.prototype.applyReplacement = function(replacements) {
-	
-	var newName = replacements[this.name];
-	if(newName) {
-		this.name = newName;
-	}
+	$.each(this.sections, function(index, section) {
+		$.each(section, function(index, period) {
+			period.applyReplacement(replacements);
+		});
+	});
+};
+
+CompoundPeriod.prototype.clone = function() {
+	return new CompoundPeriod(this.names, this.starts, this.ends);
 };
 
 CompoundPeriod.prototype.getHTML = function(date) {
@@ -49,7 +59,7 @@ CompoundPeriod.prototype.getHTML = function(date) {
 	);
 
 	return table;
-}
+};
 
 /**
  * Creates and appends two new sub-periods and passing period to parent period with given start and end times.

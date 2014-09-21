@@ -17,6 +17,6 @@ exports.init = function() {
 		meta.name = "viewport";
 		meta.content = 'user-scalable=no, initial-scale=1.0, maximum-scale=1.0';
 		document.getElementsByTagName("head")[0].appendChild(meta);
-		document.getElementsByTagName("body")[0].class = "mobile";
+		document.getElementsByTagName("body")[0].classList.add("mobile");
 	}
 };

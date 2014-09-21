@@ -29,8 +29,6 @@ exports.init = function() {
 	document.getElementById("leftArrow").addEventListener("click", goPrev);
 	document.getElementById("rightArrow").addEventListener("click", goNext);
 	
-	document.getElementById("refresh").addEventListener("click", function() { Schedule.update(null,true); });
-	
 	setTitleTitle();
 };
 
@@ -45,7 +43,7 @@ exports.setViewType = function(type) {
  */
 addEventListener("popstate", function(event) {
 	getUrlParams();
-	Schedule.update(event.state);
+	Schedule.setSchedule(event.state);
 });
 
 /**
@@ -81,16 +79,18 @@ function getDateFromUrlParams() {
  * (variables as properties and values as values)
  */
 function getUrlParams() {
+	var NON_LEADING_PLUS = /(?!^)\+/g;  //regex for replacing non-leading + with space
+	var SEARCH = /([^&=]+)=?([^&]*)/g;
+	var decode = function(s) { return decodeURIComponent(s.replace(NON_LEADING_PLUS, " ")); };
+	
 	var urlParams = {};
+	var query = location.search.substring(1);
 	
-	var match,
-		pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
-		search = /([^&=]+)=?([^&]*)/g,
-		decode = function(s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query = location.search.substring(1);
-	
-	while (match = search.exec(query))
+	var match = SEARCH.exec(query);
+	while (match) {
 		urlParams[decode(match[1])] = decode(match[2]);
+		match = SEARCH.exec(query);
+	}
 	
 	return urlParams;
 }
@@ -98,6 +98,7 @@ function getUrlParams() {
 /**
  * Navigates schedule to previous date.
  */
+exports.goPrev = goPrev;
 function goPrev() {
 	var date = Schedule.getDisplayDate();
 	date.setDate(date.getDate() - (viewType == viewTypes.DAY ? 1 : 7));
@@ -108,6 +109,7 @@ function goPrev() {
 /**
  * Navigates schedule to next date.
  */
+exports.goNext = goNext;
 function goNext() {
 	var date = Schedule.getDisplayDate();
 	date.setDate(date.getDate() + (viewType == viewTypes.DAY ? 1 : 7));
@@ -118,8 +120,9 @@ function goNext() {
 /**
  * Navigates schedule to current date.
  */
+exports.goCurr = goCurr;
 function goCurr() {
-	var date = new Date();
+	var date = (viewType == viewTypes.DAY ? DateUtil.getDayBeginning(new Date()) : DateUtil.getMonday(new Date()));
 	navigate(date);
 }
 

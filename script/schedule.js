@@ -15,7 +15,7 @@ var isCurrent = true;
 
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
 
-var updateScheduleIntervalID;
+var updateIntervalID;
 
 exports.init = function() {
 	document.addEventListener("visibilitychange", function(event) {
@@ -71,13 +71,13 @@ exports.updateUpdateInterval = updateUpdateInterval;
  * seconds is the new interval in seconds.
  */
 function setUpdateInterval(seconds) {
-	clearInterval(updateScheduleIntervalID);
+	clearInterval(updateIntervalID);
 	if(seconds>0)
-		updateScheduleIntervalID = setInterval(function() {
+		updateIntervalID = setInterval(function() {
 			//updateClock();
 			update();
 		}, seconds * 1000); //convert to milliseconds
-	else updateScheduleIntervalID = null;
+	else updateIntervalID = null;
 }
 
 exports.setDate = function(date) {
@@ -87,54 +87,47 @@ exports.setDate = function(date) {
 
 exports.update = update;
 function update(date) {
-	var newDate;
-	if(isCurrent)
-		newDate = new Date();
-	else if(date)
-		newDate = date;
-	else
-		newDate = displayDate;
+	var newDate = getNewDisplayDate(date);
 	
-	if(!onSameDisplayUnit(newDate, displayDate)) {
+	if(!onSameDisplayUnit(newDate, displayDate))
 		updateSchedule(newDate);
-	}
 	
 	updateHighlightedPeriod();
 }
 
 exports.forceUpdate = forceUpdate;
 function forceUpdate(date) {
-	var newDate;
-	if(isCurrent)
-		newDate = new Date();
-	else if(date)
-		newDate = date;
-	else
-		newDate = displayDate;
+	var newDate = getNewDisplayDate(date);
 	
 	updateSchedule(newDate);
 	
 	updateHighlightedPeriod();
 }
 
+function getNewDisplayDate(date) { //TODO better name
+	if(isCurrent)
+		return new Date();
+	else if(date)
+		return date;
+	else
+		return displayDate;
+}
+
 function onSameDisplayUnit(date1, date2) {
 	return opts.enableDayView ?
 		DateUtil.getDayBeginning(date1) == DateUtil.getDayBegninning(date2) :
-		DateUtil.getMonday(date1) == DateUtil.getMonday(date2)
+		DateUtil.getMonday(date1) == DateUtil.getMonday(date2);
 }
 
 /**
  * Displays schedule of the week of the given date/time
  */
 function updateSchedule(date) {
-	date = DateUtil.getDayBeginning(date);
-	displayDate = new Date(date);
-	
 	var schedule = document.getElementById("schedule"); //get schedule table
 	
-	if(DateUtil.getMonday(date) > DateUtil.getMonday(new Date()))
-		warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-	else warn(""); //else display message
+	if(isDateInFuture(date))
+		displayWarning("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)");
+	else displayWarning("");
 	
 	/*
 	if(date.valueOf()==dateUtil.getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
@@ -146,20 +139,30 @@ function updateSchedule(date) {
 	
 	if(!opts.enableDayView) {
 		date = DateUtil.getMonday(date);
+		displayDate = new Date(date);
+		
 		for(var d=0;d<5;d++) {
 			//for each day Monday through Friday (inclusive)
 			createDay(week, date);
 			
 			date.setDate(date.getDate()+1); //increment day
 		}
-	} else createDay(week, date);
+	} else {
+		date = DateUtil.getDayBeginning(date);
+		displayDate = new Date(date);
+		
+		createDay(week, date);
+	}
 }
 
+function isDateInFuture(date) {
+	return DateUtil.getMonday(date) > DateUtil.getMonday(new Date());
+}
 
 /**
  * Displays the given warning or hides the warning div if no warning text is given.
  */
-function warn(text) {
+function displayWarning(text) {
 	var warning = document.getElementById("warning");
 	
 	if(text) warning.style.display = "block";
@@ -172,7 +175,7 @@ function warn(text) {
  * Creates the day for the given date and appends it to the given week
  */
 function createDay(week, date) {
-	var daySchedule = Parser.getDayInfo(date); //get schedule for that day
+	var daySchedule = Parser.getSchedule(date); //get schedule for that day
 	
 	var dateString = date.getMonth().valueOf()+1 + "/" + date.getDate().valueOf() + "/" + date.getFullYear().toString().substr(-2);
 	
@@ -186,7 +189,7 @@ function createDay(week, date) {
 	head.classList.add("head");
 	var headWrapper = document.createElement("div");
 	headWrapper.classList.add("headWrapper");
-	headWrapper.innerHTML = DAYS_OF_WEEK[date.getDay()] + "<div class=\"headDate\">" + dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
+	headWrapper.innerHTML = DAYS_OF_WEEK[date.getDay()] + "<div class=\"headDate\">" + dateString + "</div>";
 	head.appendChild(headWrapper);
 	col.appendChild(head);
 	
@@ -197,8 +200,7 @@ function createDay(week, date) {
 		var periodObj = daySchedule[i];
 		var passing = $("<div>").addClass("period");
 
-		var period = document.createElement("div");
-		period.classList.add("period");
+		var period = $("<div>", { class: "period" });
 		
 		if(opts.showPassingPeriods) {
 			passing.append(Period.createPeriod("",prevEnd,periodObj.start,date));
@@ -206,9 +208,9 @@ function createDay(week, date) {
 			prevEnd = periodObj.end;
 		}
 		
-		period.appendChild(periodObj.getHTML(date));
+		period.append(periodObj.getHTML(date));
 			
-		col.appendChild(period);
+		col.appendChild(period.get(0));
 	}
 }
 

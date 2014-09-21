@@ -4,16 +4,34 @@ var options = exports.options = {}; //needs to be initialized before requiring s
 var Mobile = require("./mobile.js");
 var Nav = require("./nav.js");
 var Schedule = require("./schedule.js");
+var OptionsObject = require("./optionsObject.js");
 
 var isMobile = Mobile.isMobile;
 
 
 
 exports.init = function() {
-	download("options.json", createOptions, displayOptionsError);
+	makeLocalStorageChanges();
 	initOptionsSection();
 	applyInitialSettings();
+	createOptions(OptionsObject);
 };
+
+function makeLocalStorageChanges() {
+	if(localStorage.updateScheduleInterval) {
+		//rename key
+		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
+		localStorage.removeItem("updateScheduleInterval");
+	}
+}
+
+function initOptionsSection() {
+	var opt = document.getElementById("options");
+	
+	opt.addEventListener("mouseover", expandOptions);
+	opt.addEventListener("mouseout", contractOptions);
+	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
+}
 
 /**
  * Expands the options div and changes the options arrow to point down and to the right.
@@ -39,66 +57,20 @@ function toggleOptions() {
 
 }
 
-function initOptionsSection() {
-	var opt = document.getElementById("options");
-	opt.addEventListener("mouseover", expandOptions);
-	opt.addEventListener("mouseout", contractOptions);
+function applyInitialSettings() {
+	Schedule.updateUpdateInterval();
 	
-	if(isMobile) opt.classList.add("mobile");
+	document.body.classList.add(options.enableDayView ? "day" : "week");
+	Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
 	
-	document.getElementById("optionsArrow").addEventListener("click", toggleOptions);
-	
-	
-	if(localStorage.updateScheduleInterval) {
-		//rename key
-		localStorage.activeUpdateInterval=localStorage.updateScheduleInterval;
-		localStorage.removeItem("updateScheduleInterval");
-	}
-}
-
-/**
- * Initializes automatic option saving and sets options to previously-saved values, if any.
- * If no previous saved value exists, sets current (default) value as saved value.
- */
-function initIndividualOptions() {
-	var inputs = document.getElementById("options").getElementsByTagName("input");
-	for(var i=0; i<inputs.length; i++)
-	{
-		var input = inputs[i];
-		//special cases because localStorage saves values as strings
-		if(input.type=="checkbox") {                                      //booleans
-			input.addEventListener("change", function(event) {
-				options[event.target.name] = localStorage[event.target.name] = event.target.checked;
-			});
-			
-			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
-			else options[input.name] = localStorage[input.name] = input.checked;
-		}
-		else if(input.type=="number") {                                   //numbers
-			input.addEventListener("change", function(event) {
-				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
-			});
-			
-			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
-			else options[input.name] = parseInt(localStorage[input.name] = input.value);
-		}
-		else {                                                                //strings
-			input.addEventListener("change", function(event) {
-				options[event.target.name] = localStorage[event.target.name] = event.target.value;
-			});
-			
-			if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
-			else options[input.name] = localStorage[input.name] = input.value;
-		}
-	}
+	setDoge(options.enableDoge);
 }
 
 /**
  * Creates options in the options div.
  */
 function createOptions(data) {
-	// just assume the file has everything for now
-	JSON.parse(data).sections.forEach(function(section) {
+	data.sections.forEach(function(section) {
 		if(!section.hasOwnProperty("platforms") ||
 			((isMobile && section.platforms.indexOf("mobile") >= 0) || !isMobile)) {
 			createOptionSection(section);
@@ -107,21 +79,6 @@ function createOptions(data) {
 	
 	initIndividualOptions();
 	attachOptionActions();
-	
-	Schedule.update(null, true);
-}
-
-/**
- * Displays error about retrieving schedule.
- */
-function displayOptionsError(timeout, status) {
-	Schedule.update();
-	
-	if(timeout) {
-		warn("Retrieval of options.json timed out!");
-	} else {
-		warn("Something went wrong while retrieving options.json!");
-	}
 }
 
 /**
@@ -187,13 +144,41 @@ function createOption(option) {
 	document.getElementById("optionsContent").appendChild(tr);
 }
 
-function applyInitialSettings() {
-	Schedule.updateUpdateInterval();
-	
-	document.body.classList.add(options.enableDayView ? "day" : "week");
-	Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
-	
-	setDoge(options.enableDoge);
+/**
+ * Initializes automatic option saving and sets options to previously-saved values, if any.
+ * If no previous saved value exists, sets current (default) value as saved value.
+ */
+function initIndividualOptions() {
+	var inputs = document.getElementById("options").getElementsByTagName("input");
+	for(var i=0; i<inputs.length; i++)
+	{
+		var input = inputs[i];
+		//special cases because localStorage saves values as strings
+		if(input.type=="checkbox") {                                      //booleans
+			input.addEventListener("change", function(event) {
+				options[event.target.name] = localStorage[event.target.name] = event.target.checked;
+			});
+			
+			if(localStorage[input.name]) options[input.name] = input.checked = localStorage[input.name]=="true";
+			else options[input.name] = localStorage[input.name] = input.checked;
+		}
+		else if(input.type=="number") {                                   //numbers
+			input.addEventListener("change", function(event) {
+				options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
+			});
+			
+			if(localStorage[input.name]) options[input.name] = parseInt(input.value = localStorage[input.name]);
+			else options[input.name] = parseInt(localStorage[input.name] = input.value);
+		}
+		else {                                                                //strings
+			input.addEventListener("change", function(event) {
+				options[event.target.name] = localStorage[event.target.name] = event.target.value;
+			});
+			
+			if(localStorage[input.name]) options[input.name] = input.value = localStorage[input.name];
+			else options[input.name] = localStorage[input.name] = input.value;
+		}
+	}
 }
 
 /**
@@ -205,7 +190,7 @@ function attachOptionActions() {
 		Schedule.updateUpdateInterval();
 	});
 	document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
-		Schedule.update(null,true);
+		Schedule.forceUpdate();
 	});
 	
 	document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function(event) {
@@ -223,7 +208,7 @@ function attachOptionActions() {
 	
 	
 	document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
-		Schedule.update(null, true);
+		Schedule.forceUpdate();
 		
 		document.body.classList.remove("week");
 		document.body.classList.remove("day");
@@ -253,13 +238,13 @@ function attachOptionActions() {
 					}
 					break;
 				case 37 : //Left arrow
-					goPrev();
+					Nav.goPrev();
 					break;
 				case 39 : //Right arrow
-					goNext();
+					Nav.goNext();
 					break;
 				case 40 : //Down arrow
-					goCurr();
+					Nav.goCurr();
 				break;
 			}
 		});
@@ -268,30 +253,4 @@ function attachOptionActions() {
 			setDoge(event.target.checked);
 		});
 	}
-}
-
-/**
- * Retrieve file data via XMLHttpRequest.
- *
- * cb is for successful retrieval and takes a String as a parameter.
- * errcb is for an error on retrieval and takes:
- *    1. a boolean representing whether or not the error was a timeout.
- *    2. an integer representing the status of the response (this is null on timeout).
- */
-function download(url, cb, errcb) {
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", url, true);
-	xmlhttp.onreadystatechange = function() {
-		if(xmlhttp.readyState == 4) {
-			if(xmlhttp.status == 200) {
-				cb(xmlhttp.responseText);
-			} else if(errcb) {
-				errcb(false, xmlhttp.status);
-			}
-		}
-	};
-	xmlhttp.ontimeout = function() {
-		errcb(true, null);
-	};
-	xmlhttp.send();
 }

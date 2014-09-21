@@ -1,5 +1,4 @@
 /**
- * 
  * Handles all parsing of schedule data from the HTML and retrieval of schedules for spcific days.
  */
 
@@ -7,8 +6,17 @@ var $ = require("jquery");
 var Period = require("./period.js");
 var CompoundPeriod = require("./compoundPeriod.js");
 
-var REPLACEMENT_SEPARATOR = /, ?/; // , with or without following space
-var REPLACEMENT_SYMBOL = / ?-> ?/; // -> with or without surrounding spaces
+var DATE_PARTS_SEPARATOR = "\t";
+
+var REPLACEMENTS_SEPARATOR = /, ?/; // , with optional following space
+var REPLACEMENT_SYMBOL = / ?-> ?/;  // -> with optional surrounding spaces
+
+var SCHEDULE_PARTS_SEPARATOR = "\t";
+
+var COMPOUND_PERIOD_SECTIONS_SEPARATOR = / ?\|\| ?/; // || with optional surrounding spaces
+var COMPOUND_PERIOD_PERIODS_SEPARATOR = / ?\| ?/;    // || with optional surrounding spaces
+
+var TIMES_SEPARATOR = / ?- ?/; // - with optional surrounding spaces
 
 var dates = {};
 var schedules = {}; //array of schedules (each schedule is an array in this array
@@ -21,13 +29,13 @@ exports.init = function() {
 function parseDates() {
 	var rawDates = document.getElementById("dates").textContent.split("\n"); //get raw schedule text
 	for(var i=0; i<rawDates.length; i++) {
-		var parts = rawDates[i].split("\t");
+		var parts = rawDates[i].split(DATE_PARTS_SEPARATOR);
 		var date = parts[0];
 		var id = parts[1];
 		var replacements = {};
 		
 		if(parts[2]) {
-			var rawReplacements = parts[2].split(REPLACEMENT_SEPARATOR);
+			var rawReplacements = parts[2].split(REPLACEMENTS_SEPARATOR);
 			for(var j=0; j<rawReplacements.length; j++) {
 				var replacementParts = rawReplacements[j].split(REPLACEMENT_SYMBOL);
 				var name = replacementParts[0];
@@ -55,56 +63,52 @@ function parseSchedules() {
 		var id = rawSchedule[0];
 		var schedule = [];
 		for(var j=1; j<rawSchedule.length; j++) {
-			var periodParts = rawSchedule[j].split("\t");
-			var name = periodParts[0];
-			var span = periodParts[1];
+			var parts = rawSchedule[j].split(SCHEDULE_PARTS_SEPARATOR);
+			var name = parts[0];
+			var span = parts[1];
 			
 			if(name.indexOf("||")>=0) {
-				var rawNames = name.split("||"); //TODO: rename vars to be more descriptive
-				var rawSpans = span.split("||");
+				var rawNames = name.split(COMPOUND_PERIOD_SECTIONS_SEPARATOR);
+				var rawSpans = span.split(COMPOUND_PERIOD_SECTIONS_SEPARATOR);
 				
 				var names = [];
-				var spans = [];
-				$.each(rawNames, function(index, value) {
-					names.push(value.split("|"));
-				})
-				$.each(rawSpans, function(index, value) {
-					spans.push(value.split("|"));
-				})
+				var starts = [];
+				var ends = [];
+				$.each(rawNames, function(index, rawSectionNames) {
+					names.push(rawSectionNames.split(COMPOUND_PERIOD_PERIODS_SEPARATOR));
+				});
+				$.each(rawSpans, function(index, rawSectionSpans) {
+					var sectionSpans = rawSectionSpans.split(COMPOUND_PERIOD_PERIODS_SEPARATOR);
+					var sectionStarts = [];
+					var sectionEnds = [];
+					$.each(sectionSpans, function(index2, sectionSpan) {
+						var times = sectionSpan.split(TIMES_SEPARATOR);
+						var start = times[0];
+						var end = times[1];
+						sectionStarts.push(start);
+						sectionEnds.push(end);
+					});
+					starts.push(sectionStarts);
+					ends.push(sectionEnds);
+				});
 				
-				schedule.push(new CompoundPeriod(names, spans));
-//					first: createCompoundPeriodPart(rawNames[0], rawSpans[0]),
-//					second: createCompoundPeriodPart(rawNames[1], rawSpans[1])
+				schedule.push(new CompoundPeriod(names, starts, ends));
 			} else {
-				schedule.push(new Period(name, span));
+				var times = span.split(TIMES_SEPARATOR);
+				var start = times[0];
+				var end = times[1];
+				schedule.push(new Period(name, start, end));
 			}
 		}
 		schedules[id] = schedule;
 	}
 }
 
-function createCompoundPeriodSection(rawNames, rawSpans) {
-	var names = rawNames.split("|");
-	var times = rawSpans.split("|");
-	return [
-		createPeriodPart(names[0], times[0]),
-		createPeriodPart(names[1], times[1])
-	];
-}
-
-function createPeriodPart(name, span) {
-	return {
-		name: name,
-		start: span.substring(0,span.indexOf("-")),
-		end: span.substring(span.lastIndexOf("-")+1)
-	};
-}
-
 /**
  * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
  * Schedule id index is 0 if not found in schedules.
  */
-exports.getDayInfo = function(day) {
+exports.getSchedule = function(day) {
 	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
 	var date = dates[dateString];
 
@@ -112,9 +116,7 @@ exports.getDayInfo = function(day) {
 	var replacements;
 	if(date) {
 		id = date.id;
-		
 		replacements = date.replacements;
-		
 	} else {
 		id = day.getDay();
 		replacements = [];
@@ -122,17 +124,19 @@ exports.getDayInfo = function(day) {
 	
 	var schedule = (schedules[id] ? schedules[id] : []);
 	//$.extend([], schedule)
-	schedule =  $.merge([], schedule);
+//	newSchedule = $.extend(true, [], schedule);
 	
-	makeReplacements(schedule, replacements);
+	console.log(schedule);
 	
-	return schedule;
+	return getScheduleWithReplacements(schedule, replacements);
 };
 
-function makeReplacements(schedule, replacements) {
+function getScheduleWithReplacements(schedule, replacements) {
+	var newSchedule = [];
 	for(var i=0; i<schedule.length; i++) {
-		var period = schedule[i];
+		var period = schedule[i].clone();
 		period.applyReplacement(replacements);
-		
+		newSchedule.push(period);
 	}
+	return newSchedule;
 }

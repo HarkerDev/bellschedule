@@ -1,11 +1,9 @@
 
 module.exports = Period;
-function Period(name, span) {
+function Period(name, start, end) {
 	this.name = name;
-	
-	var times = span.split("-");
-	this.start = times[0];
-	this.end = times[1];
+	this.start = start;
+	this.end = end;
 };
 
 Period.prototype.applyReplacement = function(replacements) {
@@ -16,8 +14,12 @@ Period.prototype.applyReplacement = function(replacements) {
 };
 
 Period.prototype.getHTML = function(date) {
-	return createPeriod(this.name, this.start, this.end, date)
-}
+	return createPeriod(this.name, this.start, this.end, date);
+};
+
+Period.prototype.clone = function() {
+	return new Period(this.name, this.start, this.end);
+};
 
 /**
  * Creates and returns a new period wrapper with the given content and start/end times.
