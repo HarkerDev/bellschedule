@@ -90,7 +90,7 @@ function update(date) {
 	var newDate = getNewDisplayDate(date);
 	
 	if(!onSameDisplayUnit(newDate, displayDate))
-		updateSchedule(newDate);
+		drawSchedule(newDate);
 	
 	updateHighlightedPeriod();
 }
@@ -99,7 +99,7 @@ exports.forceUpdate = forceUpdate;
 function forceUpdate(date) {
 	var newDate = getNewDisplayDate(date);
 	
-	updateSchedule(newDate);
+	drawSchedule(newDate);
 	
 	updateHighlightedPeriod();
 }
@@ -119,10 +119,7 @@ function onSameDisplayUnit(date1, date2) {
 		DateUtil.getMonday(date1) == DateUtil.getMonday(date2);
 }
 
-/**
- * Displays schedule of the week of the given date/time
- */
-function updateSchedule(date) {
+function drawSchedule(date) {
 	var schedule = document.getElementById("schedule");
 	
 	if(isDateInFuture(date))
@@ -175,6 +172,7 @@ function displayWarning(text) {
 function createDay(week, date) { //TODO: remove week from parameters
 	var daySchedule = Parser.getSchedule(date);
 	
+	//TODO repeated code from Parser.getSchedule()
 	var dateString = date.getMonth().valueOf()+1 + "/" + date.getDate().valueOf() + "/" + date.getFullYear().toString().substr(-2);
 	
 	var col = week.insertCell(-1);

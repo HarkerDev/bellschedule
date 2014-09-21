@@ -3,6 +3,7 @@ var options = exports.options = {}; //needs to be initialized before requiring s
 var Mobile = require("./mobile.js");
 var Nav = require("./nav.js");
 var Schedule = require("./schedule.js");
+var Doge = require("./doge.js");
 var OptionsObject = require("./optionsObject.js");
 
 var isMobile = Mobile.isMobile;
@@ -53,7 +54,7 @@ function applyInitialSettings() {
 	document.body.classList.add(options.enableDayView ? "day" : "week");
 	Nav.setViewType(options.enableDayView ? Nav.viewTypes.DAY : Nav.viewTypes.WEEK);
 	
-	setDoge(options.enableDoge);
+	Doge.setDoge(options.enableDoge);
 }
 
 function createIndividualOptions(data) {
@@ -202,7 +203,7 @@ function attachIndividualOptionActions() {
 		});
 		
 		document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
-			setDoge(options.enableDoge);
+			Doge.setDoge(options.enableDoge);
 		});
 	}
 }

@@ -51,10 +51,6 @@ function parseDates() {
 	}
 }
 
-/**
- * Parses raw schedule in body of page into schedule array
- * Code is questionable
- */
 function parseSchedules() {
 	var rawSchedules = document.getElementById("schedules").textContent.split("\n\n"); //get raw schedule text
 
@@ -104,10 +100,6 @@ function parseSchedules() {
 	}
 }
 
-/**
- * For given day, returns index of schedule id in schedules, schedule id, and formatted date (mm/dd/yy).
- * Schedule id index is 0 if not found in schedules.
- */
 exports.getSchedule = function(day) {
 	var dateString = day.getMonth().valueOf()+1 + "/" + day.getDate().valueOf() + "/" + day.getFullYear().toString().substr(-2); //format in mm/dd/YY
 	var date = dates[dateString];
@@ -123,10 +115,6 @@ exports.getSchedule = function(day) {
 	}
 	
 	var schedule = (schedules[id] ? schedules[id] : []);
-	//$.extend([], schedule)
-//	newSchedule = $.extend(true, [], schedule);
-	
-	console.log(schedule);
 	
 	return getScheduleWithReplacements(schedule, replacements);
 };

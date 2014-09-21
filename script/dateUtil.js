@@ -8,12 +8,9 @@ exports.getMonday = function(d) {
 	return getDayBeginning(date);
 };
 
-/**
- * Sets given date to beginning of the day (12:00 AM).
- */
+exports.getDayBeginning = getDayBeginning;
 function getDayBeginning(date) {
 	var d = new Date(date);
 	d.setHours(0,0,0,0);
 	return d;
 }
-exports.getDayBeginning = getDayBeginning;

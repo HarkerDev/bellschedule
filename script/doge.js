@@ -1,24 +1,21 @@
-//javascript:(function(){document.body.appendChild(document.createElement('script')).src="http://harkerdev.github.io/bellschedule/doge.js";setTimeout("startDoge(2000)",500);})();
-//bookmarklet to run doge mode on any page (nouns will be the same, though)
+var suchAdjectives = ["such","very","much","many","so"];
 
-var suchAdjectives = [ "such","very","much","many","so" ];
+var suchNouns = ["schedule","time","date","table","class","periods","lines","title","color","day","organize","impress","Manan"];
 
-var suchNouns = [ "schedule","time","date","table","class","periods","lines","title","color","day","organize","impress", "Manan" ];
+var suchDelay = 2000;   //delay between adding new div in ms
+var maxDoge = 5;        //max number of dogeDivs
+var suchIntervalID;     //interval ID for doge adding
 
-var suchDelay = 2000;	//delay between adding new div in ms
-var maxDoge = 5;		//max number of dogeDivs
-var suchIntervalID;		//interval ID for doge adding
-
-function setDoge(state) {
+exports.setDoge = function(state) {
 	if(state) startDoge(suchDelay);
 	else stopDoge();
-}
+};
 
 function setDogeDelay(delay) { suchDelay = delay; }
 function setDogeMax(max) { maxDoge = max; }
 
 function startDoge(delay) {
-	document.body.style.backgroundImage = "url('http://harkerdev.github.io/bellschedule/doge.jpg')";
+	document.body.style.backgroundImage = "url('doge.jpg')";
 	
 	suchIntervalID = setInterval(swapDogeDiv, delay);
 	swapDogeDiv();
