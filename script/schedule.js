@@ -212,6 +212,7 @@ function createDay(week, date) { //TODO: remove week from parameters
 /**
  * Highlights given date/time on the schedule; defaults to now if none is given
  */
+exports.updateHighlightedPeriod = updateHighlightedPeriod;
 function updateHighlightedPeriod(time) {
 	if(!time) time = new Date();
 	var date = DateUtil.getDayBeginning(time);
@@ -227,8 +228,8 @@ function updateHighlightedPeriod(time) {
 		for(var i=prevPeriods.length-1;i>=0;i--) {
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
-			//remove period length
-			var periodLength = prevPeriod.getElementsByClassName("periodLength")[0];
+			//remove time remaining
+			var periodLength = prevPeriod.getElementsByClassName("timeRemaining")[0];
 			if(periodLength) prevPeriod.removeChild(periodLength);
 		}
 		
@@ -284,7 +285,7 @@ function highlightPeriod(period, time) { //TODO magic numbers everywhere?
 	//add period length if it fits
 	if(periodLengthInMinutes>=40) {
 		var minutesRemaining = (period.end - time) / 60000;
-		period.innerHTML += "<div class=\"periodLength\">" +
+		period.innerHTML += "<div class=\"timeRemaining\">" +
 				(minutesRemaining>1 ?
 					Math.round(minutesRemaining) + " min. left</div>" :
 					Math.round(minutesRemaining*60) + " sec. left</div>");
