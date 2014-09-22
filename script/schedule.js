@@ -250,7 +250,7 @@ function updateHighlightedPeriod(time) {
 			for(var p=0;p<periods.length;p++) {
 				var period = periods[p];
 				if(shouldHighlightPeriodAtTime(period, time))
-					highlightPeriod(period);
+					highlightPeriod(period, time);
 			}
 		}
 	}
@@ -276,15 +276,18 @@ function shouldHighlightPeriodAtTime(period, time) {
 	return time-period.start>=0 && time-period.end<0
 }
 
-function highlightPeriod(period) { //TODO magic numbers everywhere?
+function highlightPeriod(period, time) { //TODO magic numbers everywhere?
 	period.classList.add("now");
+	
+	var periodLengthInMinutes = (period.end - period.start) / 60000;
+	
 	//add period length if it fits
-	if((period.end-period.start)/60000>=40) {
-		var length = (period.end - time) / 60000;
+	if(periodLengthInMinutes>=40) {
+		var minutesRemaining = (period.end - time) / 60000;
 		period.innerHTML += "<div class=\"periodLength\">" +
-				(length>1 ?
-					Math.round(length) + " min. left</div>" :
-					Math.round(length*60) + " sec. left</div>");
+				(minutesRemaining>1 ?
+					Math.round(minutesRemaining) + " min. left</div>" :
+					Math.round(minutesRemaining*60) + " sec. left</div>");
 	}
 }
 
