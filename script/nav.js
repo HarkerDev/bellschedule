@@ -34,7 +34,7 @@ exports.setViewType = function(type) {
  */
 addEventListener("popstate", function(event) {
 	getURLParams();
-	Schedule.setSchedule(event.state);
+	Schedule.setDate(event.state);
 });
 
 function randomizeTitleTitle() {
