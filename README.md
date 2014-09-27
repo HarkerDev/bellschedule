@@ -1,4 +1,4 @@
-# Bell Schedule [![Build Status](https://travis-ci.org/HarkerDev/bellschedule.svg?branch=dev)](https://travis-ci.org/HarkerDev/bellschedule)
+# Bell Schedule [![Build Status](https://travis-ci.org/HarkerDev/bellschedule.svg?branch=dev)](https://travis-ci.org/HarkerDev/bellschedule) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 [![NPM](https://nodei.co/npm/bellschedule.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/bellschedule/)
 
