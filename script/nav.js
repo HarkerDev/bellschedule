@@ -62,17 +62,17 @@ function getDateFromURL() {
  * (variables as properties and values as values)
  */
 function getURLParams() {
-	var NON_LEADING_PLUS = /(?!^)\+/g;  //regex for replacing non-leading + with space
-	var SEARCH = /([^&=]+)=?([^&]*)/g;
-	var decode = function(s) { return decodeURIComponent(s.replace(NON_LEADING_PLUS, " ")); };
+	var nonLeadingPlus = /(?!^)\+/g;  //regex for replacing non-leading + with space
+	var search = /([^&=]+)=?([^&]*)/g;
+	var decode = function(s) { return decodeURIComponent(s.replace(nonLeadingPlus, " ")); };
 	
 	var urlParams = {};
 	var query = location.search.substring(1);
 	
-	var match = SEARCH.exec(query);
+	var match = search.exec(query);
 	while (match) {
 		urlParams[decode(match[1])] = decode(match[2]);
-		match = SEARCH.exec(query);
+		match = search.exec(query);
 	}
 	
 	return urlParams;

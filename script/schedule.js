@@ -6,9 +6,7 @@ var Period = require("./period.js");
 
 var opts = Options.options;
 
-
 var DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
 
 var displayDate; //beginning of time period currently being displayed by the schedule
 var isCurrent = true;
@@ -19,17 +17,13 @@ var updateIntervalID;
 
 exports.init = function() {
 	document.addEventListener("visibilitychange", function(event) {
-		if(!document.hidden) { //only slightly redundant; on un-minimize, document gains visibility without focus
+		if(!document.hidden) //only slightly redundant; on un-minimize, document gains visibility without focus
 			update();
-			// updateClock();
-		}
 		updateUpdateInterval();
 	});
 
 	addEventListener("focus", function(event) {
 		update();
-		//updateClock();
-		
 		hasFocus = true;
 		updateUpdateInterval();
 	});
@@ -73,10 +67,7 @@ function updateUpdateInterval() {
 function setUpdateInterval(seconds) {
 	clearInterval(updateIntervalID);
 	if(seconds>0)
-		updateIntervalID = setInterval(function() {
-			//updateClock();
-			update();
-		}, seconds * 1000); //convert to milliseconds
+		updateIntervalID = setInterval(update, seconds * 1000); //convert to milliseconds
 	else updateIntervalID = null;
 }
 
@@ -87,21 +78,28 @@ exports.setDate = function(date) {
 
 exports.update = update;
 function update(date) {
-	var newDate = getNewDisplayDate(date);
+	var prevCurrentPeriods = getCurrentPeriods();
 	
+	var newDate = getNewDisplayDate(date);
+	console.log(onSameDisplayUnit(newDate, displayDate) + " same display");
 	if(!onSameDisplayUnit(newDate, displayDate))
 		drawSchedule(newDate);
-	
 	updateHighlightedPeriod();
+	
+	if(opts.enablePeriodNotifications)
+		sendPeriodChangeNotifications(prevCurrentPeriods);
 }
 
 exports.forceUpdate = forceUpdate;
 function forceUpdate(date) {
+	var prevPeriods = getCurrentPeriods();
+	
 	var newDate = getNewDisplayDate(date);
-	
 	drawSchedule(newDate);
-	
 	updateHighlightedPeriod();
+	
+	if(opts.enablePeriodNotifications)
+		sendPeriodChangeNotifications(prevPeriods);
 }
 
 function getNewDisplayDate(date) { //TODO better name
@@ -115,8 +113,13 @@ function getNewDisplayDate(date) { //TODO better name
 
 function onSameDisplayUnit(date1, date2) {
 	return opts.enableDayView ?
-		DateUtil.getDayBeginning(date1) == DateUtil.getDayBegninning(date2) :
-		DateUtil.getMonday(date1) == DateUtil.getMonday(date2);
+		DateUtil.getDayBeginning(date1).valueOf() == DateUtil.getDayBegninning(date2).valueOf() :
+		DateUtil.getMonday(date1).valueOf() == DateUtil.getMonday(date2).valueOf();
+}
+
+function getCurrentPeriods() {
+	//get copy of array, not reference to it (needed to check for period changes)
+	return Array.prototype.slice.call(document.getElementsByClassName("now"));
 }
 
 function drawSchedule(date) {
@@ -219,62 +222,54 @@ function updateHighlightedPeriod(time) {
 	
 	//clear previous highlighted day/periods
 	//TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
+	var currDay;
 	var prevDay = document.getElementById("today");
-	var prevPeriods = [];
 	if(prevDay) {
+		var prevPeriods = getCurrentPeriods();
 		//clear previous highlighted periods
-		prevPeriods = Array.prototype.slice.call(prevDay.getElementsByClassName("now")); //get copy of array, not reference to it (needed to check for period changes later)
-		
 		for(var i=prevPeriods.length-1;i>=0;i--) {
 			var prevPeriod = prevPeriods[i];
 			prevPeriod.classList.remove("now");
 			//remove time remaining
-			var periodLength = prevPeriod.getElementsByClassName("timeRemaining")[0];
-			if(periodLength) prevPeriod.removeChild(periodLength);
+			var timeRemaining = prevPeriod.getElementsByClassName("timeRemaining")[0];
+			if(timeRemaining) prevPeriod.removeChild(timeRemaining);
 		}
 		
 		//clear previous highlighted day
 		//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
-		prevDay.id = "";
+		if(date.valueOf() == prevDay.date)
+			currDay = prevDay;
+		else
+			prevDay.id = "";
 	}
 	
-	//set new highlighted day/period
-	var days = document.getElementById("schedule").rows[0].cells;
-	for(var d=0;d<days.length;d++) {
-		var day = days[d];
-		if(date.valueOf() == day.date) { //test if date should be highlighted
-			//set new highlighted day
-			day.id = "today";
-			
-			//set new highlighted periods
-			var periods = day.getElementsByClassName("periodWrapper");
-			for(var p=0;p<periods.length;p++) {
-				var period = periods[p];
-				if(shouldHighlightPeriodAtTime(period, time))
-					highlightPeriod(period, time);
-			}
-		}
-	}
+	if(!currDay)
+		currDay = findDayOnSchedule(date);
 
-	if(opts.enablePeriodNotifications) {
-		var currPeriods = Array.prototype.slice.call(document.getElementsByClassName("now"));
-
-		var diff1 = getArrayDiff(currPeriods, prevPeriods);
-		var diff2 = getArrayDiff(prevPeriods, currPeriods);
-
-		for(var i=0; i<diff1.length; i++) {
-			var name = currPeriods[i].periodName;
-			if(name && !hasFocus) createDesktopNotification(name + " has started.", opts.notificationDuration);
-		}
-		for(var i=0; i<diff2.length; i++) {
-			var name = prevPeriods[i].periodName;
-			if(name && !hasFocus) createDesktopNotification(name + " has ended.", opts.notificationDuration);
+	if(currDay) {
+		currDay.id = "today";
+		//set new highlighted periods
+		var periods = currDay.getElementsByClassName("periodWrapper");
+		for(var p=0;p<periods.length;p++) {
+			var period = periods[p];
+			if(shouldHighlightPeriodAtTime(period, time))
+				highlightPeriod(period, time);
 		}
 	}
 }
 
+function findDayOnSchedule(date) {
+	var days = document.getElementById("schedule").rows[0].cells;
+	for(var d=0;d<days.length;d++) {
+		var day = days[d];
+		if(date.valueOf() == day.date)
+			return day;
+	}
+	return null;
+}
+
 function shouldHighlightPeriodAtTime(period, time) {
-	return time-period.start>=0 && time-period.end<0
+	return time-period.start>=0 && time-period.end<0;
 }
 
 function highlightPeriod(period, time) { //TODO magic numbers everywhere?
@@ -289,6 +284,24 @@ function highlightPeriod(period, time) { //TODO magic numbers everywhere?
 				(minutesRemaining>1 ?
 					Math.round(minutesRemaining) + " min. left</div>" :
 					Math.round(minutesRemaining*60) + " sec. left</div>");
+	}
+}
+
+function sendPeriodChangeNotifications(prevPeriods) {
+	console.log("prev"); console.log(prevPeriods)
+	var currPeriods = getCurrentPeriods();
+	console.log("curr"); console.log(currPeriods)
+	
+	var diff1 = getArrayDiff(currPeriods, prevPeriods);
+	var diff2 = getArrayDiff(prevPeriods, currPeriods);
+	
+	for(var i=0; i<diff1.length; i++) {
+		var name = currPeriods[i].periodName;
+		if(name && !hasFocus) createDesktopNotification(name + " has started.", opts.notificationDuration);
+	}
+	for(var i=0; i<diff2.length; i++) {
+		var name = prevPeriods[i].periodName;
+		if(name && !hasFocus) createDesktopNotification(name + " has ended.", opts.notificationDuration);
 	}
 }
 
