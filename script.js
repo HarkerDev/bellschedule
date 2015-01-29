@@ -858,10 +858,10 @@ function attachOptionActions() {
 			}
 		});
 
-		setDoge(options.enableDoge);
+		/*setDoge(options.enableDoge);
 		document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
 			setDoge(event.target.checked);
-		});
+		});*/ // in light of recent complaints, doge mode has been discontinued (1/28/2015)
 	}
 }
 
