@@ -34,6 +34,17 @@ var options = {};
 
 var urlParams; //object with GET variables as properties and their respective values as values
 
+var inputStr = "";
+
+var KEY_LEFT = 37;
+var KEY_UP = 38;
+var KEY_RIGHT = 39;
+var KEY_DOWN = 40;
+var KEY_A = 65;
+var KEY_B = 66;
+var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
+var isDoge;
+
 /**
  * Gets GET variables from URL and sets them as properties of the urlParams object.
  * Then updates the state of the current history entry with the appropriate week.
@@ -107,8 +118,9 @@ addEventListener("load", function(event) {
 
 	//updateSchedule();
 	//updateClock();
+	//download("options.json", createOptions, displayOptionsError);
 
-	download("options.json", createOptions, displayOptionsError);
+	isDoge = false;
 });
 
 function initViewport() {
@@ -855,6 +867,13 @@ function attachOptionActions() {
 				case 40 : //Down arrow
 					goCurr();
 				break;
+			}
+			inputStr += event.keyCode;
+			console.log(inputStr);
+			if (inputStr.indexOf(KONAMI) != -1) {
+				isDoge = !isDoge;
+				setDoge(isDoge);
+				inputStr = "";
 			}
 		});
 
