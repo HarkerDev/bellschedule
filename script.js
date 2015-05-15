@@ -118,7 +118,7 @@ addEventListener("load", function(event) {
 
 	//updateSchedule();
 	//updateClock();
-	//download("options.json", createOptions, displayOptionsError);
+	download("options.json", createOptions, displayOptionsError);
 
 	isDoge = false;
 });
