@@ -869,7 +869,7 @@ function attachOptionActions() {
 				break;
 			}
 			inputStr += event.keyCode;
-			console.log(inputStr);
+			// console.log(inputStr);
 			if (inputStr.indexOf(KONAMI) != -1) {
 				isDoge = !isDoge;
 				setDoge(isDoge);
