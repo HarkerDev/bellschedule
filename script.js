@@ -198,7 +198,7 @@ function setDisplayDate(time, force) {
 
 		if(getMonday(date) > getMonday(new Date()))
 			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-		else warn(""); //else display message
+		else warn("Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a> and spread the love!"); //else display message
 
 		/*
 		if(date.valueOf()==getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
