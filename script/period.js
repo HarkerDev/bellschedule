@@ -36,7 +36,7 @@ function createPeriod(name, start, end, date) {
 	periodWrapper.start = startDate;
 	periodWrapper.end = endDate;
 
-	var length = (endDate-startDate)/60000;
+	var length = (endDate-startDate)/50000;
 
 	if(length > 0) {
 		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border

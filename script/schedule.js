@@ -202,7 +202,7 @@ function createDay(week, date) { //TODO: remove week from parameters
 		
 		if(opts.showPassingPeriods) {
 			passing.append(Period.createPeriod("",prevEnd,periodObj.start,date));
-			col.appendChild(passing.get(0));
+    		        col.appendChild(passing.get(0));
 			prevEnd = periodObj.end;
 		}
 		
@@ -275,7 +275,7 @@ function shouldHighlightPeriodAtTime(period, time) {
 function highlightPeriod(period, time) { //TODO magic numbers everywhere?
 	period.classList.add("now");
 	
-	var periodLengthInMinutes = (period.end - period.start) / 60000;
+	var periodLengthInMinutes = (period.end - period.start) / 50000;
 	
 	//add period length if it fits
 	if(periodLengthInMinutes>=40) {
