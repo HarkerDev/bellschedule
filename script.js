@@ -445,7 +445,7 @@ function createPeriod(parent, name, start, end, date){
 	periodWrapper.start = startDate;
 	periodWrapper.end = endDate;
 
-	var length = (endDate-startDate)/60000;
+	var length = (endDate-startDate)/50000;
 
 	if(length > 0) {
 		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
@@ -598,7 +598,7 @@ function setHighlightedPeriod(time) {
 				if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
 					period.classList.add("now");
 					//add period length if it fits
-					if((period.end-period.start)/60000>=40){
+					if((period.end-period.start)/50000>=40){
 						var length = (period.end - time) / 60000;
 						period.innerHTML += "<div class=\"periodLength\">" +
 								(length>1 ?
