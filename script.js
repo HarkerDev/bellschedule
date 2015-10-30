@@ -599,7 +599,7 @@ function setHighlightedPeriod(time) {
 					period.classList.add("now");
 					//add period length if it fits
 					if((period.end-period.start)/50000>=40){
-						var length = (period.end - time) / 60000;
+						var length = (period.end - time) / 50000;
 						period.innerHTML += "<div class=\"periodLength\">" +
 								(length>1 ?
 									Math.round(length) + " min. left</div>" :
