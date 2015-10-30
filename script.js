@@ -452,7 +452,7 @@ function createPeriod(parent, name, start, end, date){
 
 		if(length >= 15) {
 			if(name) periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + " – " + end;
-			if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
+			if(length>60 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
 				periodWrapper.classList.add("long");
 		}
 
@@ -599,7 +599,7 @@ function setHighlightedPeriod(time) {
 					period.classList.add("now");
 					//add period length if it fits
 					if((period.end-period.start)/50000>=40){
-						var length = (period.end - time) / 50000;
+						var length = (period.end - time) / 60000;
 						period.innerHTML += "<div class=\"periodLength\">" +
 								(length>1 ?
 									Math.round(length) + " min. left</div>" :
