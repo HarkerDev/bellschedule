@@ -198,7 +198,7 @@ function setDisplayDate(time, force) {
 
 		if(getMonday(date) > getMonday(new Date()))
 			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-		else warn("Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a> and spread the love!"); //else display message
+		else warn("<b style='color:#FF0000'>MAJOR UPDATE!</b> Join us at our new events page <a href='http://harkerdev.github.io/events-manager'>tiny.cc/harkerevents</a>! Have an event you'd like to get noticed?<br> Fill out a form at <a style='font-weight: bold' href='http://tiny.cc/harkereventssub'>tiny.cc/harkereventssub</a>."); //else display message
 
 		/*
 		if(date.valueOf()==getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
