@@ -199,7 +199,7 @@ function setDisplayDate(time, force) {
 		if(getMonday(date) > getMonday(new Date()))
 			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
 		else warn("<b style='color:#FF7F00'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!" 
-					+ "<br>Anonymous feedback for both student council and honor council can be submitted here:  <a style='font-weight:bold' href=https://www.suggestionox.com/response/ORsTEM>suggestionox.com/response/ORsTEM</a>"
+					+ "<br>Anonymous feedback for both student council and honor council can be submitted here:  <a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
 					+ "<br><b>Harker Events:</b> <a style='font-weight:bold' href='http://tiny.cc/harkerevents'>tiny.cc/harkerevents</a>"
 					+ "<br><b>Submissions: <a style='font-weight:bold' href='http://tiny.cc/harkereventssub'>tiny.cc/harkereventssub</a>"); //else display message
 
