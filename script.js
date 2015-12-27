@@ -47,7 +47,22 @@ var isDoge;
 
 var START_DATE = new Date('January 4, 2016'); //The start day of the pilot program. This should be a weekday.
 var END_DATE = new Date('February 1, 2016'); //The end day of the pilot program
+
 var START_SCHEDULE = 1; //The schedule on the first day
+
+var SCHOOL_MEETING = "S"; //Types of meetings for the "B" type schedules
+var CLASS_MEETING = "C";
+
+//On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.) 
+//to the particular function (e.g. Extra Help). This ultimately piggybacks on the replacement system. 
+var AFTER_SCHOOL_REPLACEMENTS = 	[
+										"After School -> Extra Help",
+										"After School -> Extra Help",
+										"After School -> Faculty Meeting",
+										"After School -> Club Meeting",
+										""
+									]
+
 var TOTAL_SCHEDULES = 4; //The number of schedules to be cycled
 
 var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -424,8 +439,14 @@ function getDayInfo(day) {
 		else { //default schedule for that day
 			if (day < START_DATE || day > END_DATE) //For dates outside the pilot program, use the old index
 				index = getScheduleIndex("O" + id); //Use O1, O2, etc. to distinguish old schedules from new ones
-			else //Otherwise, use the pilot indexes
-				index = calculateScheduleRotation(day); 
+			else { //Otherwise, use the pilot indexes
+				index = calculateScheduleRotationIndex(day);
+				//Utilizes the replacement system and the fixed mapping to determine
+				//and display the particular after school function on a given day. 
+				//Note that this is completely independent of the rotation of the 
+				//schdule.
+				replacements = [AFTER_SCHOOL_REPLACEMENTS[day.getDay() - 1]];
+			}
 		}
 	}
 	
@@ -445,33 +466,52 @@ function getScheduleIndex(id) {
 
 /**
  * Determines which schedule should be displayed given the four block rotation.
- * This futher factors out weekends and holidays when considering which day to 
- * display. Relies on a known starting anchor day with a given schedule and 
- * continues the cycle from there. 
+ * If the schedule is for a "B" day, it determines whether the meeting will be
+ * a school or class one.This futher factors out weekends and holidays when 
+ * considering which day to display. Relies on a known starting anchor day with 
+ * a given schedule and continues the cycle from there. 
  */
-function calculateScheduleRotation(date) {
+function calculateScheduleRotationIndex(date) {
 	var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
-	//Factor out weekends
-	daysDifference -= Math.floor(daysDifference / 7) * 2; 
+	var weeksDifference = Math.floor(daysDifference / 7);
+	//Factor out weekends (2 days per week)
+	daysDifference -= weeksDifference * 2; 
 	//Factor out holidays
 	var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/ //Finds dates of the format M(M)/D(D)/YY
 	for (var i = 0; i < schedules[0].length; i++) {
 		var entry = schedules[0][i];
+
 		if (entry.search(dateExp) != -1) {
 			//Parse entry into date and id
-			var entryDate = new Date(entry.split("\t")[0]);
+			var dateString = entry.split("\t")[0];
+			//Convert the date to format M(M)/D(D)/YYYY because Date defaults to 1900s
+			dateString = dateString.substring(0, dateString.length - 2) + "20" + dateString.substring(dateString.length - 2);
+			var entryDate = new Date(dateString);
 			var entryId = entry.split("\t")[1];
-			//If the schedule is a holiday in the future, don't consider it in the count
-			if (getScheduleIndex(entryId) == 0 && date - entryDate > 0) {
+			//If the checked schedule "entry" is a holiday in the future that occurs 
+			//before the date that is being calculated "date" but after the start of 
+			//pilot program, don't consider it in the cycle
+			if (getScheduleIndex(entryId) == 0 && date > entryDate && entryDate > START_DATE) {
 				daysDifference--;
 			}
 		}
 	}
 
+	var id;
+
 	if (daysDifference < 0) //Different formula needed for events before start day
-		return START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES) + TOTAL_SCHEDULES;
+		id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES) + TOTAL_SCHEDULES;
 	else
-		return START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES);
+		id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES);
+
+	if (id == 2) { //If it is a B type schedule, determine whether class or school meeting.
+		if (weeksDifference % 2 == 0)
+			return getScheduleIndex(id + SCHOOL_MEETING);
+		else
+			return getScheduleIndex(id + CLASS_MEETING);
+	}
+	else
+		return getScheduleIndex(id);
 }
 
 /**
