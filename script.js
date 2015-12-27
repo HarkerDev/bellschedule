@@ -45,7 +45,8 @@ var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
 var isDoge;
 
-var START_DATE = new Date('January 4, 2016'); //The start day of the pilot program should be a weekday
+var START_DATE = new Date('January 4, 2016'); //The start day of the pilot program. This should be a weekday.
+var END_DATE = new Date('February 1, 2016'); //The end day of the pilot program
 var START_SCHEDULE = 1; //The schedule on the first day
 var TOTAL_SCHEDULES = 4; //The number of schedules to be cycled
 
@@ -420,7 +421,12 @@ function getDayInfo(day) {
 	if(id === undefined) { //no special schedule found
 		id = day.getDay();
 		if(id==0 || id==6) index = id = 0; //no school on weekends
-		else index = calculateScheduleRotation(day); //default schedule for that day
+		else { //default schedule for that day
+			if (day < START_DATE || day > END_DATE) //For dates outside the pilot program, use the old index
+				index = getScheduleIndex("O" + id); //Use O1, O2, etc. to distinguish old schedules from new ones
+			else //Otherwise, use the pilot indexes
+				index = calculateScheduleRotation(day); 
+		}
 	}
 	
 	return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
