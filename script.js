@@ -45,6 +45,12 @@ var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
 var isDoge;
 
+var START_DATE = new Date('January 4, 2016'); //The start day of the pilot program should be a weekday
+var START_SCHEDULE = 1; //The schedule on the first day
+var TOTAL_SCHEDULES = 4; //The number of schedules to be cycled
+
+var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
+
 /**
  * Gets GET variables from URL and sets them as properties of the urlParams object.
  * Then updates the state of the current history entry with the appropriate week.
@@ -198,11 +204,7 @@ function setDisplayDate(time, force) {
 
 		if(getMonday(date) > getMonday(new Date()))
 			warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-		else warn("<b style='color:#00C000'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!" 
-					+ "<br>Anonymous feedback for both student council and honor council can be submitted here:  <a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
-					+ "<br>What has already been done can be found at: <a style='font-weight:bold' href='http://bit.ly/harkerresponses'>bit.ly/harkerresponses</a>"
-					+ "<br><b>Harker Events:</b> <a style='font-weight:bold' href='http://tiny.cc/harkerevents'>tiny.cc/harkerevents</a>"
-					+ "<br><b>Submissions: <a style='font-weight:bold' href='http://tiny.cc/harkereventssub'>tiny.cc/harkereventssub</a>"); //else display message
+		else warn("Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a> and spread the love!"); //else display message
 
 		/*
 		if(date.valueOf()==getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
@@ -232,7 +234,7 @@ function setDisplayDate(time, force) {
 function getDateFromUrlParams() {
 	var date = new Date();
 	
-	if(urlParams["y"]>0) date.setFullYear(urlParams["y"]);
+	if(urlParams["y"]>0) date.setFullYear("20" + urlParams["y"]);
 	if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
 	if(urlParams["d"]>0) date.setDate(urlParams["d"]);
 	
@@ -418,7 +420,7 @@ function getDayInfo(day) {
 	if(id === undefined) { //no special schedule found
 		id = day.getDay();
 		if(id==0 || id==6) index = id = 0; //no school on weekends
-		else index = id; //default schedule for that day
+		else index = calculateScheduleRotation(day); //default schedule for that day
 	}
 	
 	return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
@@ -436,6 +438,37 @@ function getScheduleIndex(id) {
 }
 
 /**
+ * Determines which schedule should be displayed given the four block rotation.
+ * This futher factors out weekends and holidays when considering which day to 
+ * display. Relies on a known starting anchor day with a given schedule and 
+ * continues the cycle from there. 
+ */
+function calculateScheduleRotation(date) {
+	var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
+	//Factor out weekends
+	daysDifference -= Math.floor(daysDifference / 7) * 2; 
+	//Factor out holidays
+	var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/ //Finds dates of the format M(M)/D(D)/YY
+	for (var i = 0; i < schedules[0].length; i++) {
+		var entry = schedules[0][i];
+		if (entry.search(dateExp) != -1) {
+			//Parse entry into date and id
+			var entryDate = new Date(entry.split("\t")[0]);
+			var entryId = entry.split("\t")[1];
+			//If the schedule is a holiday in the future, don't consider it in the count
+			if (getScheduleIndex(entryId) == 0 && date - entryDate > 0) {
+				daysDifference--;
+			}
+		}
+	}
+
+	if (daysDifference < 0) //Different formula needed for events before start day
+		return START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES) + TOTAL_SCHEDULES;
+	else
+		return START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES);
+}
+
+/**
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
@@ -449,14 +482,14 @@ function createPeriod(parent, name, start, end, date){
 	periodWrapper.start = startDate;
 	periodWrapper.end = endDate;
 
-	var length = (endDate-startDate)/50000;
+	var length = (endDate-startDate)/60000;
 
 	if(length > 0) {
 		periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
 
 		if(length >= 15) {
 			if(name) periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + " – " + end;
-			if(length>60 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
+			if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
 				periodWrapper.classList.add("long");
 		}
 
@@ -602,7 +635,7 @@ function setHighlightedPeriod(time) {
 				if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
 					period.classList.add("now");
 					//add period length if it fits
-					if((period.end-period.start)/50000>=40){
+					if((period.end-period.start)/60000>=40){
 						var length = (period.end - time) / 60000;
 						period.innerHTML += "<div class=\"periodLength\">" +
 								(length>1 ?
@@ -742,7 +775,7 @@ function displayOptionsError(timeout, status) {
 	if(timeout) {
 		warn("Retrieval of options.json timed out!");
 	} else {
-		//warn("Something went wrong while retrieving options.json!");
+		warn("Something went wrong while retrieving options.json!");
 	}
 }
 
@@ -873,7 +906,6 @@ function attachOptionActions() {
 				break;
 			}
 			inputStr += event.keyCode;
-			// console.log(inputStr);
 			if (inputStr.indexOf(KONAMI) != -1) {
 				isDoge = !isDoge;
 				setDoge(isDoge);
@@ -976,4 +1008,9 @@ function updateClock() {
  */
 function addLeadingZero(n) {
 	return (n<10) ? "0"+n : n;
+}
+
+function daysBetweenExceptWeekends(date1, date2) {
+	var diffMilli = date2.getTime() - date1.getTime();
+	return Math.floor(diffMilli / MILLIS_PER_DAY);
 }
