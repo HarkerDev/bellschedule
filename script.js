@@ -29,7 +29,6 @@ var mobile = isMobile();
  */
 var displayDate; //beginning of time period currently being displayed by the schedule
 var updateScheduleID; //ID of interval of updateSchedule
-var loadExternalID; //ID of interval loading the schedule from the external site
 var hasFocus = true; //document.hasFocus() seems to be unreliable; assumes window has focus on page load
 var options = {};
 
@@ -89,7 +88,6 @@ document.addEventListener("visibilitychange", function(event) {
 		// updateClock();
 	}
 	updateUpdateInterval();
-	updateLoadExternalInterval();
 });
 
 addEventListener("focus", function(event) {
@@ -98,12 +96,10 @@ addEventListener("focus", function(event) {
 
 	hasFocus = true;
 	updateUpdateInterval();
-	updateLoadExternalInterval();
 });
 addEventListener("blur", function(event) {
 	hasFocus = false;
 	updateUpdateInterval();
-	updateLoadExternalInterval();
 });
 
 /**
@@ -901,7 +897,6 @@ function createOption(option) {
  */
 function attachOptionActions() {
 	updateUpdateInterval();
-	updateLoadExternalInterval();
 	document.getElementsByName("activeUpdateInterval")[0].addEventListener("change", function(event) {
 		updateUpdateInterval();
 	});
@@ -1010,10 +1005,6 @@ function updateUpdateInterval() {
 	else setUpdateInterval(options.inactiveUpdateInterval);
 }
 
-function updateLoadExternalInterval() {
-	setLoadExternalInterval(10);
-}
-
 /**
  * Updates the interval for automatically refreshing the page.
  * seconds is the new interval in seconds.
@@ -1026,18 +1017,6 @@ function setUpdateInterval(seconds) {
 			updateSchedule();
 		}, seconds * 1000); //convert to milliseconds
 	else updateScheduleID = null;
-}
-
-/**
- * Updates the interval for loading the schedule from the external site.
- * seconds is the new interval in seconds.
- */
-function setLoadExternalInterval(seconds) {
-	clearInterval(loadExternalID);
-	if (seconds > 0) {
-		loadExternalID = setInterval(loadExternalSchedule, seconds * 1000);
-	}
-	else loadExternalID = null;
 }
 
 /**
@@ -1084,20 +1063,4 @@ function addLeadingZero(n) {
 function daysBetweenExceptWeekends(date1, date2) {
 	var diffMilli = date2.getTime() - date1.getTime();
 	return Math.floor(diffMilli / MILLIS_PER_DAY);
-}
-
-/**
- * Loads schedules from the external website at
- * 		http://harkerdev.github.io/schedules
- * and forces the bell schedule to update to reflect any changes found there.
- */
-function loadExternalSchedule() {
-	$.get("http://harkerdev.github.io/schedules", function(data) {
-    	var extHTML = $(data).html();
-    	if (document.getElementById("schedules").innerHTML != extHTML) {
-    		document.getElementById("schedules").innerHTML = extHTML;
-    		parseRawSchedule();
- 			updateSchedule(displayDate, true);
-    	}
- 	});
 }
