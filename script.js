@@ -295,66 +295,126 @@ function createDay(week, date) {
 	head.appendChild(headWrapper);
 	col.appendChild(head);
 
-	var prevEnd = "8:00"; //set start of day to 8:00AM
+    var prevEnd = "8:00"; //set start of day to 8:00AM
+    var prevSubPeriod = false; // whether the previous period consisted of sub periods
+                              // for sub periods, passing periods are already handled and do not need to be added in the next iteration
+    var newSchedule = (date >= START_DATE && date <= END_DATE);
 
 	if(daySchedule.index > 0) { //populates cell with day's schedule (a bit messily)
-		for(var i=1;i<schedules[daySchedule.index].length;i++) {
-			var text = schedules[daySchedule.index][i];
-			var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
-			var periodTime = text.substring(text.indexOf("\t")+1);
-			
-
-			var start = periodTime.substring(0,periodTime.indexOf("-"));
-			var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
-
-			if(options.showPassingPeriods){
-				var passing = document.createElement("div");
-				passing.classList.add("period");
-				createPeriod(passing,"",prevEnd,start,date);
-				col.appendChild(passing);
-			}
-
+	    for(var i=1;i<schedules[daySchedule.index].length;i++) {
+		var text = schedules[daySchedule.index][i];
+		var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
+		var periodTime = text.substring(text.indexOf("\t")+1);
+		
+		var start = periodTime.substring(0,periodTime.indexOf("-"));
+		var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
+		
+		// only creates a new passing period before the period if either 1) it's a split lunch period in the new schedule or
+		// 2) the date is not within the bounds of the new schedule
+		if(periodName.indexOf("|") == -1 || (periodName.indexOf("|") >= 0 && !newSchedule)) {
+		    if(options.showPassingPeriods && !prevSubPeriod){
+			var passing = document.createElement("div");
+			passing.classList.add("period");
+			createPeriod(passing,"",prevEnd,start,date);
+			col.appendChild(passing);
+		    }
+		}
+		    
 			prevEnd = end;
 
 			var period = document.createElement("div");
 			period.classList.add("period");
 
 			if(periodName.indexOf("|")>=0) {
-				//handle split periods (i.e. lunches)
+			    //handle split periods (i.e. lunches)
+			    if (newSchedule) prevSubPeriod = true; // indicate that the next iteration should not create a passing period
 				var table = document.createElement("table");
 				table.classList.add("lunch");
 				var row = table.insertRow(-1);
 
 				var lunch1 = row.insertCell(-1);
+			    var lunch2 = row.insertCell(-1);
+			    
 				var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
+			    var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
 
-				createSubPeriods(
-						lunch1,
-						periodName.substring(0,periodName.indexOf("||")),
-						start,
-						lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
-						lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
-						end,
-						date
+			    var period1Name = periodName.substring(0, periodName.indexOf("||"));
+			    var period2Name = periodName.substring(periodName.indexOf("||")+2);
+			    
+			    var start1 = lunch2Time.substring(0, lunch2Time.indexOf("-"));
+			    var start2 = lunch1Time.substring(0,lunch1Time.indexOf("-"));
+			    var start3 = lunch1Time.substring(lunch1Time.indexOf("|")+1, lunch1Time.lastIndexOf("-"));
+			    var end = lunch1Time.substring(lunch1Time.lastIndexOf("-")+1);
+
+			    // if new schedule, create 3 sub periods in the split lunch: one passing, one class, and one lunch period
+			    // allows there to be a passing period before the class period but not before the lunch period (thanks harker admins)
+			    if (newSchedule) {
+				create3SubPeriods(
+				    lunch1,
+				    "",
+				    start1,
+				    start2,
+				    period1Name.substring(0, period1Name.indexOf("|")),
+				    start2,
+				    start3,
+				    period1Name.substring(period1Name.indexOf("|")+1),
+				    start3,
+				    end,
+				    date
 				);
 
-				var lunch2 = row.insertCell(-1);
-				var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
+							    start1 = lunch2Time.substring(0,lunch2Time.indexOf("-"));
+			    start2 = lunch2Time.substring(lunch2Time.indexOf("|")+1, lunch2Time.lastIndexOf("-"));
+			    start3 = lunch2Time.substring(lunch2Time.lastIndexOf("-")+1);
+			    end = lunch1Time.substring(lunch1Time.lastIndexOf("-")+1);
+
+							    create3SubPeriods(
+				    lunch2,
+				    period2Name.substring(0, period2Name.indexOf("|")),
+				    start1,
+				    start2,
+				    period2Name.substring(period2Name.indexOf("|")+1),
+				    start2,
+				    start3,
+				    "",
+				    start3,
+				    end,
+				    date
+				);
+			    } else {
+				createSubPeriods(
+				    lunch1,
+				    periodName.substring(0,periodName.indexOf("||")),
+				    start,
+				    lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
+				    lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
+				    end,
+				    date
+				    );
 
 				createSubPeriods(
-						lunch2,
-						periodName.substring(periodName.indexOf("||")+2),
-						start,
-						lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
-						lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
-						end,
-						date
-				);
+				    lunch2,
+				    periodName.substring(periodName.indexOf("||")+2),
+				    start,
+				    lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
+				    lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
+				    end,
+				    date
+				    );
+			    }
+			    
 
-				period.appendChild(table);
+
+
+
+			    period.appendChild(table);
 			}
-			else createPeriod(period,periodName,start,end,date);
-			col.appendChild(period);
+			else {
+			    prevSubPeriod = false;
+			    
+			    createPeriod(period,periodName,start,end,date);
+			}		    
+		    col.appendChild(period);
 		}
 	}
 }
@@ -570,8 +630,8 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 
 	var p2 = document.createElement("div");
 	p2.classList.add("period");
-	var w2 = document.createElement("div");
-	w2.classList.add("periodWrapper");
+	//var w2 = document.createElement("div");
+        //w2.classList.add("periodWrapper");
 	createPeriod(
 			p2,
 			name.substring(name.indexOf("|")+1),
@@ -579,6 +639,43 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 			end2,
 			date);
 	parent.appendChild(p2);
+}
+
+/**
+ * Creates and appends just three new sub-periods (passing periods added manually) with given start and end times.
+ */
+function create3SubPeriods(parent, name1, start1, end1, name2, start2, end2, name3, start3, end3, date) {
+	var p1 = document.createElement("div");
+	p1.classList.add("period");
+	createPeriod(
+			p1,
+			name1,
+			start1,
+			end1,
+			date);
+	parent.appendChild(p1);
+
+	var p2 = document.createElement("div");
+	p2.classList.add("period");
+	//var w2 = document.createElement("div");
+	//w2.classList.add("periodWrapper");
+	createPeriod(
+			p2,
+			name2,
+			start2,
+			end2,
+			date);
+	parent.appendChild(p2);
+
+    	var p3 = document.createElement("div");
+	p3.classList.add("period");
+	createPeriod(
+			p3,
+			name3,
+			start3,
+			end3,
+			date);
+	parent.appendChild(p3);
 }
 
 /**
