@@ -53,8 +53,8 @@ var START_SCHEDULE = 1; //The schedule on the first day
 var SCHOOL_MEETING = "S"; //Types of meetings for the "B" type schedules
 var CLASS_MEETING = "C";
 
-//On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.) 
-//to the particular function (e.g. Extra Help). This ultimately piggybacks on the replacement system. 
+//On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.)
+//to the particular function (e.g. Extra Help). This ultimately piggybacks on the replacement system.
 var AFTER_SCHOOL_REPLACEMENTS = 	[
     "After School -> Extra Help",
     "After School -> Extra Help",
@@ -74,7 +74,7 @@ var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 (function() {
     //decode GET vars in URL
     updateUrlParams();
-    
+
     //update history state
     window.history.replaceState(getDateFromUrlParams(), document.title, document.location);
 }());
@@ -117,13 +117,13 @@ addEventListener("popstate", function(event) {
  */
 function updateUrlParams() {
     urlParams = {};
-    
+
     var match,
 	pl = /(?!^)\+/g,  //regex for replacing non-leading + with space
 	search = /([^&=]+)=?([^&]*)/g,
 	decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
 	query = location.search.substring(1);
-    
+
     while (match = search.exec(query))
 	urlParams[decode(match[1])] = decode(match[2]);
 }
@@ -215,7 +215,7 @@ function setDisplayDate(time, force) {
 
 	if(getMonday(date) > getMonday(new Date()))
 	    warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-	else warn("<b style='color:#8A76C3'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!" 
+	else warn("<b style='color:#8A76C3'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
 		  + "<br><b>Submit StuCo Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
 		  + "<br><b>See Responses: </b><a style='font-weight:bold' href='http://bit.ly/harkerresponses'>bit.ly/harkerresponses</a>"
 		  + "<br><b>Harker Events:</b> <a style='font-weight:bold' href='http://tiny.cc/harkerevents'>tiny.cc/harkerevents</a>"
@@ -248,13 +248,13 @@ function setDisplayDate(time, force) {
  */
 function getDateFromUrlParams() {
     var date = new Date();
-    
+
     if(urlParams["y"]>0) date.setFullYear("20" + urlParams["y"]);
     if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
     if(urlParams["d"]>0) date.setDate(urlParams["d"]);
-    
+
     if(!options.enableDayView) date = getMonday(date);
-    
+
     return date;
 }
 
@@ -263,10 +263,10 @@ function getDateFromUrlParams() {
  */
 function warn(text) {
     var warning = document.getElementById("warning")
-    
+
     if(text) warning.style.display = "block";
     else warning.style.display = "none";
-    
+
     warning.innerHTML = text;
 }
 
@@ -301,10 +301,10 @@ function createDay(week, date) {
 	    var text = schedules[daySchedule.index][i];
 	    var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
 	    var periodTime = text.substring(text.indexOf("\t")+1);
-	    
+
 	    var start = periodTime.substring(0,periodTime.indexOf("-"));
 	    var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
-	    
+
 	    // only creates a new passing period before the period if either 1) it's a split lunch period in the new schedule or
 	    // 2) the date is not within the bounds of the new schedule
 	    if(periodName.indexOf("|") == -1 || (periodName.indexOf("|") >= 0 && !newSchedule)) {
@@ -315,7 +315,7 @@ function createDay(week, date) {
 		    col.appendChild(passing);
 		}
 	    }
-	    
+
 	    prevEnd = end;
 
 	    var period = document.createElement("div");
@@ -330,13 +330,13 @@ function createDay(week, date) {
 
 		var lunch1 = row.insertCell(-1);
 		var lunch2 = row.insertCell(-1);
-		
+
 		var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
 		var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
 
 		var period1Name = periodName.substring(0, periodName.indexOf("||"));
 		var period2Name = periodName.substring(periodName.indexOf("||")+2);
-		
+
 		var start1 = lunch2Time.substring(0, lunch2Time.indexOf("-"));
 		var start2 = lunch1Time.substring(0,lunch1Time.indexOf("-"));
 		var start3 = lunch1Time.substring(lunch1Time.indexOf("|")+1, lunch1Time.lastIndexOf("-"));
@@ -398,7 +398,7 @@ function createDay(week, date) {
 			date
 		    );
 		}
-		
+
 
 
 
@@ -407,9 +407,9 @@ function createDay(week, date) {
 	    }
 	    else {
 		prevSubPeriod = false;
-		
+
 		createPeriod(period,periodName,start,end,date);
-	    }		    
+	    }
 	    col.appendChild(period);
 	}
     }
@@ -477,7 +477,7 @@ function getDayInfo(day) {
     var id;
     var index = 0;
     var replacements = [];
-    
+
     for(var i=0;i<schedules[0].length;i++) //search for special schedule on day
 	if(!schedules[0][i].indexOf(dateString)){
 	    //found special schedule
@@ -489,10 +489,10 @@ function getDayInfo(day) {
 		// no replacements to be made
 		id = schedules[0][i].substring(schedules[0][i].indexOf("\t")+1);
 	    }
-	    
+
 	    index = getScheduleIndex(id);
 	}
-    
+
     if(id === undefined) { //no special schedule found
 	id = day.getDay();
 	if(id==0 || id==6) index = id = 0; //no school on weekends
@@ -502,14 +502,14 @@ function getDayInfo(day) {
 	    else { //Otherwise, use the pilot indexes
 		index = calculateScheduleRotationIndex(day);
 		//Utilizes the replacement system and the fixed mapping to determine
-		//and display the particular after school function on a given day. 
-		//Note that this is completely independent of the rotation of the 
+		//and display the particular after school function on a given day.
+		//Note that this is completely independent of the rotation of the
 		//schdule.
 		replacements = [AFTER_SCHOOL_REPLACEMENTS[day.getDay() - 1]];
 	    }
 	}
     }
-    
+
     return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
 }
 
@@ -527,15 +527,15 @@ function getScheduleIndex(id) {
 /**
  * Determines which schedule should be displayed given the four block rotation.
  * If the schedule is for a "B" day, it determines whether the meeting will be
- * a school or class one.This futher factors out weekends and holidays when 
- * considering which day to display. Relies on a known starting anchor day with 
- * a given schedule and continues the cycle from there. 
+ * a school or class one.This futher factors out weekends and holidays when
+ * considering which day to display. Relies on a known starting anchor day with
+ * a given schedule and continues the cycle from there.
  */
 function calculateScheduleRotationIndex(date) {
     var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
     var weeksDifference = Math.floor(daysDifference / 7);
     //Factor out weekends (2 days per week)
-    daysDifference -= weeksDifference * 2; 
+    daysDifference -= weeksDifference * 2;
     //Factor out holidays
     var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/ //Finds dates of the format M(M)/D(D)/YY
     for (var i = 0; i < schedules[0].length; i++) {
@@ -548,8 +548,8 @@ function calculateScheduleRotationIndex(date) {
 	    dateString = dateString.substring(0, dateString.length - 2) + "20" + dateString.substring(dateString.length - 2);
 	    var entryDate = new Date(dateString);
 	    var entryId = entry.split("\t")[1];
-	    //If the checked schedule "entry" is a holiday in the future that occurs 
-	    //before the date that is being calculated "date" but after the start of 
+	    //If the checked schedule "entry" is a holiday in the future that occurs
+	    //before the date that is being calculated "date" but after the start of
 	    //pilot program, don't consider it in the cycle
 	    if (getScheduleIndex(entryId) == 0 && date > entryDate && entryDate > START_DATE) {
 		daysDifference--;
@@ -570,8 +570,6 @@ function calculateScheduleRotationIndex(date) {
 		else
 			return getScheduleIndex(id + SCHOOL_MEETING);
 	}
-    }
-    else
 	return getScheduleIndex(id);
 }
 
@@ -682,7 +680,7 @@ function goLast() {
     var date = new Date(displayDate);
     date.setDate(date.getDate() - (options.enableDayView ? 1 : 7));
     updateSchedule(date);
-    
+
     updateSearch(date);
 }
 
@@ -693,7 +691,7 @@ function goNext() {
     var date = new Date(displayDate);
     date.setDate(date.getDate() + (options.enableDayView ? 1 : 7));
     updateSchedule(date);
-    
+
     updateSearch(date);
 }
 
@@ -712,9 +710,9 @@ function goCurr() {
  */
 function updateSearch(week, noHistory) {
     var curr = new Date();
-    
+
     if(!options.enableDayView) curr = getMonday(curr);
-    
+
     if(week.getDate() != curr.getDate()) {
 	urlParams["m"] = week.getMonth()+1;
 	urlParams["d"] = week.getDate();
@@ -724,11 +722,11 @@ function updateSearch(week, noHistory) {
     }
     if(week.getYear() != curr.getYear()) urlParams["y"] = week.getFullYear().toString().substr(-2);
     else delete urlParams["y"];
-    
+
     var search = "?";
     for(var param in urlParams) search += param + "=" + urlParams[param] + "&";
     search = search.slice(0,-1);
-    
+
     history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
@@ -758,7 +756,7 @@ function setHighlightedPeriod(time) {
 	    var periodLength = prevPeriod.getElementsByClassName("periodLength")[0];
 	    if(periodLength) prevPeriod.removeChild(periodLength);
 	}
-	
+
 	//clear previous highlighted day
 	//needs to be done after getting prevPeriods, or else prevDay no longer points anywhere
 	prevDay.id = "";
@@ -915,7 +913,7 @@ function createOptions(data) {
  */
 function displayOptionsError(timeout, status) {
     updateSchedule();
-    
+
     if(timeout) {
 	warn("Retrieval of options.json timed out!");
     } else {
@@ -1014,11 +1012,11 @@ function attachOptionActions() {
     document.body.classList.add(options.enableDayView ? "day" : "week");
     document.getElementsByName("enableDayView")[0].addEventListener("change", function(event) {
 	updateSchedule(null, true);
-	
+
 	document.body.classList.remove("week");
 	document.body.classList.remove("day");
 	document.body.classList.add(options.enableDayView ? "day" : "week");
-	
+
 	scrollTo(0,0); //scroll back to top-left corner
     });
 
