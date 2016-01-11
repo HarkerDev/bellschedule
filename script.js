@@ -512,7 +512,7 @@ function calculateScheduleRotationIndex(date) {
 		if (weeksDifference % 2 == 0)
 			return getScheduleIndex(id + SCHOOL_MEETING);
 		else
-			return getScheduleIndex(id + CLASS_MEETING);
+			return getScheduleIndex(id + SCHOOL_MEETING);
 	}
 	else
 		return getScheduleIndex(id);
