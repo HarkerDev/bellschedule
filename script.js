@@ -215,9 +215,9 @@ function setDisplayDate(time, force) {
 
 	if(getMonday(date) > getMonday(new Date()))
 	    warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"); //display warning if date is in the future
-	else warn("<b style='color:#8A76C3'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
-		  + "<br><b>Submit StuCo Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
-		  + "<br><b>See Responses: </b><a style='font-weight:bold' href='http://bit.ly/harkerresponses'>bit.ly/harkerresponses</a>"
+	else warn("<b style='color:#FF7878'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
+		  + "<br><b>Submit StuCo Feedback:</b> Email <a style='font-weight:bold' href=mailto:16GraceG@students.harker.org>16GraceG@students.harker.org</a> <br> (You may email anonymously)"
+      + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
 		  + "<br><b>Harker Events:</b> <a style='font-weight:bold' href='http://tiny.cc/harkerevents'>tiny.cc/harkerevents</a>"
 		  + "<br><b>Submissions: <a style='font-weight:bold' href='http://tiny.cc/harkereventssub'>tiny.cc/harkereventssub</a>"); //else display message
 
