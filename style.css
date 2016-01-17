@@ -143,6 +143,47 @@ table{
 	vertical-align: top;
 }
 
+.periodone {
+	background-color: rgba(18,41,246,.55);
+}
+
+.periodtwo {
+	background-color: rgba(249,122,44,.82);
+}
+
+.periodthree {
+	background-color: rgba(249,210,42, .65);
+}
+
+.periodfour {
+	background-color: rgba(99,41,228,.5);
+}
+
+.lunchtime{
+	background-color: rgba(0, 1, 255, .5);
+}
+
+.lunchperiod {
+	background-color: rgba(64,228,62,.66);
+}
+
+.periodseven
+{
+	background-color: rgba(48,228,227,.66);
+}
+
+.periodeight{
+	background-color: rgba(206,52,228,.66);
+}
+
+.extrahelp {
+	background-color: #5f9eff;
+}
+
+.meeting {
+	background-color: rgba(255,46,67,.7);
+}
+
 .period, .head{
 	width: inherit;
 	overflow: hidden;
