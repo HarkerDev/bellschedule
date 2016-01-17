@@ -160,7 +160,7 @@ table{
 }
 
 .lunchtime{
-	background-color: rgba(0, 1, 255, .5);
+	background-color: rgba(255,46,67,.7);
 }
 
 .lunchperiod {
@@ -177,11 +177,11 @@ table{
 }
 
 .extrahelp {
-	background-color: #5f9eff;
+	background-color: rgba(246,69,163,.63);
 }
 
 .meeting {
-	background-color: rgba(255,46,67,.7);
+		background-color: rgba(77, 80, 123, .28);
 }
 
 .period, .head{
