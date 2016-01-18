@@ -587,6 +587,8 @@ function createPeriod(parent, name, start, end, date){
     periodWrapper.start = startDate;
     periodWrapper.end = endDate;
     var length = (endDate-startDate)/60000;
+    if (color==true)
+    {
     if (periodWrapper.periodName == "P1")
     {
     	periodWrapper.classList.add("periodone");
@@ -627,6 +629,7 @@ function createPeriod(parent, name, start, end, date){
     {
     	periodWrapper.classList.add("extrahelp");
     }
+}
     if(length > 0) {
 	periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
 
