@@ -586,9 +586,50 @@ function createPeriod(parent, name, start, end, date){
     periodWrapper.periodName = name;
     periodWrapper.start = startDate;
     periodWrapper.end = endDate;
-
     var length = (endDate-startDate)/60000;
-
+    if (color==true)
+    {
+    if (periodWrapper.periodName == "P1")
+    {
+    	periodWrapper.classList.add("periodone");
+    }
+    if (periodWrapper.periodName =="P2")
+    {
+    	periodWrapper.classList.add("periodtwo");
+    }
+    if (periodWrapper.periodName =="P3")
+    {
+    	periodWrapper.classList.add("periodthree");
+    }
+    if (periodWrapper.periodName == "P4")
+    {
+    	periodWrapper.classList.add("periodfour");
+    }
+    if (periodWrapper.periodName == "P5" ||periodWrapper.periodName == "P6")
+    {
+    	periodWrapper.classList.add("lunchperiod");
+    }
+    if (periodWrapper.periodName == "Lunch")
+    {
+    	periodWrapper.classList.add("lunchtime");
+    }
+    if (periodWrapper.periodName == "P7")
+    {
+    	periodWrapper.classList.add("periodseven");
+    }
+    if (periodWrapper.periodName == "P8")
+    {
+    	periodWrapper.classList.add("periodeight");
+    }
+    if (periodWrapper.periodName == "School Meeting" || periodWrapper.periodName == "Advisory") 
+    {
+    	periodWrapper.classList.add("meeting");
+    }
+    if (periodWrapper.periodName == "Extra Help")
+    {
+    	periodWrapper.classList.add("extrahelp");
+    }
+}
     if(length > 0) {
 	periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
 

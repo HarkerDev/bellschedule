@@ -2,6 +2,12 @@
 /*  General                       */
 /* ------------------------------ */
 
+button{
+  color: #000;
+  font-size: 12px;
+  text-decoration: none;
+}
+
 a{
 	color: #0000FF;
 }
@@ -143,6 +149,47 @@ table{
 	vertical-align: top;
 }
 
+.periodone {
+	background-color: rgba(18,41,246,.55);
+}
+
+.periodtwo {
+	background-color: rgba(249,122,44,.82);
+}
+
+.periodthree {
+	background-color: rgba(249,210,42, .65);
+}
+
+.periodfour {
+	background-color: rgba(99,41,228,.5);
+}
+
+.lunchtime{
+	background-color: rgba(255,46,67,.7);
+}
+
+.lunchperiod {
+	background-color: rgba(64,228,62,.66);
+}
+
+.periodseven
+{
+	background-color: rgba(48,228,227,.66);
+}
+
+.periodeight{
+	background-color: rgba(206,52,228,.66);
+}
+
+.extrahelp {
+	background-color: rgba(246,69,163,.63);
+}
+
+.meeting {
+		background-color: rgba(77, 80, 123, .28);
+}
+
 .period, .head{
 	width: inherit;
 	overflow: hidden;
@@ -172,24 +219,8 @@ table{
 	font-size: .7em;
 }
 
-#today .periodWrapper, #today .head{
-	background-color: rgba(208,208,208,.75); /* looks like #ddd on white background */
-}
 #today .head{
 	font-weight: bold;
-}
-
-#today .now{
-	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
-}
-
-#today.halloween .periodWrapper, #today.halloween .head{
-	background-color: #f80;
-}
-
-#today.halloween .now{
-	background: #222;
-	color: white;
 }
 
 .long{
