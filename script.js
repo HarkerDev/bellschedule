@@ -587,7 +587,7 @@ function createPeriod(parent, name, start, end, date){
     periodWrapper.start = startDate;
     periodWrapper.end = endDate;
     var length = (endDate-startDate)/60000;
-    if (color==true)
+    if (options.color==true)
     {
     if (periodWrapper.periodName == "P1")
     {
@@ -1034,6 +1034,9 @@ function attachOptionActions() {
 	updateUpdateInterval();
     });
     document.getElementsByName("showPassingPeriods")[0].addEventListener("change", function(event) {
+	updateSchedule(null,true);
+    });
+    document.getElementsByName("color")[0].addEventListener("change", function(event) {
 	updateSchedule(null,true);
     });
 
