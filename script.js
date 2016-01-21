@@ -812,21 +812,23 @@ function setHighlightedPeriod(time) {
 	    day.id = "today";
 
 	    //set new highlighted periods
-	    var periods = day.getElementsByClassName("periodWrapper");
-	    for(var p=0;p<periods.length;p++){
-		var period = periods[p];
-		if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
-		    period.classList.add("now");
-		    //add period length if it fits
-		    if((period.end-period.start)/60000>=40){
-			var length = (period.end - time) / 60000;
-			period.innerHTML += "<div class=\"periodLength\">" +
-			    (length>1 ?
-			     Math.round(length) + " min. left</div>" :
-			     Math.round(length*60) + " sec. left</div>");
-		    }
+		    var periods = day.getElementsByClassName("periodWrapper");
+		    for(var p=0;p<periods.length;p++)
+		    {
+			var period = periods[p];
+			if(time-period.start>=0 && time-period.end<0){ //test if period should be highlighted
+			    period.classList.add("now");
+			    //add period length if it fits
+			    if((period.end-period.start)/60000>=40){
+				var length = (period.end - time) / 60000;
+				period.innerHTML += "<div class=\"periodLength\">" +
+				    (length>1 ?
+				     Math.round(length) + " min. left</div>" :
+				     Math.round(length*60) + " sec. left</div>");
+			   
 		}
-	    }
+			}
+	    		}
 	}
     }
 
