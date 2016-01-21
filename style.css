@@ -223,6 +223,15 @@ table{
 	font-weight: bold;
 }
 
+#today .head{
+	background: rgba(128,128,128,.75); /* looks like #ddd on white background */
+}
+
+#today .now{
+	background-color: rgba(208,208,208,.75);
+	 /* looks close to #999 on #ddd background */
+}
+
 .long{
 	font-weight: bold;
 }
