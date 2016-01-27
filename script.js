@@ -46,7 +46,7 @@ var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT +
 var isDoge;
 
 var START_DATE = new Date('January 4, 2016'); //The start day of the pilot program. This should be a weekday.
-var END_DATE = new Date('February 1, 2016'); //The end day of the pilot program
+var END_DATE = new Date('February 20, 2016'); //The end day of the pilot program
 
 var START_SCHEDULE = 1; //The schedule on the first day
 
@@ -56,8 +56,8 @@ var CLASS_MEETING = "C";
 //On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.)
 //to the particular function (e.g. Extra Help). This ultimately piggybacks on the replacement system.
 var AFTER_SCHOOL_REPLACEMENTS = 	[
-    "After School -> Extra Help",
-    "After School -> Extra Help",
+    "After School -> Office Hours",
+    "After School -> Office Hours",
     "After School -> Faculty Meeting",
     "After School -> Club Meeting",
     ""
