@@ -221,7 +221,7 @@ function setDisplayDate(time, force) {
       + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
 		  + "<br><b>Harker Events:</b> <a style='font-weight:bold' href='http://tiny.cc/harkerevents'>tiny.cc/harkerevents</a>"
 		  + "<br><b>Submissions: <a style='font-weight:bold' href='http://tiny.cc/harkereventssub'>tiny.cc/harkereventssub</a>"
-          +"<br><b>Dowload the new iOS app <a href='goo.gl/ZDMMRp'>here</a> to get live push notifications.</b>"); //else display message
+          +"<br><b>Dowload the new iOS app <a href='http://goo.gl/ZDMMRp'>here</a> to get live push notifications.</b>"); //else display message
 
 	/*
 	  if(date.valueOf()==getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
