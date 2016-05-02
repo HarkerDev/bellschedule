@@ -216,7 +216,7 @@ function setDisplayDate(time, force) {
 	if(getMonday(date) > getMonday(new Date()))
 	    warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"
 	    +"<br><b>Dowload the new iOS app <a href='http://goo.gl/ZDMMRp'>here</a> to get live push notifications.</b>"); //display warning if date is in the future
-	else if (new Date() == new Date("May 2, 2016")) warn("<b style='color:#660066'>Don't forget your class shirts tomorrow!</b>")
+	else if (isSameDate(new Date(), new Date("May 2, 2016"))) warn("<b style='color:#ff0099; font-size:10pt;'>Don't forget your class shirts tomorrow!</b>")
 
 	else warn("<b style='color:#FF8020'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
 		  + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
@@ -1200,6 +1200,17 @@ function updateClock() {
  */
 function addLeadingZero(n) {
     return (n<10) ? "0"+n : n;
+}
+
+/**
+ * Checks if two dates are the same, ignoring hours, minutes, and seconds
+ */
+function isSameDate(d1, d2) {
+	return (
+    	d1.getFullYear() === d2.getFullYear() &&
+    	d2.getMonth() === d2.getMonth() &&
+    	d1.getDate() === d2.getDate()
+  	);
 }
 
 function daysBetweenExceptWeekends(date1, date2) {
