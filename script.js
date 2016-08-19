@@ -45,25 +45,22 @@ var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
 var isDoge;
 
-var START_DATE = new Date('January 4, 2016'); //The start day of the pilot program. This should be a weekday.
-var END_DATE = new Date('February 20, 2016'); //The end day of the pilot program
+var START_DATE = new Date('August 22, 2016'); //The start day of the school year. This should be a weekday.
 
 var START_SCHEDULE = 1; //The schedule on the first day
 
-var SCHOOL_MEETING = "S"; //Types of meetings for the "B" type schedules
-var CLASS_MEETING = "C";
 
 //On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.)
 //to the particular function (e.g. Extra Help). This ultimately piggybacks on the replacement system.
-var AFTER_SCHOOL_REPLACEMENTS = 	[
-    "After School -> Office Hours",
-    "After School -> Office Hours",
-    "After School -> Faculty Meeting",
-    "After School -> Club Meeting",
-    ""
+var COLLABORATION_REPLACEMENTS = 	[
+    "Collaboration -> Office Hours",
+    "Collaboration -> Office Hours",
+    "Collaboration -> Faculty Meeting",
+    "Collaboration -> Office Hours",
+    "Collaboration -> After School"
 ]
 
-var TOTAL_SCHEDULES = 4; //The number of schedules to be cycled
+var TOTAL_SCHEDULES = 8; //The number of schedules to be cycled
 
 var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -213,13 +210,12 @@ function setDisplayDate(time, force) {
 
 	displayDate = new Date(date);
 
+	displayMessage = "Welcome back! Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a>.";
+
 	if(getMonday(date) > getMonday(new Date()))
-	    warn("This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"
-	    +"<br><b>Dowload the new iOS app <a href='http://goo.gl/ZDMMRp'>here</a> to get live push notifications.</b>"); //display warning if date is in the future
-	else if (isSameDate(new Date(), new Date("May 2, 2016"))) warn("<b style='color:#ff0099; font-size:10pt;'>Don't forget your class shirts tomorrow!</b>")
+	    displayMessage += "<br>This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"; //display warning if date is in the future
 
-	else warn("Good luck on finals! And now, your daily <a href='https://youtu.be/U_4XWcDSR8w'>moment of cute</a>."); 
-
+	warn(displayMessage)
 	/*warn("<b style='color:#FF8020'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
 		  + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
 		  + "<br>Use this link <b>only</b> if you have concerns about possible breaches of academic integrity or wish to report Code of Conduct violations."
@@ -297,128 +293,85 @@ function createDay(week, date) {
     col.appendChild(head);
 
     var prevEnd = "8:00"; //set start of day to 8:00AM
-    var prevSubPeriod = false; // whether the previous period consisted of sub periods
     // for sub periods, passing periods are already handled and do not need to be added in the next iteration
-    var newSchedule = (date >= START_DATE && date <= END_DATE);
 
     if(daySchedule.index > 0) { //populates cell with day's schedule (a bit messily)
-	for(var i=1;i<schedules[daySchedule.index].length;i++) {
+		for(var i=1;i<schedules[daySchedule.index].length;i++) {
 
-	    var text = schedules[daySchedule.index][i];
-	    var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
-	    var periodTime = text.substring(text.indexOf("\t")+1);
+	    	var text = schedules[daySchedule.index][i];
+	    	var periodName = makePeriodNameReplacements(text.substring(0,text.indexOf("\t")), daySchedule.replacements);
+	    	var periodTime = text.substring(text.indexOf("\t")+1);
 
-	    var start = periodTime.substring(0,periodTime.indexOf("-"));
-	    var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
+	    	var start = periodTime.substring(0,periodTime.indexOf("-"));
+	    	var end = periodTime.substring(periodTime.lastIndexOf("-")+1);
 
-	    // only creates a new passing period before the period if either 1) it's a split lunch period in the new schedule or
-	    // 2) the date is not within the bounds of the new schedule
-	    if(periodName.indexOf("|") == -1 || (periodName.indexOf("|") >= 0 && !newSchedule)) {
-		if(options.showPassingPeriods && !prevSubPeriod){
-		    var passing = document.createElement("div");
-		    passing.classList.add("period");
-		    createPeriod(passing,"",prevEnd,start,date);
-		    col.appendChild(passing);
-		}
+	    	// only creates a new passing period before the period if either 1) it's a split lunch period in the new schedule or
+	    	// 2) the date is not within the bounds of the new schedule
+			if(options.showPassingPeriods) {
+	    		var passing = document.createElement("div");
+	    		passing.classList.add("period");
+	    		createPeriod(passing,"",prevEnd,start,date);
+	    		col.appendChild(passing);
+			}
+
+	    	prevEnd = end;
+
+	    	var period = document.createElement("div");
+	    	period.classList.add("period");
+
+	    	if(periodName.indexOf("|") >= 0) {
+				//handle split periods (i.e. lunches)
+				var table = document.createElement("table");
+				table.classList.add("lunch");
+				var row = table.insertRow(-1);
+
+				var period1 = row.insertCell(-1);
+				var period2 = row.insertCell(-1);
+
+				var period1Time = periodTime.substring(0,periodTime.indexOf("||"));
+				var period2Time = periodTime.substring(periodTime.indexOf("||")+2);
+
+				var period1Name = periodName.substring(0, periodName.indexOf("||"));
+				var period2Name = periodName.substring(periodName.indexOf("||")+2);
+
+				//parent, name, start, end, date
+				createPeriod(
+		    		period1,
+		    		period1Name,
+		    		start,
+		    		end,
+		    		date
+		   		)
+
+				//parent, name, start1, end1, start2, end2, date
+				createSubPeriods(
+					period2,
+					period2Name,
+					start,
+					period2Time.substring(period2Time.indexOf("-")+1,period2Time.indexOf("|")),
+					period2Time.substring(period2Time.indexOf("|")+1,period2Time.lastIndexOf("-")),
+					end,
+					date
+		    	);
+
+		    	
+ 				period.appendChild(table);
+			} else {
+		    	createPeriod(period,periodName,start,end,date);
+		    	//parent, name, start, end, date
+		    	//createSubPeriods(
+					//lunch2,
+					//periodName.substring(periodName.indexOf("||")+2),
+					//start,
+					//lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
+					//lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
+					//end,
+					//date
+		    	//);
+			}
+		    col.appendChild(period);
 	    }
-
-	    prevEnd = end;
-
-	    var period = document.createElement("div");
-	    period.classList.add("period");
-
-	    if(periodName.indexOf("|")>=0) {
-		//handle split periods (i.e. lunches)
-		if (newSchedule) prevSubPeriod = true; // indicate that the next iteration should not create a passing period
-		var table = document.createElement("table");
-		table.classList.add("lunch");
-		var row = table.insertRow(-1);
-
-		var lunch1 = row.insertCell(-1);
-		var lunch2 = row.insertCell(-1);
-
-		var lunch1Time = periodTime.substring(0,periodTime.indexOf("||"));
-		var lunch2Time = periodTime.substring(periodTime.indexOf("||")+2);
-
-		var period1Name = periodName.substring(0, periodName.indexOf("||"));
-		var period2Name = periodName.substring(periodName.indexOf("||")+2);
-
-		var start1 = lunch2Time.substring(0, lunch2Time.indexOf("-"));
-		var start2 = lunch1Time.substring(0,lunch1Time.indexOf("-"));
-		var start3 = lunch1Time.substring(lunch1Time.indexOf("|")+1, lunch1Time.lastIndexOf("-"));
-		var end = lunch1Time.substring(lunch1Time.lastIndexOf("-")+1);
-
-		// if new schedule, create 3 sub periods in the split lunch: one passing, one class, and one lunch period
-		// allows there to be a passing period before the class period but not before the lunch period (thanks harker admins)
-		if (newSchedule) {
-		    create3SubPeriods(
-			lunch1,
-			"",
-			start1,
-			start2,
-			period1Name.substring(0, period1Name.indexOf("|")),
-			start2,
-			start3,
-			period1Name.substring(period1Name.indexOf("|")+1),
-			start3,
-			end,
-			date
-		    );
-
-		    start1 = lunch2Time.substring(0,lunch2Time.indexOf("-"));
-		    start2 = lunch2Time.substring(lunch2Time.indexOf("|")+1, lunch2Time.lastIndexOf("-"));
-		    start3 = lunch2Time.substring(lunch2Time.lastIndexOf("-")+1);
-		    end = lunch1Time.substring(lunch1Time.lastIndexOf("-")+1);
-
-		    create3SubPeriods(
-			lunch2,
-			period2Name.substring(0, period2Name.indexOf("|")),
-			start1,
-			start2,
-			period2Name.substring(period2Name.indexOf("|")+1),
-			start2,
-			start3,
-			"",
-			start3,
-			end,
-			date
-		    );
-		} else {
-		    createSubPeriods(
-			lunch1,
-			periodName.substring(0,periodName.indexOf("||")),
-			start,
-			lunch1Time.substring(lunch1Time.indexOf("-")+1,lunch1Time.indexOf("|")),
-			lunch1Time.substring(lunch1Time.indexOf("|")+1,lunch1Time.lastIndexOf("-")),
-			end,
-			date
-		    );
-
-		    createSubPeriods(
-			lunch2,
-			periodName.substring(periodName.indexOf("||")+2),
-			start,
-			lunch2Time.substring(lunch2Time.indexOf("-")+1,lunch2Time.indexOf("|")),
-			lunch2Time.substring(lunch2Time.indexOf("|")+1,lunch2Time.lastIndexOf("-")),
-			end,
-			date
-		    );
-		}
-
-
-
-
-
-		period.appendChild(table);
-	    }
-	    else {
-		prevSubPeriod = false;
-
-		createPeriod(period,periodName,start,end,date);
-	    }
-	    col.appendChild(period);
 	}
-    }
 }
 
 /**
@@ -503,7 +456,7 @@ function getDayInfo(day) {
 	id = day.getDay();
 	if(id==0 || id==6) index = id = 0; //no school on weekends
 	else { //default schedule for that day
-	    if (day < START_DATE || day > END_DATE) //For dates outside the pilot program, use the old index
+	    if (day < START_DATE) //For dates outside the pilot program, use the old index
 		index = getScheduleIndex("O" + id); //Use O1, O2, etc. to distinguish old schedules from new ones
 	    else { //Otherwise, use the pilot indexes
 		index = calculateScheduleRotationIndex(day);
@@ -511,7 +464,7 @@ function getDayInfo(day) {
 		//and display the particular after school function on a given day.
 		//Note that this is completely independent of the rotation of the
 		//schdule.
-		replacements = [AFTER_SCHOOL_REPLACEMENTS[day.getDay() - 1]];
+		replacements = [COLLABORATION_REPLACEMENTS[day.getDay() - 1]];
 	    }
 	}
     }
@@ -545,37 +498,35 @@ function calculateScheduleRotationIndex(date) {
     //Factor out holidays
     var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/ //Finds dates of the format M(M)/D(D)/YY
     for (var i = 0; i < schedules[0].length; i++) {
-	var entry = schedules[0][i];
+		var entry = schedules[0][i];
 
-	if (entry.search(dateExp) != -1) {
-	    //Parse entry into date and id
-	    var dateString = entry.split("\t")[0];
-	    //Convert the date to format M(M)/D(D)/YYYY because Date defaults to 1900s
-	    dateString = dateString.substring(0, dateString.length - 2) + "20" + dateString.substring(dateString.length - 2);
-	    var entryDate = new Date(dateString);
-	    var entryId = entry.split("\t")[1];
-	    //If the checked schedule "entry" is a holiday in the future that occurs
-	    //before the date that is being calculated "date" but after the start of
-	    //pilot program, don't consider it in the cycle
-	    if (getScheduleIndex(entryId) == 0 && date > entryDate && entryDate > START_DATE) {
-		daysDifference--;
-	    }
-	}
+		if (entry.search(dateExp) != -1) {
+			//Parse entry into date and id
+			var dateString = entry.split("\t")[0];
+			//Convert the date to format M(M)/D(D)/YYYY because Date defaults to 1900s
+			dateString = dateString.substring(0, dateString.length - 2) + "20" + dateString.substring(dateString.length - 2);
+			var entryDate = new Date(dateString);
+			var entryId = entry.split("\t")[1];
+			//If the checked schedule "entry" is a holiday in the future that occurs
+			//before the date that is being calculated "date" but after the start of
+			//pilot program, don't consider it in the cycle
+			if (getScheduleIndex(entryId) == 0 && date > entryDate && entryDate > START_DATE) {
+				daysDifference--;
+			}
+		}
     }
 
     var id;
 
     if (daysDifference < 0) //Different formula needed for events before start day
-	id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES) + TOTAL_SCHEDULES;
+		id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES) + TOTAL_SCHEDULES;
     else
-	id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES);
+		id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES);
 
-	if (id == 2) { //If it is a B type schedule, determine whether class or school meeting.
-		if (weeksDifference % 2 == 0)
-			return getScheduleIndex(id + SCHOOL_MEETING);
-		else
-			return getScheduleIndex(id + SCHOOL_MEETING);
-	}
+	//Even schedules repeat (2 and 6 are the same and 4 and 8 are the same)
+	if (id > 4 && id % 2 == 0)
+		id = id - 4;
+
 	return getScheduleIndex(id);
 }
 
@@ -583,7 +534,7 @@ function calculateScheduleRotationIndex(date) {
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
-function createPeriod(parent, name, start, end, date){
+function createPeriod(parent, name, start, end, date, showTime = true){
     startDate = getDateFromString(start,date);
     endDate = getDateFromString(end,date);
 
@@ -640,9 +591,10 @@ function createPeriod(parent, name, start, end, date){
 	periodWrapper.style.height = (length-1) + "px"; //minus 1 to account for 1px border
 
 	if(length >= 15) {
-	    if(name) periodWrapper.innerHTML = name + (length<30 ? " " : "<br />") + start + " – " + end;
-	    if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
-		periodWrapper.classList.add("long");
+	    if(name) periodWrapper.innerHTML = name;
+	    if(showTime) periodWrapper.innerHTML += (length<30 ? " " : "<br />") + start + " – " + end;
+	    //if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
+		//periodWrapper.classList.add("long");
 	}
 
 	return parent.appendChild(periodWrapper);
@@ -660,7 +612,8 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 	name.substring(0,name.indexOf("|")),
 	start1,
 	end1,
-	date);
+	date,
+	false);
     parent.appendChild(p1);
 
     if(options.showPassingPeriods) {
