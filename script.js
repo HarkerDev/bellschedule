@@ -534,7 +534,9 @@ function calculateScheduleRotationIndex(date) {
  * Creates and returns a new period wrapper with the given content and start/end times.
  * Also applies any special properties based on period length (text on single line if too short, block period if longer than regular).
  */
-function createPeriod(parent, name, start, end, date, showTime = true){
+function createPeriod(parent, name, start, end, date, showTime) {
+	//Do not show time for very small periods (e.g. class meetings)
+	if(typeof(showTime) === "undefined") showTime = true;
     startDate = getDateFromString(start,date);
     endDate = getDateFromString(end,date);
 
