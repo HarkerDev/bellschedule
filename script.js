@@ -343,7 +343,9 @@ function createDay(week, date) {
 		    		date
 		   		)
 
-				//parent, name, start1, end1, start2, end2, date
+				show1Time = daySchedule.id == 4;
+				show2Time = !(show1Time);
+				//parent, name, start1, end1, start2, end2, date, show 1st, show 2nd
 				createSubPeriods(
 					period2,
 					period2Name,
@@ -351,7 +353,9 @@ function createDay(week, date) {
 					period2Time.substring(period2Time.indexOf("-")+1,period2Time.indexOf("|")),
 					period2Time.substring(period2Time.indexOf("|")+1,period2Time.lastIndexOf("-")),
 					end,
-					date
+					date,
+					show1Time,
+					show2Time
 		    	);
 
 		    	
@@ -453,20 +457,17 @@ function getDayInfo(day) {
 	}
 
     if(id === undefined) { //no special schedule found
-	id = day.getDay();
-	if(id==0 || id==6) index = id = 0; //no school on weekends
-	else { //default schedule for that day
-	    if (day < START_DATE) //For dates outside the pilot program, use the old index
-		index = getScheduleIndex("O" + id); //Use O1, O2, etc. to distinguish old schedules from new ones
-	    else { //Otherwise, use the pilot indexes
-		index = calculateScheduleRotationIndex(day);
-		//Utilizes the replacement system and the fixed mapping to determine
-		//and display the particular after school function on a given day.
-		//Note that this is completely independent of the rotation of the
-		//schdule.
-		replacements = [COLLABORATION_REPLACEMENTS[day.getDay() - 1]];
-	    }
-	}
+		id = day.getDay();
+		if(id==0 || id==6) index = id = 0; //no school on weekends
+		else { //default schedule for that day
+			id = calculateScheduleRotationID(day);
+			index = getScheduleIndex(id);
+			//Utilizes the replacement system and the fixed mapping to determine
+			//and display the particular after school function on a given day.
+			//Note that this is completely independent of the rotation of the
+			//schdule.
+			replacements = [COLLABORATION_REPLACEMENTS[day.getDay() - 1]];
+		}
     }
 
     return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
@@ -485,12 +486,11 @@ function getScheduleIndex(id) {
 
 /**
  * Determines which schedule should be displayed given the four block rotation.
- * If the schedule is for a "B" day, it determines whether the meeting will be
- * a school or class one.This futher factors out weekends and holidays when
+ * This futher factors out weekends and holidays when
  * considering which day to display. Relies on a known starting anchor day with
  * a given schedule and continues the cycle from there.
  */
-function calculateScheduleRotationIndex(date) {
+function calculateScheduleRotationID(date) {
     var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
     var weeksDifference = Math.floor(daysDifference / 7);
     //Factor out weekends (2 days per week)
@@ -527,7 +527,7 @@ function calculateScheduleRotationIndex(date) {
 	if (id > 4 && id % 2 == 0)
 		id = id - 4;
 
-	return getScheduleIndex(id);
+	return id;
 }
 
 /**
@@ -594,6 +594,7 @@ function createPeriod(parent, name, start, end, date, showTime) {
 
 	if(length >= 15) {
 	    if(name) periodWrapper.innerHTML = name;
+	    //Force long periods (30 minutes and up) to have a time
 	    if(showTime) periodWrapper.innerHTML += (length<30 ? " " : "<br />") + start + " – " + end;
 	    //if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
 		//periodWrapper.classList.add("long");
@@ -606,7 +607,11 @@ function createPeriod(parent, name, start, end, date, showTime) {
 /**
  * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
  */
-function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
+function createSubPeriods(parent, name, start1, end1, start2, end2, date, showFirstTime, showSecondTime) {
+	console.log(showSecondTime);
+	if (typeof(showFirstTime) === "undefined") showFirstTime = true;
+	if (typeof(showSecondTime) === "undefined") showSecondTime = true;
+
     var p1 = document.createElement("div");
     p1.classList.add("period");
     createPeriod(
@@ -615,7 +620,7 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 	start1,
 	end1,
 	date,
-	false);
+	showFirstTime);
     parent.appendChild(p1);
 
     if(options.showPassingPeriods) {
@@ -634,7 +639,8 @@ function createSubPeriods(parent, name, start1, end1, start2, end2, date) {
 	name.substring(name.indexOf("|")+1),
 	start2,
 	end2,
-	date);
+	date,
+	showSecondTime);
     parent.appendChild(p2);
 }
 
