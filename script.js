@@ -343,7 +343,7 @@ function createDay(week, date) {
 		    		date
 		   		)
 
-				show1Time = daySchedule.id == 4;
+				show1Time = daySchedule.id == 4 || daySchedule.id == "ReCreate";
 				show2Time = !(show1Time);
 				//parent, name, start1, end1, start2, end2, date, show 1st, show 2nd
 				createSubPeriods(
