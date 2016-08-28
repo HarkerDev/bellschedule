@@ -18,7 +18,7 @@
 				{
 					"name": "enablePeriodNotifications",
 					"type": "checkbox",
-					"default": true,
+					"default": false,
 					"description": "Enable period change notifications"
 				},
 				{
