@@ -1186,6 +1186,10 @@ function isSameDate(d1, d2) {
   	);
 }
 
+/**
+ * Gets the number of days between two days, excluding any
+ * weekends. 
+ */
 function daysBetweenExceptWeekends(date1, date2) {
     var diffMilli = date2.getTime() - date1.getTime();
     return Math.floor(diffMilli / MILLIS_PER_DAY);
