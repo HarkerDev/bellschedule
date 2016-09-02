@@ -62,6 +62,8 @@ var COLLABORATION_REPLACEMENTS = 	[
 
 var TOTAL_SCHEDULES = 8; //The number of schedules to be cycled
 
+var SCHEDULES = ["A", "B", "C", "D", "A", "B", "C", "D"]
+
 var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
 /**
@@ -288,7 +290,9 @@ function createDay(week, date) {
     head.classList.add("head");
     var headWrapper = document.createElement("div");
     headWrapper.classList.add("headWrapper");
-    headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule.dateString + /*" (" + daySchedule.id + ")*/"</div>"; //Portion commented out represents schedule id of that day
+    var scheduleString = ""; //Should we display the schedule id (e.g. A) next to the date
+    if (daySchedule.name !== "") { scheduleString = "(" + daySchedule.name + ")"; }
+    headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule.dateString + " " + scheduleString + "</div>"; //Portion commented out represents schedule id of that day
     head.appendChild(headWrapper);
     col.appendChild(head);
 
@@ -470,7 +474,13 @@ function getDayInfo(day) {
 		}
     }
 
-    return { "index": index, "id": id, "dateString": dateString, "replacements": replacements };
+    var name = "";
+
+    if (id <= TOTAL_SCHEDULES) {
+    	name = SCHEDULES[id - 1];
+    }
+
+    return { "index": index, "id": id, "dateString": dateString, "replacements": replacements, "name": name };
 }
 
 /**
