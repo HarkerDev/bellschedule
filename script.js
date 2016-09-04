@@ -291,7 +291,14 @@ function createDay(week, date) {
     var headWrapper = document.createElement("div");
     headWrapper.classList.add("headWrapper");
     var scheduleString = ""; //Should we display the schedule id (e.g. A) next to the date
-    if (daySchedule.name !== "") { scheduleString = "(" + daySchedule.name + ")"; }
+    //Make sure not to display anything if daySchedule is empty
+    if (typeof daySchedule.name != 'undefined' || daySchedule.name != null){
+    	//Not a weekend, so add
+    	scheduleString = "(" + daySchedule.name + ")";
+    }
+    if (scheduleString === "()") {
+    //It's a holiday so delete the extra parenthesis
+    scheduleString = "";}
     headWrapper.innerHTML = days[date.getDay()] + "<div class=\"headDate\">" + daySchedule.dateString + " " + scheduleString + "</div>"; //Portion commented out represents schedule id of that day
     head.appendChild(headWrapper);
     col.appendChild(head);
