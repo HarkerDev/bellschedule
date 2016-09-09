@@ -338,30 +338,60 @@ function createDay(week, date) {
 				var period1Name = periodName.substring(0, periodName.indexOf("||"));
 				var period2Name = periodName.substring(periodName.indexOf("||")+2);
 
-				//parent, name, start, end, date
-				createPeriod(
-		    		period1,
-		    		period1Name,
-		    		start,
-		    		end,
-		    		date
-		   		)
+				//If there are two sets of subperiods (i.e. a|b||c|d) there should be 4 "|"s
+				if (findNumberOfOccurences(periodName, "|") == 4) {
+					show1Time = true;
+					show2Time = true;
 
-				show1Time = daySchedule.id == 4 || daySchedule.id == "ReCreate";
-				show2Time = !(show1Time);
-				//parent, name, start1, end1, start2, end2, date, show 1st, show 2nd
-				createSubPeriods(
-					period2,
-					period2Name,
-					start,
-					period2Time.substring(period2Time.indexOf("-")+1,period2Time.indexOf("|")),
-					period2Time.substring(period2Time.indexOf("|")+1,period2Time.lastIndexOf("-")),
-					end,
-					date,
-					show1Time,
-					show2Time
-		    	);
+					createSubPeriods(
+						period1,
+						period1Name,
+						start,
+						period1Time.substring(period1Time.indexOf("-")+1,period1Time.indexOf("|")),
+						period1Time.substring(period1Time.indexOf("|")+1,period1Time.lastIndexOf("-")),
+						end,
+						date,
+						show1Time,
+						show2Time
+		    		);
 
+					createSubPeriods(
+						period2,
+						period2Name,
+						start,
+						period2Time.substring(period2Time.indexOf("-")+1,period2Time.indexOf("|")),
+						period2Time.substring(period2Time.indexOf("|")+1,period2Time.lastIndexOf("-")),
+						end,
+						date,
+						show1Time,
+						show2Time
+		    		);
+				}
+				else {
+					//parent, name, start, end, date
+					createPeriod(
+		    			period1,
+		    			period1Name,
+		    			start,
+		    			end,
+		    			date
+		   			)
+
+					show1Time = daySchedule.id == 4 || daySchedule.id == "ReCreate";
+					show2Time = !(show1Time);
+					//parent, name, start1, end1, start2, end2, date, show 1st, show 2nd
+					createSubPeriods(
+						period2,
+						period2Name,
+						start,
+						period2Time.substring(period2Time.indexOf("-")+1,period2Time.indexOf("|")),
+						period2Time.substring(period2Time.indexOf("|")+1,period2Time.lastIndexOf("-")),
+						end,
+						date,
+						show1Time,
+						show2Time
+			    	);
+				}
 		    	
  				period.appendChild(table);
 			} else {
@@ -1187,10 +1217,10 @@ function isSameDate(d1, d2) {
 }
 
 /**
- * Gets the number of days between two days, excluding any
- * weekends. 
+ * Determines how many times the character or character sequence
+ * char appears in str. 
  */
-function daysBetweenExceptWeekends(date1, date2) {
-    var diffMilli = date2.getTime() - date1.getTime();
-    return Math.floor(diffMilli / MILLIS_PER_DAY);
+function findNumberOfOccurences(str, char) {
+	for(var count=-1,index=-2; index != -1; count++,index=str.indexOf(char,index+1) );
+	return count;
 }
