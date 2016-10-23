@@ -165,12 +165,16 @@ table{
 	background-color: rgba(99,41,228,.5);
 }
 
-.lunchtime{
-	background-color: rgba(255,46,67,.7);
+.periodfive {
+	background-color: rgba(64,228,62,.66);
 }
 
-.lunchperiod {
-	background-color: rgba(64,228,62,.66);
+.periodsix{
+	background-color: rgba(11, 137, 72, .75);
+}
+
+.lunchtime{
+	background-color: rgba(255,46,67,.7);
 }
 
 .periodseven
@@ -182,12 +186,16 @@ table{
 	background-color: rgba(206,52,228,.66);
 }
 
-.extrahelp {
-	background-color: rgba(246,69,163,.63);
+.officehours {
+	background-color: rgba(249, 22, 215,.5);
 }
 
 .meeting {
 		background-color: rgba(77, 80, 123, .28);
+}
+
+.meetingtwo{
+	background-color: rgba(196, 233, 242, .6);
 }
 
 .period, .head{

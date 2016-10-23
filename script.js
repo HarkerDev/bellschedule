@@ -611,9 +611,13 @@ function createPeriod(parent, name, start, end, date, showTime) {
     {
     	periodWrapper.classList.add("periodfour");
     }
-    if (periodWrapper.periodName == "P5" ||periodWrapper.periodName == "P6")
+    if (periodWrapper.periodName == "P5")
     {
-    	periodWrapper.classList.add("lunchperiod");
+    	periodWrapper.classList.add("periodfive");
+    }
+    if (periodWrapper.periodName == "P6")
+    {
+    	periodWrapper.classList.add("periodsix");
     }
     if (periodWrapper.periodName == "Lunch")
     {
@@ -631,9 +635,13 @@ function createPeriod(parent, name, start, end, date, showTime) {
     {
     	periodWrapper.classList.add("meeting");
     }
-    if (periodWrapper.periodName == "Extra Help")
+    if (periodWrapper.periodName == "Office Hours")
     {
-    	periodWrapper.classList.add("extrahelp");
+    	periodWrapper.classList.add("officehours");
+    }
+    if (periodWrapper.periodName == "Club Leadership" || periodWrapper.periodName == "Junior Mtg." || periodWrapper.periodName == "Soph Mtg." || periodWrapper.periodName == "Frosh Mtg.") 
+    {
+    	periodWrapper.classList.add("meetingtwo");
     }
 }
     if(length > 0) {
