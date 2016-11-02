@@ -212,8 +212,10 @@ function setDisplayDate(time, force) {
 
 	displayDate = new Date(date);
 
-	displayMessage = "Welcome back! Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a>.";
+	displayMessage = "";//"Welcome back! Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a>.";
 
+	if(displayDate.toDateString() == (new Date("11/18/16")).toDateString())
+		displayMessage = "Have a wonderful Thanksgiving Break! &#x1f983;"
 	if(getMonday(date) > getMonday(new Date()))
 	    displayMessage += "<br>This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"; //display warning if date is in the future
 
@@ -507,7 +509,6 @@ function getDayInfo(day) {
 			//and display the particular after school function on a given day.
 			//Note that this is completely independent of the rotation of the
 			//schdule.
-			replacements = [COLLABORATION_REPLACEMENTS[day.getDay() - 1]];
 		}
     }
 
@@ -516,6 +517,8 @@ function getDayInfo(day) {
     if (id <= TOTAL_SCHEDULES) {
     	name = SCHEDULES[id - 1];
     }
+
+    replacements.push(COLLABORATION_REPLACEMENTS[day.getDay() - 1]);
 
     return { "index": index, "id": id, "dateString": dateString, "replacements": replacements, "name": name };
 }
@@ -655,7 +658,6 @@ function createPeriod(parent, name, start, end, date, showTime) {
  * Creates and appends two new sub-periods and passing period to parent period with given start and end times.
  */
 function createSubPeriods(parent, name, start1, end1, start2, end2, date, showFirstTime, showSecondTime) {
-	console.log(showSecondTime);
 	if (typeof(showFirstTime) === "undefined") showFirstTime = true;
 	if (typeof(showSecondTime) === "undefined") showSecondTime = true;
 
