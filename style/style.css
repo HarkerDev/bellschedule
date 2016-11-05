@@ -2,6 +2,7 @@
 /*  General                       */
 /* ------------------------------ */
 
+<<<<<<< HEAD:style.css
 button{
   color: #000;
   font-size: 12px;
@@ -10,6 +11,10 @@ button{
 
 a{
 	color: #0000FF;
+=======
+a {
+	color: #555;
+>>>>>>> origin/dev:style/style.css
 }
 
 @-webkit-keyframes fadeIO {
@@ -42,31 +47,31 @@ a{
 	}
 }
 
-body{
-	margin: 0;
+body {
+	margin: 15px;
 	font: .75em "Segoe UI", "Arial", sans-serif;
 	text-align: center;
 	background-position-x: center;
 }
 
-h1{
+h1 {
 	margin-bottom: .25em;
 }
 
-#container{
+#container {
 	margin: auto;
 	padding: 0 10px;
 }
 
 /* apply absolute formatting on small screens so that there's padding on both sides of the schedule */
-@media only screen and (max-width:814px){
-	.week #container{
+@media only screen and (max-width:814px) {
+	.week #container {
 		position: absolute;
 	}
 }
 
 
-#titleTitles, #schedules, #changelog{
+#titleTitles, #dates, #schedules, #changelog {
 	display: none;
 }
 
@@ -74,7 +79,7 @@ h1{
 /*  Header                        */
 /* ------------------------------ */
 
-.noHighlight{
+.noHighlight {
 	/*-webkit-touch-callout: none; (disables context menu on mobile? perhaps this also disables highlighting on mobile?)*/
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -83,14 +88,14 @@ h1{
 	user-select: none;
 }
 
-#header{
+#header {
 	position: relative;
 	margin: 1.25em auto;
 	width: 100%;
 	max-width: 400px;
 }
 
-#title{
+#title {
 	display: inline;
 	/*-webkit-touch-callout: initial;*/
 	-webkit-user-select: initial;
@@ -100,30 +105,30 @@ h1{
 	user-select: initial;
 }
 
-#leftArrow{
+#leftArrow {
 	float: left;
 }
-#rightArrow{
+#rightArrow {
 	float: right;
 }
-#leftArrow, #rightArrow{
+#leftArrow, #rightArrow {
 	cursor: pointer;
 	padding: 0 12px;
 	font-weight: normal;
 	transition: padding .2s;
 	-webkit-transition: padding .2s;
 }
-#leftArrow:hover{
+#leftArrow:hover {
 	padding: 0 20px 0 4px;
 }
-#rightArrow:hover{
+#rightArrow:hover {
 	padding: 0 4px 0 20px;
 }
-#leftArrow:hover, #rightArrow:hover{
+#leftArrow:hover, #rightArrow:hover {
 	font-weight: bold;
 }
 
-#warning{
+#warning {
 	display:none;
 	margin-bottom: 1em;
 }
@@ -132,23 +137,24 @@ h1{
 /*  Schedule                      */
 /* ------------------------------ */
 
-table{
+table {
 	border-collapse: collapse;
 }
 
-#schedule{
+#schedule {
 	margin: auto;
 	height: 300px; /* acts like min-height */
 	background-color: rgba(255,255,255,.5)
 }
 
-#schedule td{
+#schedule td {
 	width: 158px;  /* 2px short to account for 2px border */
 	border: 2px solid black;
 	padding: 0 0 15px;
 	vertical-align: top;
 }
 
+<<<<<<< HEAD:style.css
 .periodone {
 	background-color: rgba(18,41,246,.55);
 }
@@ -191,34 +197,38 @@ table{
 }
 
 .period, .head{
+=======
+.period, .head {
+>>>>>>> origin/dev:style/style.css
 	width: inherit;
 	overflow: hidden;
 	line-height: 110%;
 }
-.periodWrapper, .headWrapper{
+.periodWrapper, .headWrapper {
 	display: table-cell;
 	width: inherit;
 	border-bottom: 1px solid black;
 	vertical-align: middle;
 }
-.periodLength{
+.timeRemaining {
 	font-size: .8em;
 }
-.head{
+.head {
 	height: 3.25em;
 	border-bottom: 2px solid black;
 	font-size: 1.33em;
 }
-.headWrapper{
+.headWrapper {
 	height: inherit;
 }
-.headDate{
+.headDate {
 	font-size: .8em;
 }
-.headSchedId{
+.headSchedId {
 	font-size: .7em;
 }
 
+<<<<<<< HEAD:style.css
 #today .head{
 	font-weight: bold;
 }
@@ -230,22 +240,42 @@ table{
 #today .now{
 	background-color: rgba(208,208,208,.75);
 	 /* looks close to #999 on #ddd background */
+=======
+#today {
+	background-color: rgba(208,208,208,.75); /* looks like #ddd on white background */
 }
-
-.long{
+#today .head {
 	font-weight: bold;
 }
 
-#schedule .lunch{
+#today .now {
+	background: rgba(128,128,128,.75); /* looks close to #999 on #ddd background */
+}
+
+#today.halloween .periodWrapper, #today.halloween .head {
+	background-color: #f80;
+}
+
+#today.halloween .now {
+	background: #222;
+	color: white;
+>>>>>>> origin/dev:style/style.css
+}
+
+.long {
+	font-weight: bold;
+}
+
+#schedule .compound {
 	width:100%;
 	height:100%;
 }
-#schedule .lunch td{
-	width: 80px;  /* half of day width */
+#schedule .compound td {
+	width: 79px;  /* half of day width */
 	padding: 0px;
 	border-width: 0;
 }
-#schedule .lunch td:first-child {
+#schedule .compound td:first-child {
 	border-right: 1px solid black;
 }
 
@@ -253,7 +283,7 @@ table{
 /*  Version                       */
 /* ------------------------------ */
 
-#version{
+#version {
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
@@ -262,7 +292,7 @@ table{
 	color: #555;
 	background-color: rgba(255, 255, 255, 0.5);
 }
-#version a{
+#version a {
 	text-decoration: none;
 }
 
@@ -270,7 +300,7 @@ table{
 /*  Options                       */
 /* ------------------------------ */
 
-#options{
+#options {
 	box-sizing: content-box;
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
@@ -291,7 +321,7 @@ table{
 	-webkit-transition: right .5s, bottom .5s, padding .5s border-top-left-radius .5s;
 	z-index: 10;
 }
-#options.mobile{ /* must be before #options.expanded for expanding to apply properly */
+.mobile #options { /* must be before #options.expanded for expanding to apply properly */
 	right: -100%;
 	bottom: -100%;
 	padding: 3.75em 0 0 3.75em;
@@ -299,23 +329,23 @@ table{
 	width: 100%;
 	height: 100%;
 }
-#options.expanded{
+#options.expanded {
 	right: 0;
 	bottom: 0;
 	padding: 0;
 }
-#options.mobile.expanded{
+.mobile #options.expanded {
 	border-top-left-radius: 0;
 }
 
-#optionsTitle{
+#optionsTitle {
 	margin: 0 0 5px;
 	-webkit-transition: margin .5s;
 }
-.expanded #optionsTitle{
+.expanded #optionsTitle {
 	margin-top: 30px;
 }
-#optionsArrow{
+#optionsArrow {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -328,41 +358,41 @@ table{
 	font-size: 2.5em;
 }
 
-#options.mobile input[type=checkbox]{
+.mobile #options input[type=checkbox] {
 	transform: scale(1.2);
 	-webkit-transform: scale(1.2);
 }
-#options input[type=number], #options input[type=text]{
+#options input[type=number], #options input[type=text] {
 	border: 1px solid gray;
 	background: rgba(255, 255, 255, .5);
 	text-align: center;
 	font-size: 1em;
 }
-#options input[type=number]{
+#options input[type=number] {
 	width: 2.5em;
 }
-#options input::-webkit-outer-spin-button, #options input::-webkit-inner-spin-button{
+#options input::-webkit-outer-spin-button, #options input::-webkit-inner-spin-button {
 	display: none; /* hide spinner on number inputs in webkit browsers */
 }
 
-#optionsContent{
+#optionsContent {
 	margin: 0 auto;
 }
-#optionsContent tr{
+#optionsContent tr {
 	height: 2em;
 }
-#optionsContent th{
+#optionsContent th {
 	padding: 15px 0 5px;
 }
-#optionsContent td:first-child{
+#optionsContent td:first-child {
 	padding-right: 15px;
 	text-align: right;
 }
-.tooltipIndicator{
+.tooltipIndicator {
 	text-decoration: underline;
 }
 
-#repo{
+#repo {
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -373,7 +403,7 @@ table{
 /*  Clock                         */
 /* ------------------------------ */
 
-#currentTime{
+#currentTime {
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -384,29 +414,4 @@ table{
 	font-weight: bold;
 	/* letter-spacing: .05em; */
 	color: #333;
-}
-
-/* ------------------------------ */
-/*  Refresh                       */
-/* ------------------------------ */
-
-#refresh{
-	display: none;
-	position: fixed;
-	top: 0;
-	right: 0;
-	padding-right: 3px;
-	color: #AAA;
-	font-size: 2em;
-	cursor: pointer;
-	transition: color .25s;
-	-webkit-transition: color .25s;
-}
-#refresh:hover{
-	color: #333;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }

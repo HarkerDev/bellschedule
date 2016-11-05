@@ -1,26 +1,27 @@
-//javascript:(function(){document.body.appendChild(document.createElement('script')).src="http://harkerdev.github.io/bellschedule/doge.js";setTimeout("startDoge(2000)",500);})();
-//bookmarklet to run doge mode on any page (nouns will be the same, though)
-
 var suchAdjectives = ["such","very","much","many","so"];
 
+<<<<<<< HEAD:doge.js
 var suchNouns = ["schedule","time","date","table","class","periods","lines","title","color","day","organize","impress", "harkerdev"];
+=======
+var suchNouns = ["schedule","time","date","table","class","periods","lines","title","color","day","organize","impress","Manan"];
+>>>>>>> origin/dev:script/doge.js
 
-var suchDelay = 2000;	//delay between adding new div in ms
-var maxDoge = 5;		//max number of dogeDivs
-var suchIntervalID;		//interval ID for doge adding
+var suchDelay = 2000;   //delay between adding new div in ms
+var maxDoge = 5;        //max number of dogeDivs
+var suchIntervalID;     //interval ID for doge adding
 
-function setDoge(state) {
+exports.setDoge = function(state) {
 	if(state) startDoge(suchDelay);
 	else stopDoge();
-}
+};
 
 function setDogeDelay(delay) { suchDelay = delay; }
 function setDogeMax(max) { maxDoge = max; }
 
 function startDoge(delay) {
-	document.body.style.backgroundImage = "url('http://harkerdev.github.io/bellschedule/doge.jpg')";
+	document.body.style.backgroundImage = "url('doge.jpg')";
 	
-	suchIntervalID = setInterval("swapDogeDiv()", delay);
+	suchIntervalID = setInterval(swapDogeDiv, delay);
 	swapDogeDiv();
 }
 
@@ -36,7 +37,7 @@ function stopDoge() {
 
 function createDogeDiv() {
 	var dogeDiv = document.createElement("div");
-	var text = document.createTextNode(Math.random()<.1 ? "wow" : (choose(suchAdjectives) + " " + choose(suchNouns)));
+	var text = document.createTextNode(Math.random()<0.1 ? "wow" : (choose(suchAdjectives) + " " + choose(suchNouns)));
 	
 	dogeDiv.classList.add("doge");
 	dogeDiv.appendChild(text);
@@ -69,7 +70,7 @@ function removeDogeDiv(dogeDiv) {
 }
 
 function swapDogeDiv() {
-	var doges = document.getElementsByClassName("doge")
+	var doges = document.getElementsByClassName("doge");
 	if(doges.length >= maxDoge)
 		removeDogeDiv(choose(doges));
 	createDogeDiv();
@@ -80,7 +81,7 @@ function choose(array) {
 }
 
 function randInt(x,y) {
-	if(y==null)
+	if(y==undefined)
 		return Math.floor(Math.random()*x);
-	else return Math.floor(Math.random()*(y-x) + x)
+	else return Math.floor(Math.random()*(y-x) + x);
 }

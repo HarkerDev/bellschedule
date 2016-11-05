@@ -1,4 +1,4 @@
-{
+module.exports = {
 	"sections": [
 		{
 			"name": "General",
@@ -83,4 +83,4 @@
 			]
 		}
 	]
-}
+};
