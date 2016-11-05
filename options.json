@@ -6,7 +6,7 @@
 				{
 					"name": "color",
 					"type": "checkbox",
-					"default": false,
+					"default": true,
 					"description": "Show color"
 				},
 				{
