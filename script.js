@@ -214,7 +214,7 @@ function setDisplayDate(time, force) {
 
 	displayMessage = "";//"Welcome back! Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a>.";
 
-	if(displayDate.toDateString() == (new Date("11/18/16")).toDateString())
+	if((new Date()).toDateString() == (new Date("11/18/16")).toDateString())
 		displayMessage = "Have a wonderful Thanksgiving Break! &#x1f983;"
 	if(getMonday(date) > getMonday(new Date()))
 	    displayMessage += "<br>This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"; //display warning if date is in the future
