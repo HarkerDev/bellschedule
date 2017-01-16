@@ -217,7 +217,7 @@ function setDisplayDate(time, force) {
 		displayMessage += "<span style='font-weight:bold;color: red;'>Finals Disclaimer:</span> All morning exams have different call times divided by grade or course that are not displayed here. To see when you need to get to school, check out the official schedule <a href='http://resources.harker.org/download/us-final-exams-schedule/'>here</a>."
 	if(getMonday(date) > getMonday(new Date()))
 	    displayMessage += "<br>This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"; //display warning if date is in the future
-	
+
 	warn(displayMessage)
 	/*warn("<b style='color:#FF8020'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
 		  + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
@@ -400,7 +400,7 @@ function createDay(week, date) {
 						show2Time
 			    	);
 				}
-		    	
+
  				period.appendChild(table);
 			} else {
 		    	createPeriod(period,periodName,start,end,date);
@@ -541,7 +541,7 @@ function getScheduleIndex(id) {
  */
 function calculateScheduleRotationID(date) {
     var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
-    var weeksDifference = Math.floor(daysDifference / 7);
+    var weeksDifference = Math.floor((daysDifference + (START_DATE.getDay() - 1))/ 7);
     //Factor out weekends (2 days per week)
     daysDifference -= weeksDifference * 2;
     //Factor out holidays
@@ -572,11 +572,14 @@ function calculateScheduleRotationID(date) {
     else
 		id = START_SCHEDULE + Math.floor(daysDifference % TOTAL_SCHEDULES);
 
-	//Even schedules repeat (2 and 6 are the same and 4 and 8 are the same)
-	if (id > 4 && id % 2 == 0)
-		id = id - 4;
+    if (id > 8) { id -= 8; }
 
-	return id;
+	  //Even schedules repeat (2 and 6 are the same and 4 and 8 are the same)
+	  if (id > 4 && id % 2 == 0) {
+		  id = id - 4;
+    }
+
+    return id;
 }
 
 /**
@@ -633,7 +636,7 @@ function createPeriod(parent, name, start, end, date, showTime) {
     {
     	periodWrapper.classList.add("periodeight");
     }
-    if (periodWrapper.periodName == "School Meeting" || periodWrapper.periodName == "Advisory") 
+    if (periodWrapper.periodName == "School Meeting" || periodWrapper.periodName == "Advisory")
     {
     	periodWrapper.classList.add("meeting");
     }
@@ -641,7 +644,7 @@ function createPeriod(parent, name, start, end, date, showTime) {
     {
     	periodWrapper.classList.add("officehours");
     }
-    if (periodWrapper.periodName == "Club Leadership" || periodWrapper.periodName == "Junior Mtg." || periodWrapper.periodName == "Soph Mtg." || periodWrapper.periodName == "Frosh Mtg.") 
+    if (periodWrapper.periodName == "Club Leadership" || periodWrapper.periodName == "Junior Mtg." || periodWrapper.periodName == "Soph Mtg." || periodWrapper.periodName == "Frosh Mtg.")
     {
     	periodWrapper.classList.add("meetingtwo");
     }
@@ -848,7 +851,7 @@ function setHighlightedPeriod(time) {
 				    (length>1 ?
 				     Math.round(length) + " min. left</div>" :
 				     Math.round(length*60) + " sec. left</div>");
-			   
+
 		}
 			}
 	    		}
@@ -1234,7 +1237,7 @@ function isSameDate(d1, d2) {
 
 /**
  * Determines how many times the character or character sequence
- * char appears in str. 
+ * char appears in str.
  */
 function findNumberOfOccurences(str, char) {
 	for(var count=-1,index=-2; index != -1; count++,index=str.indexOf(char,index+1) );
