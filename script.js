@@ -1093,38 +1093,38 @@ function attachOptionActions() {
     });
 
     if(!mobile) {
-	sy 
-	    switch (event.keyCode){
-	    case 116 : //F5
-		if(options.interceptF5){
-		    //enabled
-		    event.preventDefault();
-		    updateSchedule();
-		}
-		break;
-	    case 82 : //R key
-		if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){
-		    //enabled and control/cmd (meta)
-		    event.preventDefault();
-		    updateSchedule();
-		}
-		break;
-	    case 37 : //Left arrow
-		goLast();
-		break;
-	    case 39 : //Right arrow
-		goNext();
-		break;
-	    case 40 : //Down arrow
-		goCurr();
-		break;
-	    }
-	    inputStr += event.keyCode;
-	    if (inputStr.indexOf(KONAMI) != -1) {
-		isDoge = !isDoge;
-		setDoge(isDoge);
-		inputStr = "";
-	    }
+		document.addEventListener("keydown", function(event) {
+		    switch (event.keyCode){
+		    case 116 : //F5
+			if(options.interceptF5){
+			    //enabled
+			    event.preventDefault();
+			    updateSchedule();
+			}
+			break;
+		    case 82 : //R key
+			if(options.interceptCtrlR && (event.ctrlKey||event.metaKey)){
+			    //enabled and control/cmd (meta)
+			    event.preventDefault();
+			    updateSchedule();
+			}
+			break;
+		    case 37 : //Left arrow
+			goLast();
+			break;
+		    case 39 : //Right arrow
+			goNext();
+			break;
+		    case 40 : //Down arrow
+			goCurr();
+			break;
+		    }
+		    inputStr += event.keyCode;
+		    if (inputStr.indexOf(KONAMI) != -1) {
+				isDoge = !isDoge;
+				setDoge(isDoge);
+				inputStr = "";
+		    }
 	});
 
 	/*setDoge(options.enableDoge);
