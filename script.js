@@ -1093,7 +1093,7 @@ function attachOptionActions() {
     });
 
     if(!mobile) {
-	document.addEventListener("keydown", function(event) {
+	sy 
 	    switch (event.keyCode){
 	    case 116 : //F5
 		if(options.interceptF5){
