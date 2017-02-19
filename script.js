@@ -541,9 +541,8 @@ function getScheduleIndex(id) {
  */
 function calculateScheduleRotationID(date) {
     var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
-    var weeksDifference = Math.floor((daysDifference + (START_DATE.getDay() - 1))/ 7);
-    //Factor out weekends (2 days per week)
-    daysDifference -= weeksDifference * 2;
+    //Factor out weekends
+    daysDifference -= countWeekendDays(START_DATE, date);
     //Factor out holidays
     var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/ //Finds dates of the format M(M)/D(D)/YY
     for (var i = 0; i < schedules[0].length; i++) {
@@ -558,8 +557,10 @@ function calculateScheduleRotationID(date) {
 			var entryId = entry.split("\t")[1];
 			//If the checked schedule "entry" is a holiday in the future that occurs
 			//before the date that is being calculated "date" but after the start of
-			//pilot program, don't consider it in the cycle
-			if (getScheduleIndex(entryId) == 0 && date > entryDate && entryDate > START_DATE) {
+			//schedule rotation, don't consider it in the cycle. Furthermore, if the holiday
+			//in question is on a weekend (as can happen for long breaks) do not consider it
+			//as it has already been factored in in the prior weekend exclusion.
+			if (getScheduleIndex(entryId) == 0 && date >= entryDate && entryDate >= START_DATE && entryDate.getDay() != 0 && entryDate.getDay() != 6) {
 				daysDifference--;
 			}
 		}
@@ -1242,4 +1243,10 @@ function isSameDate(d1, d2) {
 function findNumberOfOccurences(str, char) {
 	for(var count=-1,index=-2; index != -1; count++,index=str.indexOf(char,index+1) );
 	return count;
+}
+
+function countWeekendDays(start, end) {
+    var numDays = 1 + Math.round((end.getTime() - start.getTime()) / MILLIS_PER_DAY);
+    var numSat = Math.floor((start.getDay() + numDays) / 7);
+    return 2 * numSat + (start.getDay()==0) - (end.getDay()==6);
 }
