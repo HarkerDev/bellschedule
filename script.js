@@ -781,7 +781,7 @@ function updateSearch(week, noHistory) {
 
     if(!options.enableDayView) curr = getMonday(curr);
 
-    if(week.getDate() != curr.getDate()) {
+    if(week.getDate() != curr.getDate() || week.getMonth() != curr.getMonth()) {
 	urlParams["m"] = week.getMonth()+1;
 	urlParams["d"] = week.getDate();
     } else {
