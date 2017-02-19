@@ -540,7 +540,7 @@ function getScheduleIndex(id) {
  * a given schedule and continues the cycle from there.
  */
 function calculateScheduleRotationID(date) {
-    var daysDifference = (date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY;
+    var daysDifference = Math.ceil((date.getTime() - START_DATE.getTime()) / MILLIS_PER_DAY);
     //Factor out weekends
     daysDifference -= countWeekendDays(START_DATE, date);
     //Factor out holidays
