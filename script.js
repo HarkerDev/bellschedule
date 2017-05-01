@@ -645,7 +645,7 @@ function createPeriod(parent, name, start, end, date, showTime) {
     {
     	periodWrapper.classList.add("officehours");
     }
-    if (periodWrapper.periodName == "Club Leadership" || periodWrapper.periodName == "Junior Mtg." || periodWrapper.periodName == "Soph Mtg." || periodWrapper.periodName == "Frosh Mtg.")
+    if (periodWrapper.periodName == "Club Leadership" || periodWrapper.periodName == "Junior Mtg." || periodWrapper.periodName == "Soph Mtg." || periodWrapper.periodName == "Frosh Mtg." || periodWrapper.periodName == "Senior Mtg.")
     {
     	periodWrapper.classList.add("meetingtwo");
     }
