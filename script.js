@@ -219,6 +219,10 @@ function setDisplayDate(time, force) {
 	    displayMessage += "<br>This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"; //display warning if date is in the future
 
 	warn(displayMessage)
+
+
+  warn("Hungry? <a href='http://tiny.cc/lunchmenu' style='text-decoration:none;color:#000;'>http://tiny.cc/lunchmenu</a>")
+
 	/*warn("<b style='color:#FF8020'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
 		  + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
 		  + "<br>Use this link <b>only</b> if you have concerns about possible breaches of academic integrity or wish to report Code of Conduct violations."
