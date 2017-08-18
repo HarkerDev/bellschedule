@@ -45,7 +45,7 @@ var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
 var isDoge;
 
-var START_DATE = new Date('January 3, 2017'); //The start day of the school year. This should be a weekday.
+var START_DATE = new Date('August 28, 2017'); //The start day of the school year. This should be a weekday.
 
 var START_SCHEDULE = 1; //The schedule on the first day
 
@@ -212,7 +212,7 @@ function setDisplayDate(time, force) {
 
 	displayDate = new Date(date);
 
-	displayMessage = "";//"Welcome back! Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a>.";
+	displayMessage = "Welcome back! Tell a freshman about <a href='http://tiny.cc/bellschedule'>tiny.cc/bellschedule</a>.";
 	if(isSameDate(date, new Date("12/12/16")))
 		displayMessage += "<span style='font-weight:bold;color: red;'>Finals Disclaimer:</span> All morning exams have different call times divided by grade or course that are not displayed here. To see when you need to get to school, check out the official schedule <a href='http://resources.harker.org/download/us-final-exams-schedule/'>here</a>."
 	if(getMonday(date) > getMonday(new Date()))
@@ -221,7 +221,7 @@ function setDisplayDate(time, force) {
 	warn(displayMessage)
 
 
-  warn("Hungry? <a href='http://tiny.cc/lunchmenu' style='text-decoration:none;color:#000;'>http://tiny.cc/lunchmenu</a>")
+	//warn("Hungry? <a href='http://tiny.cc/lunchmenu' style='text-decoration:none;color:#000;'>http://tiny.cc/lunchmenu</a>")
 
 	/*warn("<b style='color:#FF8020'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
 		  + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
