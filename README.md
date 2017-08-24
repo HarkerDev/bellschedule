@@ -10,19 +10,19 @@ A clean bell schedule web application for Harker students
 
 ## How to Contribute
 
-###TL; DR
+### TL; DR
 1. **Check the To Do Section**: choose a pending task that hasn't yet been completed from the issues page and help us add that functionality to the schedule
 2. **Fork this Repository**: fork either the main or development branches to your account
 3. **Make the Changes**: make proposed changes on your fork
 4. **Submit a Pull Request**: submit a pull request, then we'll review the changes and accept them if applicable
 
-###Detailed Guide
+### Detailed Guide
 
 1. **Fork project** (click upper right "Fork" button)
 2. **Goto your fork**, (lower right, SSH clone url)
 ![git clone url](https://cloud.githubusercontent.com/assets/928812/2546957/26d189f6-b646-11e3-80e5-3659c5e1ed43.png)
 3. Open a Terminal. "**git clone**" a local copy off your own fork.
-```git clone git@github.com:mananshah99/bellschedule.git```
+```git clone https://github.com/HarkerDev/bellschedule.git```
 4. **Create a branch**. You can call it anything, for example "fix timer".
 ```git checkout -b fix_timer```
 5. Make your changes to the file(s) in your newly created branch.
@@ -55,7 +55,7 @@ So let's assume, I had done a clone of HarkerDev/bellschedule a couple weeks ago
 
 `git push origin master` (push our now updated local repo to your github fork so that it is updated as well)
 
-Now that you are completely up to date, you can jump to Step 4 (above). If these steps aren't taken, then @mananshah99 may run into merge conflicts when trying to add your contribution (not as easy as 1 click merge, when there's no conflicts).
+Now that you are completely up to date, you can jump to Step 4 (above). If these steps aren't taken, then there may be merge conflicts when trying to add your contribution (not as easy as 1 click merge, when there's no conflicts).
 
 Inspired by, and derived from [this wiki page](https://github.com/vhf/free-programming-books/wiki/Creating-good-Pull-Requests)
 
