@@ -177,51 +177,31 @@ table {
 }
 
 .periodone {
-    background-color: rgba(18, 41, 246, .55);
+    background-color: #f9d689;
 }
 
 .periodtwo {
-    background-color: rgba(249, 122, 44, .82);
+    background-color: #efa7cc;
 }
 
 .periodthree {
-    background-color: rgba(249, 210, 42, .65);
+    background-color: #9df2aa;
 }
 
 .periodfour {
-    background-color: rgba(99, 41, 228, .5);
+    background-color: #dd8d8d;
 }
 
 .periodfive {
-    background-color: rgba(64, 228, 62, .66);
+    background-color: #9bccef;
 }
 
 .periodsix {
-    background-color: rgba(11, 137, 72, .75);
-}
-
-.lunchtime {
-    background-color: rgba(255, 46, 67, .7);
+    background-color: #abaaf7;
 }
 
 .periodseven {
-    background-color: rgba(48, 228, 227, .66);
-}
-
-.periodeight {
-    background-color: rgba(206, 52, 228, .66);
-}
-
-.officehours {
-    background-color: rgba(249, 22, 215, .5);
-}
-
-.meeting {
-    background-color: rgba(77, 80, 123, .28);
-}
-
-.meetingtwo {
-    background-color: rgba(196, 233, 242, .6);
+    background-color: #aeefde;
 }
 
 .period,
