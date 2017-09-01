@@ -258,12 +258,17 @@ function setDisplayDate(time, force) {
 function getDateFromUrlParams() {
     var date = new Date();
 
-    if(urlParams["y"]>0) date.setFullYear("20" + urlParams["y"]);
-    if(urlParams["m"]>0) date.setMonth(urlParams["m"]-1);
-    if(urlParams["d"]>0) date.setDate(urlParams["d"]);
+    if (urlParams["y"] > 0 && urlParams["m"] > 0 && urlParams["d"] > 0) {
+        date = new Date("20" + urlParams["y"], urlParams["m"] - 1, urlParams["d"]);
+    }
 
-    if(!options.enableDayView) date = getMonday(date);
+    if (urlParams["m"] > 0 && urlParams["d"] > 0) {
+        date = new Date((new Date()).getFullYear(), urlParams["m"] - 1, urlParams["d"]);
+    }
 
+    if (!options.enableDayView) {
+        date = getMonday(date);
+    }
     return date;
 }
 
