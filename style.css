@@ -28,6 +28,21 @@ button {
     padding: 0 10px;
 }
 
+@keyframes fadeIO {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 100%;
+    }
+    70% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 @-webkit-keyframes fadeIO {
     0% {
         opacity: 0;
@@ -48,7 +63,9 @@ button {
 
 @media only screen and (width:320px) and (device-width:320px) and (device-height:480px) and (orientation: landscape) {
     body {
+        transform: (0.667);
         -webkit-transform: scale(0.667);
+        transform-origin: top right;
         -webkit-transform-origin: top right;
         position: absolute;
         right: 0;
@@ -62,7 +79,9 @@ button {
 
 @media only screen and (width:768px) and (device-width:768px) and (device-height:1024px) and (orientation: landscape) {
     body {
+        transform: scale(0.75);
         -webkit-transform: scale(0.75);
+        transform-origin: top right;
         -webkit-transform-origin: top right;
         position: absolute;
         right: 0;
