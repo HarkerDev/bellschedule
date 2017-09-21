@@ -1,5 +1,4 @@
 # Bell Schedule
-
 A bell schedule web application for Harker Upper School students.
 
 ## Usage
@@ -9,7 +8,6 @@ A bell schedule web application for Harker Upper School students.
 * Time left until the current period is over is displayed in small, bold text underneath the general period title
 
 ## How to Contribute
-
 1. Create a fork of this repository
 2. Make changes on a new branch
 3. Create a pull request with details of your changes
