@@ -47,7 +47,7 @@ var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
 //var isDoge;
 
-var START_DATE = new Date('January 23, 2018'); //The start day of the school year. This should be a weekday.
+var START_DATE = new Date('January 22, 2018'); //The start day of the school year. This should be a weekday.
 
 var START_SCHEDULE = 1; //The schedule on the first day
 
