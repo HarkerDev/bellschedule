@@ -221,7 +221,7 @@ function setDisplayDate(time, force) {
 
         displayDate = new Date(date);
 
-        displayMessage = "Hungry? <a href='http://tiny.cc/lunchmenu'>tiny.cc/lunchmenu</a>. \n Too many tiny.cc links? <a href='http://tiny.cc/harkertiny'>tiny.cc/harkertiny</a>";
+        displayMessage = "Hungry? <a href='https://n3a9.github.io/harker-lunch/'>tiny.cc/lunchmenu</a>. \n Too many tiny.cc links? <a href='https://n3a9.github.io/harker-tiny/'>tiny.cc/harkertiny</a>.";
         if (isSameDate(date, new Date("12/12/16"))) {
             displayMessage += "<span style='font-weight:bold;color: red;'>Finals Disclaimer:</span> All morning exams have different call times divided by grade or course that are not displayed here. To see when you need to get to school, check out the official schedule <a href='http://resources.harker.org/download/us-final-exams-schedule/'>here</a>."
         }
