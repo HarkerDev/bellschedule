@@ -226,7 +226,7 @@ function setDisplayDate(time, force) {
             displayMessage += "<span style='font-weight:bold;color: red;'>Finals Disclaimer:</span> All morning exams have different call times divided by grade or course that are not displayed here. To see when you need to get to school, check out the official schedule <a href='http://resources.harker.org/download/us-final-exams-schedule/'>here</a>."
         }
         if (getMonday(date) > getMonday(new Date())) {
-            displayMessage += "<br>This is a future date, so the schedule may be incorrect. (In particular, special/alternate schedules may be missing.)"; //display warning if date is in the future
+            displayMessage += "<br>This is a future date, so the schedule may be incorrect."; //display warning if date is in the future
         }
 
         warn(displayMessage)
