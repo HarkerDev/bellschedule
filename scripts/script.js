@@ -221,12 +221,10 @@ function setDisplayDate(time, force) {
 
         displayDate = new Date(date);
 
-        displayMessage = "Hungry? <a href='https://n3a9.github.io/harker-lunch/'>tiny.cc/lunchmenu</a>. \n Too many tiny.cc links? <a href='https://n3a9.github.io/harker-tiny/'>tiny.cc/harkertiny</a>.";
-        if (isSameDate(date, new Date("12/12/16"))) {
-            displayMessage += "<span style='font-weight:bold;color: red;'>Finals Disclaimer:</span> All morning exams have different call times divided by grade or course that are not displayed here. To see when you need to get to school, check out the official schedule <a href='http://resources.harker.org/download/us-final-exams-schedule/'>here</a>."
-        }
+        displayMessage = "Peep HarkerDev and our work @ <a href='https://harkerdev.github.io/'>tiny.cc/harkerdev</a>."
+        displayMessage += "<br>Hungry? <a href='https://n3a9.github.io/harker-lunch/'>tiny.cc/lunchmenu</a>.";
         if (getMonday(date) > getMonday(new Date())) {
-            displayMessage += "<br>This is a future date, so the schedule may be incorrect."; //display warning if date is in the future
+            displayMessage += "<br>Future schedules may be incorrect."; //display warning if date is in the future
         }
 
         warn(displayMessage)
