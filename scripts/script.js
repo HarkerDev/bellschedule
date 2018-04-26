@@ -60,11 +60,11 @@ var COLLABORATION_REPLACEMENTS = [
     "Collaboration -> Faculty Meeting",
     "Collaboration -> Office Hours",
     "Collaboration -> After School"
-]
+];
 
 var TOTAL_SCHEDULES = 8; //The number of schedules to be cycled
 
-var SCHEDULES = ["A", "B", "C", "D", "A", "B", "C", "D"]
+var SCHEDULES = ["A", "B", "C", "D", "A", "B", "C", "D"];
 
 var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -166,7 +166,7 @@ function initTitle() {
     document.getElementById("rightArrow").addEventListener("click", goNext);
 
     document.getElementById("refresh").addEventListener("click", function () {
-        updateSchedule(null, true)
+        updateSchedule(null, true);
     });
 
     setTitleTitle();
@@ -178,20 +178,20 @@ function initTitle() {
  */
 function parseRawSchedule() {
     var rawSchedules = document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
-    schedules = new Array();
+    schedules = [];
     var x = 0; //index in schedules
-    schedules[0] = new Array(); //create array of special schedule days
+    schedules[0] = []; //create array of special schedule days
 
     //loop through all lines in raw schedule text
     while (rawSchedules.length > 0) {
-        if (rawSchedules[0].length == 0) {
+        if (rawSchedules[0].length === 0) {
             //if line is empty, move to next index in schedules
-            schedules[++x] = new Array(); //could probably use id as index instead, or just properties
+            schedules[++x] = []; //could probably use id as index instead, or just properties
             rawSchedules.shift();
         } else {
             //if line has text, save in current location in schedules
             var str = rawSchedules.shift();
-            if (x == 0 && str.indexOf("|") >= 0) {
+            if (x === 0 && str.indexOf("|") >= 0) {
                 //behavior for blocks of dates with the same schedule
                 var start = new Date(str.substring(0, str.indexOf("|")));
                 var end = new Date(str.substring(str.indexOf("|") + 1, str.indexOf("\t")));
@@ -221,27 +221,14 @@ function setDisplayDate(time, force) {
 
         displayDate = new Date(date);
 
-        displayMessage = "Peep HarkerDev and our work @ <a href='https://harkerdev.github.io/'>tiny.cc/harkerdev</a>."
+        displayMessage = "Peep HarkerDev and our work @ <a href='https://harkerdev.github.io/'>tiny.cc/harkerdev</a>.";
         displayMessage += "<br>Hungry? <a href='https://n3a9.github.io/harker-lunch/'>tiny.cc/lunchmenu</a>.";
         if (getMonday(date) > getMonday(new Date())) {
             displayMessage += "<br>Future schedules may be incorrect."; //display warning if date is in the future
         }
 
-        warn(displayMessage)
+        warn(displayMessage);
 
-        //warn("Hungry? <a href='http://tiny.cc/lunchmenu' style='text-decoration:none;color:#000;'>http://tiny.cc/lunchmenu</a>")
-
-        /*warn("<b style='color:#FF8020'>UPDATE FROM STUCO!</b> Find out what Harker Student Council is working on for YOU at <a style='font-weight:bold' href='http://tiny.cc/harkerstuco'>tiny.cc/harkerstuco</a>!"
-              + "<br><b>Submit Honor Council Feedback: </b><a style='font-weight:bold' href=http://bit.ly/harkerfeedback>bit.ly/harkerfeedback</a>"
-              + "<br>Use this link <b>only</b> if you have concerns about possible breaches of academic integrity or wish to report Code of Conduct violations."
-              + "<br><b>Submit StuCo Feedback:</b> Email <a style='font-weight:bold' href=mailto:16GraceG@students.harker.org>16GraceG@students.harker.org</a>"
-              + "<br>Otherwise, direct your suggestions and concerns here."
-              +"<br><b>Dowload the new iOS app <a href='http://goo.gl/ZDMMRp'>here</a> to get live push notifications.</b>"); //else display message*/
-
-        /*
-          if(date.valueOf()==getMonday(new Date()).valueOf()) document.getElementById("currWeek").style.display = "none"; //hide back to current week button on current week
-          else document.getElementById("currWeek").style.display = "inline"; //else show the button
-        */
         while (schedule.rows.length) {
             schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...  
         }
@@ -269,12 +256,12 @@ function setDisplayDate(time, force) {
 function getDateFromUrlParams() {
     var date = new Date();
 
-    if (urlParams["y"] > 0 && urlParams["m"] > 0 && urlParams["d"] > 0) {
-        date = new Date("20" + urlParams["y"], urlParams["m"] - 1, urlParams["d"]);
+    if (urlParams['y'] > 0 && urlParams['m'] > 0 && urlParams['d'] > 0) {
+        date = new Date("20" + urlParams['y'], urlParams['m'] - 1, urlParams['d']);
     }
 
-    if (urlParams["m"] > 0 && urlParams["d"] > 0) {
-        date = new Date((new Date()).getFullYear(), urlParams["m"] - 1, urlParams["d"]);
+    if (urlParams['m'] > 0 && urlParams['d'] > 0) {
+        date = new Date((new Date()).getFullYear(), urlParams['m'] - 1, urlParams['d']);
     }
 
     if (!options.enableDayView) {
@@ -287,7 +274,7 @@ function getDateFromUrlParams() {
  * Displays the given warning or hides the warning div if no warning text is given.
  */
 function warn(text) {
-    var warning = document.getElementById("warning")
+    var warning = document.getElementById("warning");
 
     if (text) {
         warning.style.display = "block";
@@ -318,7 +305,7 @@ function createDay(week, date) {
     headWrapper.classList.add("headWrapper");
     var scheduleString = ""; //Should we display the schedule id (e.g. A) next to the date
     //Make sure not to display anything if daySchedule is empty
-    if (typeof daySchedule.name != 'undefined' || daySchedule.name != null) {
+    if (typeof daySchedule.name != 'undefined' || daySchedule.name !== null) {
         //Not a weekend, so add
         scheduleString = "(" + daySchedule.name + ")";
     }
@@ -408,7 +395,7 @@ function createDay(week, date) {
                         start,
                         end,
                         date
-                    )
+                    );
 
                     show1Time = daySchedule.id == 4 || daySchedule.id == "ReCreate";
                     show2Time = !(show1Time);
@@ -519,7 +506,7 @@ function getDayInfo(day) {
             //found special schedule
             if (schedules[0][i].indexOf("[") >= 0) { //check for period replacements
                 //cut replacements and space character out of id and save separately
-                id = schedules[0][i].substring(schedules[0][i].indexOf("\t") + 1, schedules[0][i].indexOf("[") - 1)
+                id = schedules[0][i].substring(schedules[0][i].indexOf("\t") + 1, schedules[0][i].indexOf("[") - 1);
                 replacements = schedules[0][i].substring(schedules[0][i].indexOf("[") + 1, schedules[0][i].indexOf("]")).split(",");
             } else {
                 // no replacements to be made
@@ -531,7 +518,7 @@ function getDayInfo(day) {
 
     if (id === undefined) { //no special schedule found
         id = day.getDay();
-        if (id == 0 || id == 6) {
+        if (id === 0 || id == 6) {
             index = id = 0; //no school on weekends  
         } else { //default schedule for that day
             id = calculateScheduleRotationID(day);
@@ -564,7 +551,7 @@ function getDayInfo(day) {
  * Gets the index in the list of schedules of the schedule with the given schedule id (or 0 if no matching schedules were found)
  */
 function getScheduleIndex(id) {
-    if (id == 0) {
+    if (id === 0) {
         return 0; //schedule id 0 represents no school
     }
     for (var i = 1; i < schedules.length; i++) { //find index of schedule id
@@ -586,7 +573,7 @@ function calculateScheduleRotationID(date) {
     //Factor out weekends
     daysDifference -= countWeekendDays(START_DATE, date);
     //Factor out holidays
-    var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/ //Finds dates of the format M(M)/D(D)/YY
+    var dateExp = /\d{1,2}\/\d{1,2}\/\d{2}/; //Finds dates of the format M(M)/D(D)/YY
     for (var i = 0; i < schedules[0].length; i++) {
         var entry = schedules[0][i];
 
@@ -602,7 +589,7 @@ function calculateScheduleRotationID(date) {
             //schedule rotation, don't consider it in the cycle. Furthermore, if the holiday
             //in question is on a weekend (as can happen for long breaks) do not consider it
             //as it has already been factored in in the prior weekend exclusion.
-            if (getScheduleIndex(entryId) == 0 && date >= entryDate && entryDate >= START_DATE && entryDate.getDay() != 0 && entryDate.getDay() != 6) {
+            if (getScheduleIndex(entryId) === 0 && date >= entryDate && entryDate >= START_DATE && entryDate.getDay() !== 0 && entryDate.getDay() != 6) {
                 daysDifference--;
             }
         }
@@ -621,7 +608,7 @@ function calculateScheduleRotationID(date) {
     }
 
     //Even schedules repeat (2 and 6 are the same and 4 and 8 are the same)
-    if (id > 4 && id % 2 == 0) {
+    if (id > 4 && id % 2 === 0) {
         id = id - 4;
     }
 
@@ -646,7 +633,7 @@ function createPeriod(parent, name, start, end, date, showTime) {
     periodWrapper.start = startDate;
     periodWrapper.end = endDate;
     var length = (endDate - startDate) / 60000;
-    if (options.color == true) {
+    if (options.color === true) {
         if (periodWrapper.periodName == "P1") {
             periodWrapper.classList.add("periodone");
         }
@@ -826,16 +813,16 @@ function updateSearch(week, noHistory) {
     }
 
     if (week.getDate() != curr.getDate() || week.getMonth() != curr.getMonth()) {
-        urlParams["m"] = week.getMonth() + 1;
-        urlParams["d"] = week.getDate();
+        urlParams['m'] = week.getMonth() + 1;
+        urlParams['d'] = week.getDate();
     } else {
-        delete urlParams["m"];
-        delete urlParams["d"];
+        delete urlParams['m'];
+        delete urlParams['d'];
     }
     if (week.getYear() != curr.getYear()) {
-        urlParams["y"] = week.getFullYear().toString().substr(-2);
+        urlParams['y'] = week.getFullYear().toString().substr(-2);
     } else {
-        delete urlParams["y"];
+        delete urlParams['y'];
     }
 
     var search = "?";
@@ -920,10 +907,10 @@ function setHighlightedPeriod(time) {
                 sendNotification(name + " has started.", options.notificationDuration);
             }
         }
-        for (var i = 0; i < diff2.length; i++) {
-            var name = prevPeriods[i].periodName;
-            if (name && !hasFocus) {
-                sendNotification(name + " has ended.", options.notificationDuration);
+        for (var j = 0; j < diff2.length; j++) {
+            var name2 = prevPeriods[j].periodName;
+            if (name2 && !hasFocus) {
+                sendNotification(name2 + " has ended.", options.notificationDuration);
             }
         }
     }
@@ -1076,7 +1063,7 @@ function createOptionSectionTitle(section) {
     th.colspan = 2;
     if (section.hasOwnProperty("tooltip")) {
         var span = document.createElement("span");
-        span.title = section["tooltip"];
+        span.title = section['tooltip'];
         span.innerHTML = section.name + '<sup class="tooltipIndicator">?</sup>';
         th.appendChild(span);
     } else {
