@@ -256,12 +256,12 @@ function setDisplayDate(time, force) {
 function getDateFromUrlParams() {
     var date = new Date();
 
-    if (urlParams['y'] > 0 && urlParams['m'] > 0 && urlParams['d'] > 0) {
-        date = new Date("20" + urlParams['y'], urlParams['m'] - 1, urlParams['d']);
+    if (urlParams.y > 0 && urlParams.m > 0 && urlParams.d > 0) {
+        date = new Date("20" + urlParams.y, urlParams.m - 1, urlParams.d);
     }
 
-    if (urlParams['m'] > 0 && urlParams['d'] > 0) {
-        date = new Date((new Date()).getFullYear(), urlParams['m'] - 1, urlParams['d']);
+    if (urlParams.m > 0 && urlParams.d > 0) {
+        date = new Date((new Date()).getFullYear(), urlParams.m - 1, urlParams.d);
     }
 
     if (!options.enableDayView) {
@@ -813,16 +813,16 @@ function updateSearch(week, noHistory) {
     }
 
     if (week.getDate() != curr.getDate() || week.getMonth() != curr.getMonth()) {
-        urlParams['m'] = week.getMonth() + 1;
-        urlParams['d'] = week.getDate();
+        urlParams.m = week.getMonth() + 1;
+        urlParams.d = week.getDate();
     } else {
-        delete urlParams['m'];
-        delete urlParams['d'];
+        delete urlParams.m;
+        delete urlParams.d;
     }
     if (week.getYear() != curr.getYear()) {
-        urlParams['y'] = week.getFullYear().toString().substr(-2);
+        urlParams.y = week.getFullYear().toString().substr(-2);
     } else {
-        delete urlParams['y'];
+        delete urlParams.y;
     }
 
     var search = "?";
@@ -901,16 +901,16 @@ function setHighlightedPeriod(time) {
         var diff1 = currPeriods.diff(prevPeriods);
         var diff2 = prevPeriods.diff(currPeriods);
 
-        for (var i = 0; i < diff1.length; i++) {
+        for (i = 0; i < diff1.length; i++) {
             var name = currPeriods[i].periodName;
             if (name && !hasFocus) {
                 sendNotification(name + " has started.", options.notificationDuration);
             }
         }
-        for (var j = 0; j < diff2.length; j++) {
-            var name2 = prevPeriods[j].periodName;
-            if (name2 && !hasFocus) {
-                sendNotification(name2 + " has ended.", options.notificationDuration);
+        for (i = 0; i < diff2.length; i++) {
+            name = prevPeriods[i].periodName;
+            if (name && !hasFocus) {
+                sendNotification(name + " has ended.", options.notificationDuration);
             }
         }
     }
@@ -1063,7 +1063,7 @@ function createOptionSectionTitle(section) {
     th.colspan = 2;
     if (section.hasOwnProperty("tooltip")) {
         var span = document.createElement("span");
-        span.title = section['tooltip'];
+        span.title = section.tooltip;
         span.innerHTML = section.name + '<sup class="tooltipIndicator">?</sup>';
         th.appendChild(span);
     } else {
@@ -1275,7 +1275,7 @@ function updateClock() {
     var h = now.getHours();
     var h12 = h % 12;
     var m = now.getMinutes();
-    document.getElementById('currentTime').innerHTML = (h12 == 0 ? 12 : h12) + ":" + addLeadingZero(m) + (h >= 12 ? " PM" : " AM");
+    document.getElementById('currentTime').innerHTML = (h12 === 0 ? 12 : h12) + ":" + addLeadingZero(m) + (h >= 12 ? " PM" : " AM");
 }
 
 /**
@@ -1309,5 +1309,5 @@ function findNumberOfOccurences(str, char) {
 function countWeekendDays(start, end) {
     var numDays = 1 + Math.round((end.getTime() - start.getTime()) / MILLIS_PER_DAY);
     var numSat = Math.floor((start.getDay() + numDays) / 7);
-    return 2 * numSat + (start.getDay() == 0) - (end.getDay() == 6);
+    return 2 * numSat + (start.getDay() === 0) - (end.getDay() == 6);
 }
