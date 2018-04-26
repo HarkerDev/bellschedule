@@ -634,41 +634,31 @@ function createPeriod(parent, name, start, end, date, showTime) {
     periodWrapper.end = endDate;
     var length = (endDate - startDate) / 60000;
     if (options.color === true) {
-        if (periodWrapper.periodName == "P1") {
-            periodWrapper.classList.add("periodone");
+
+
+        switch(periodWrapper.periodName) {
+            case "P1":
+                periodWrapper.classList.add("periodone");
+                break;
+            case "P2":
+                periodWrapper.classList.add("periodtwo");
+                break;
+            case "P3":
+                periodWrapper.classList.add("periodthree");
+                break;
+            case "P4":
+                periodWrapper.classList.add("periodfour");
+                break;
+            case "P5":
+                periodWrapper.classList.add("periodfive");
+                break;
+            case "P6":
+                periodWrapper.classList.add("periodsix");
+                break;
+            case "P7":
+                periodWrapper.classList.add("periodseven");
+                break;
         }
-        if (periodWrapper.periodName == "P2") {
-            periodWrapper.classList.add("periodtwo");
-        }
-        if (periodWrapper.periodName == "P3") {
-            periodWrapper.classList.add("periodthree");
-        }
-        if (periodWrapper.periodName == "P4") {
-            periodWrapper.classList.add("periodfour");
-        }
-        if (periodWrapper.periodName == "P5") {
-            periodWrapper.classList.add("periodfive");
-        }
-        if (periodWrapper.periodName == "P6") {
-            periodWrapper.classList.add("periodsix");
-        }
-        if (periodWrapper.periodName == "P7") {
-            periodWrapper.classList.add("periodseven");
-        }
-        /*if (periodWrapper.periodName == "Lunch") {
-            periodWrapper.classList.add("lunchtime");
-        }*/
-        /*if (periodWrapper.periodName == "School Meeting" || periodWrapper.periodName == "Advisory") {
-            periodWrapper.classList.add("meeting");
-        }
-        if (periodWrapper.periodName == "Office Hours") {
-            periodWrapper.classList.add("officehours");
-        }
-        if (periodWrapper.periodName == "Club Leadership" || periodWrapper.periodName == "Junior Mtg." ||
-            periodWrapper.periodName == "Soph Mtg." || periodWrapper.periodName == "Frosh Mtg." ||
-            periodWrapper.periodName == "Senior Mtg.") {
-            periodWrapper.classList.add("meetingtwo");
-        }*/
     }
     if (length > 0) {
         periodWrapper.style.height = (length - 1) + "px"; //minus 1 to account for 1px border
@@ -848,7 +838,6 @@ function setHighlightedPeriod(time) {
     date.setHours(0, 0, 0, 0);
 
     //clear previous highlighted day/periods
-    //TODO: maybe it would be better to not clear highlights when nothing needs to be changed.
     var prevDay = document.getElementById("today");
     var prevPeriods = [];
     if (prevDay) {
@@ -901,14 +890,14 @@ function setHighlightedPeriod(time) {
         var diff1 = currPeriods.diff(prevPeriods);
         var diff2 = prevPeriods.diff(currPeriods);
 
-        for (i = 0; i < diff1.length; i++) {
-            var name = currPeriods[i].periodName;
+        for (var j = 0; j < diff1.length; j++) {
+            var name = currPeriods[j].periodName;
             if (name && !hasFocus) {
                 sendNotification(name + " has started.", options.notificationDuration);
             }
         }
-        for (i = 0; i < diff2.length; i++) {
-            name = prevPeriods[i].periodName;
+        for (var k = 0; k < diff2.length; k++) {
+            name = prevPeriods[k].periodName;
             if (name && !hasFocus) {
                 sendNotification(name + " has ended.", options.notificationDuration);
             }
