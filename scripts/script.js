@@ -222,6 +222,7 @@ function setDisplayDate(time, force) {
         displayDate = new Date(date);
 
         displayMessage = "It's been a journey, but we made it <a href='https://n3a9.github.io/harker-2018/'>#harker2018</a>.";
+        displayMessage += "<br>Hungry? <a href='https://n3a9.github.io/harker-lunch/'>tiny.cc/lunchmenu</a>.";
         if (getMonday(date) > getMonday(new Date())) {
             displayMessage += "<br>Future schedules may be incorrect."; //display warning if date is in the future
         }
