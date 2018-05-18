@@ -223,7 +223,7 @@ function setDisplayDate(time, force) {
 
         //displayMessage = "It's been a journey, but we made it <a href='https://n3a9.github.io/harker-2018/'>#harker2018</a>.";
         displayMessage = "Find the AP exam schedule at <a href='https://apcentral.collegeboard.org/pdf/exam-schedule-2018.pdf'>tiny.cc/ap18</a>."
-        displayMessage += "<br>Hungry? <a href='https://n3a9.github.io/harker-lunch/'>tiny.cc/lunchmenu</a>.";
+        displayMessage += "<br>Say bye to the HarkerDev member best at telling you what's not for lunch!";
         if (getMonday(date) > getMonday(new Date())) {
             displayMessage += "<br>Future schedules may be incorrect."; //display warning if date is in the future
         }
