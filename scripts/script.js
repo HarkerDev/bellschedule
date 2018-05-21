@@ -64,7 +64,7 @@ var COLLABORATION_REPLACEMENTS = [
 
 var TOTAL_SCHEDULES = 8; //The number of schedules to be cycled
 
-var SCHEDULES = ["A", "B", "C", "D", "D", "B", "C", "D"];
+var SCHEDULES = ["A", "B", "C", "D", "A", "B", "C", "D"];
 
 var MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
