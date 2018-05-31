@@ -1,0 +1,755 @@
+8/27/15	44
+9/7/15	Labor Day
+9/8/15	O2	[Class Meeting->School Meeting]
+9/18/15	51
+9/28/15	Fall Break
+10/2/15	54
+10/7/15	31a
+10/8/15	47
+10/12/15	O2
+10/13/15	O3
+10/14/15	PSAT
+10/21/15	31
+10/22/15	41	[Assembly/Advisory->Advisory]
+10/26/15	Fall Break
+10/29/15	41	[Assembly/Advisory->Assembly]
+11/6/15	51
+11/11/15	31
+11/13/15	51
+11/19/15	47
+11/23/15|11/27/15	Thanksgiving Break
+12/10/15	41
+12/11/15	58
+12/14/15	O1	[School Meeting->Extra Help]
+12/15/15	F16 s1d1
+12/16/15	F16 s1d2
+12/17/15	F16 s1d3
+12/18/15	F16 s1d4
+12/19/15|1/3/16	Winter Break
+1/15/16	B1
+1/18/16	Holiday
+1/28/16	B3
+2/1/16	4	[Advisory->Class Meeting]
+2/2/16	B2
+2/3/16	1
+2/4/16	4
+2/5/16	3
+2/7/16|2/15/16	Presidents Week
+3/1/16	21	[Class Meeting->Assembly]
+3/9/16	31	[Assembly->Advisory]
+3/10/16	41
+3/11/16	53
+3/18/16	57
+3/22/16	2B
+3/23/16	3
+3/24/16	No School
+3/25/16	No School
+3/26/16|4/2/16	Spring Break
+4/5/16	21
+4/12/16	O2	[Class Meeting->ReCreate Reading]
+4/13/16	31
+4/21/16	45a
+4/22/16	54
+4/26/16	21
+5/3/16	25
+5/9/16	O1	[School Meeting->Extra Help]
+5/10/16	O2	[Class Meeting->Extra Help]
+5/17/16	32
+5/18/16	O4
+5/19/16	26
+5/26/16	41
+5/30/16	No School
+5/31/16	O1	[School Meeting->Extra Help]
+6/1/16	F16 s2d1
+6/2/16	F16	s2d2
+6/3/16	F16 s2d3
+6/9/16|8/18/16	Summer Break
+8/19/16	Matriculation
+8/25/16	ReCreate
+9/5/16	Labor Day
+9/12/16	31a
+9/13/16	44
+9/30/16	Fall Break
+10/6/16	41
+10/18/16	4	[Advisory->School Meeting]
+10/19/16	PSAT
+10/31/16	Fall Break
+11/3/16	27
+11/4/16	31b
+11/7/16	41
+11/9/16	2	[School Meeting->Advisory]
+11/11/16	4	[Advisory->School Meeting]
+11/15/16	2b
+11/17/16	4b
+11/21/16	PTC
+11/22/16	PTC
+11/23/16|11/25/16	Thanksgiving Break
+11/28/16	2	[School Meeting->Advisory]
+12/6/16	4b	[Advisee Reviews->Advisory]
+12/9/16	32
+12/12/16	46
+12/13/16	F16 s1d1
+12/14/16	F16 s1d2
+12/15/16	F16 s1d3
+12/16/16	F16 s1d4
+12/17/16|1/2/17		Winter Break
+1/4/17	2c
+1/9/17	5
+1/10/17	22
+1/16/17	MLKDay
+1/26/17	12
+1/27/17	25
+2/2/17	29
+2/3/17	31a
+2/7/17	13
+2/8/17	28
+2/13/17|2/20/17	PresWeekBreak
+3/10/17	21
+3/14/17	4b
+3/16/17	2b
+3/20/17	4c
+3/30/17|3/31/17	ParentTeacherConferences
+4/3/17|4/7/17	SpringBreak
+4/11/17	5
+4/12/17	2d
+4/14/17	4	[Advisory->School Meeting]
+4/17/17	1	[Soph Mtg.->Senior Mtg.]
+4/24/17	2b	[Advisee Reviews->Regatta]
+4/28/17	21b
+5/4/17	2b	[Advisee Reviews->Office Hours]
+5/5/17	3b
+5/10/17	2b	[Advisee Reviews->Office Hours]
+5/18/17	47
+5/25/17	5
+5/26/17	2b	[Advisee Reviews->Advisory]
+5/29/17	MemorialDay
+6/1/17	7a
+6/2/17	2e
+6/5/17	1a
+6/6/17	F17 s2d1
+6/7/17	F17 s2d2
+6/8/17	F17 s2d3
+6/9/17|8/25/17	Summer
+8/25/17	Matriculation 2017
+8/31/17	ReCreate
+9/4/17	Labor Day
+9/21/17	2f
+9/22/17	32b
+9/25/17	45
+9/26/17	7a
+9/27/17	2g
+9/28/17	5a
+9/29/17	Fall Break
+10/4/17	21c
+10/11/17	PSAT
+10/13/17	4	[Office Hours->Service Fair]
+10/17/17	27
+10/18/17	31a
+10/25/17	40
+10/27/17	20
+10/30/17	Fall Break
+11/7/17	41
+11/13/17	4a
+11/15/17	2b
+11/17/17	4b
+11/20/17|11/24/17	Thanksgiving Break
+11/28/17	71
+12/6/17	4b	[Advisee Reviews->Advisory]
+12/8/17	2b	[Advisee Reviews->Holiday Show]
+12/12/17	F17 s1d1
+12/13/17	F17 s1d2
+12/14/17	F17 s1d3
+12/15/17	F17 s1d4
+12/18/17|1/1/18	Winter Break
+1/4/18	2c
+1/10/18	21d
+1/12/18	40b [Honor Council Assembly->Assembly]
+1/15/18	MLKDay
+1/25/18	41b
+1/31/18	4e
+2/2/18	21e
+2/7/18	13
+2/8/18	28b
+2/12/18|2/19/18	PresWeekBreak
+2/26/18	41c
+3/14/18	4f
+3/16/18	2b
+3/20/18	41b
+3/22/18	2d
+3/23/18	31c
+3/26/18	44
+3/28/18	2c
+4/2/18|4/6/18	Spring Break
+4/16/18	2d
+4/30/18	4b	[Advisee Reviews->Regatta]
+5/4/18	41d
+5/8/18	2b	[Advisee Reviews->Office Hours]
+5/9/18	3b
+5/11/18	1b
+5/14/18	2b	[Advisee Reviews->Office Hours]
+5/15/18	3b
+5/17/18	1b
+5/18/18	2b	[Advisee Reviews->Office Hours]
+5/24/18	72
+5/28/18	Memorial Day
+5/30/18	15
+5/31/18	2b	[Advisee Reviews->Office Hours]
+6/1/18	33
+6/4/18	48
+6/5/18	F18 s2d1
+6/6/18	F18 s2d2
+6/7/18	F18 s2d3
+6/8/18|8/22/18	Summer
+
+1
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch||Senior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+2
+P5	8:00-9:25
+School Meeting	9:35-10:05
+Office Hours	10:10-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+3
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch||Junior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+4
+P5	8:00-9:25
+Advisory	9:35-10:05
+Office Hours	10:10-10:40
+P7	10:50-12:15
+Lunch||Lunch|Club Leadership	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+5
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch||Soph Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+<!--Skips 6 to have a gap for a cycling B schedule-->
+7
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+<!--Custom Schedules-->
+4a
+P5	8:00-9:25
+Office Hours	9:35-10:05
+Advisory	10:10-10:40
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+7a
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+5a
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch||Soph Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+1a
+Late Start - No Classes	8:00-8:50
+P1	8:50-9:35
+Office Hours	9:45-10:45
+P4	10:55-11:40
+Lunch	11:45-12:35
+P2	12:45-1:30
+P3	1:40-2:25
+Collaboration	2:35-3:30
+
+1b
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch	11:10-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+2b
+P5	8:00-9:25
+Advisee Reviews	9:35-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+2c
+P5	8:00-9:25
+Senior Mtg. (Atrium)||School Mtg. (Gym, G9-11)|Office Hours	9:35-10:40||9:35-10:05|10:10-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+2d
+P5	8:00-9:25
+Senior Mtg.||School Mtg. (G9-G11)	9:35-10:40||9:35-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+2e
+Late Start - No Classes	8:00-8:50
+P5	8:50-9:35
+Office Hours	9:45-11:05
+P6	11:15-12:00
+Lunch	12:05-1:05
+P7	1:15-2:00
+Office Hours	2:10-3:00
+
+2f
+P5	8:00-9:25
+School Meeting	9:35-10:05
+Office Hours	10:10-10:40
+P6	10:50-12:15
+Parade	12:20-12:45
+Lunch	12:45-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+2g
+P5	8:00-9:25
+Frosh Mtg.||School Mtg.	9:35-10:05||9:35-10:05
+Office Hours	10:10-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+3b
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch	11:10-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+4b
+P5	8:00-9:25
+Advisee Reviews	9:35-10:40
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+4c
+P5	8:00-9:25
+Senior Mtg.||School Mtg.	9:35-10:40||9:35-10:40
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+4d
+P5	8:00-9:25
+Advisory	9:35-10:05
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+4e
+P5	8:00-9:25
+Frosh Mtg.||Advisory|Office Hours	9:35-10:40||9:35-10:05|10:10-10:40
+P7	10:50-12:15
+Lunch	12:20-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+4f
+P5	8:00-9:25
+Advisee Reviews	9:35-10:00
+Vigil + Activism	10:00-10:45
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+12
+P1	8:00-9:25
+Eagle Buddies (G11-12)||LIFE (G9-G10)|Lunch	9:35-11:50||9:35-10:35|10:35-11:50
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+13
+Office Hours	9:00-9:25
+P2	9:35-11:00
+Lunch||Soph Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+15
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch||Junior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+20
+P5	8:00-9:25
+Advisory	9:35-10:05
+Office Hours	10:10-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+21
+P5	8:00-9:25
+P6	9:35-11:00
+Eagle Buddies(G11)||LIFE/EB (G9,10/12)|Lunch	11:10-1:25||11:10-12:40|12:40-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+21b
+P5	8:00-9:25
+P6	9:35-11:00
+Spirit Rally	11:10-12:10
+Lunch	12:10-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+21c
+P5	8:00-9:25
+P6	9:35-11:00
+Eagle Buddies (10/12)||LIFE (G9/11)|Lunch	11:10-1:25||11:10-12:10|12:10-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+21d
+P5	8:00-9:25
+P6	9:35-11:00
+Assembly	11:10-12:10
+Lunch	12:15-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+21e
+P5	8:00-9:25
+P6	9:35-11:00
+Eagle Buddies (G10)||LIFE (G9,11-12)|Lunch	10:45-1:25||11:10-12:10|12:10-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+22
+P5	8:00-9:25
+Eagle Buddies (G10)||LIFE (G9,11-12)|Lunch	9:35-11:50||9:35-10:35|10:35-11:50
+P6	12:00-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+25
+P5	8:00-9:25
+P2	9:35-11:00
+Lunch||Senior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P6	12:00-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+27
+P5	8:00-9:25
+P2	9:35-11:00
+Lunch||Junior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P6	12:00-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+28
+P5	8:00-9:25
+P1	9:35-11:00
+Lunch	11:10-11:55
+P6	12:00-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+28b
+P5	8:00-9:25
+P1	9:35-11:00
+Lunch||Senior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P6	12:00-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+29
+P5	8:00-9:25
+P2	9:35-11:00
+Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P6	12:00-1:25
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+31a
+P1	8:00-9:25
+P4	9:35-11:00
+Assembly (9/10)|Lunch||Lunch|Assembly (11/12)	11:10-12:00|12:00-1:25||11:10-12:20|12:30-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+31b
+P1	8:00-9:25
+P4	9:35-11:00
+Rally	11:10-12:10
+Lunch	12:10-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+31c
+P1	8:00-9:25
+P4	9:35-11:00
+Hoscars (9/10)|Lunch||Lunch|Hoscars (11/12)	11:10-12:00|12:00-1:25||11:10-12:20|12:30-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
+32
+P1	8:00-9:20
+Holiday Show	9:30-10:40
+Lunch	10:50-11:50
+P2	12:00-1:25
+P3	1:35-3:00
+
+32b
+P1	8:00-9:25
+Rally	9:35-10:35
+Lunch	10:35-11:50
+P2	12:00-1:25
+P3	1:35-3:00
+
+33
+P1	8:50-9:35
+Office Hours	9:45-10:45
+P4	10:55-11:40
+Lunch	11:40-12:35
+P2	12:45-1:30
+P3	1:40-2:25
+Office Hours	2:35-3:00
+
+40
+P5	8:00-9:25
+Honor Council Assembly	9:35-10:40
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+40b
+P5	8:00-9:25
+P7	9:35-11:00
+Honor Council Assembly	11:10-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+41
+P5	8:00-9:25
+P7	9:35-11:00
+Eagle Buddies (G11)||LIFE (G9-10,12)|Lunch	11:10-1:25||11:10-12:10|12:10-1:25
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+41b
+P5	8:00-9:25
+P7	9:35-11:00
+Eagle Buddies (G11-12)||LIFE (G9-10)|Lunch	11:10-1:25||11:10-12:10|12:10-1:25
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+41c
+P5	8:00-9:25
+P7	9:35-11:00
+Assembly (Ath. Center)	11:10-12:10
+Lunch	12:15-1:25
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+41d
+P5	8:00-9:25
+P7	9:35-11:00
+Spirit Rally	11:10-12:10
+Lunch	12:15-1:25
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+44
+P5	8:00-9:25
+P2	9:35-11:00
+Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P7	12:00-1:25
+P6	1:35-3:00
+Office Hours	3:10-3:30
+
+45
+P5	8:00-9:25
+P4	9:35-11:00
+Lunch||Junior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P7	12:00-1:25
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+46
+P5	8:00-9:25
+P4	9:35-11:00
+Lunch||Frosh Mtg.|Lunch	11:10-11:50||11:10-11:25|11:25-11:50
+P7	12:00-1:25
+P6	1:35-3:00
+
+47
+P5	8:00-9:25
+P7	9:35-11:00
+Lunch	11:10-11:50
+P6	12:00-1:25
+
+48
+P5	8:50-9:35
+Office Hours	9:45-11:05
+P7	11:15-12:00
+Lunch	12:00-1:05
+P6	1:15-2:00
+Office Hours	2:10-3:30
+
+71
+P5	8:00-9:25
+Office Hours	9:35-10:05
+P6	10:15-11:40
+Lunch	11:50-12:55
+P7	1:00-2:25
+Collaboration	2:35-3:30
+
+72
+P5	8:00-9:25
+P6	9:35-11:00
+Lunch	11:10-11:50
+P7	12:00-1:25
+
+F16 s1d1
+English	8:00-12:30
+Lunch	12:30-1:30
+Language	1:30-3:30
+
+F16 s1d2
+Math	8:00-12:30
+Lunch	12:30-1:30
+Computer Science	1:30-3:30
+
+F16 s1d3
+Chemistry (G10)/Biology	8:00-12:30
+Lunch	12:30-1:30
+Physics (G9)/Economics	1:30-3:30
+
+F16 s1d4
+US/Euro/World 2	8:00-12:30
+Lunch	12:30-1:30
+World 1/Chem (G11)/Physics (G10-12)	1:30-3:30
+
+F17 s2d1
+World 1 / Hon World 1	8:00-10:00
+World 2 / Hon World 2 / US / Hon US	10:30-12:30
+Lunch	12:30-1:30
+Physics / Hon Physics / Prog / Adv Prog / Econ	1:30-3:30
+
+F17 s2d2
+Chinese / French / Japanese / Latin	8:00-10:00
+Spanish	10:30-12:30
+Lunch	12:30-1:30
+Chem / Hon Chem / Bio / Hon Bio	1:30-3:30
+
+F17 s2d3
+Alg 2 / Hon Alg 2	8:00-10:00
+Alg 1 / Geo / Hon Geo / Precalc| || |Hon Precalc	9:00-11:00|11:00-12:30||9:00-10:30|10:30-12:30
+Lunch	12:30-1:30
+
+F17 s1d1
+Geo / Alg 2 / Hon Alg 2 / Precalc (Momenian)	8:00-10:00
+AP Calc AB / AP Calc BC / Hon Calc C| || |Honors Precalc / Precalc (Thiele) / Calc	9:00-11:00|11:00-12:30||9:00-10:30|10:30-12:30
+Lunch	12:30-1:30
+Alg 1 / Hon Geo / Prog / Adv Prog / AP CSA DS	1:30-3:30
+
+F17 s1d2
+Hon Chem / AP Chem (10G)	8:00-10:00
+Chemistry / Hon Biology (Pistacchi)| || |AP Bio (11G) / Biology / Hon Biology (Blickenstaff, Harley)	9:00-11:00|11:00-12:30||9:00-10:30|10:30-12:30
+Lunch	12:30-1:30
+Physics / Hon Physics / AP Physics C / AP Chem (11G)	1:30-3:30
+
+F17 s1d3
+English 1 / Hon English 1	8:00-10:00
+English 2 / Hon English 2 (Siraganian, Hurshman)| || |Hon English 2 (Manning) / English 3 / Hon English 3	9:00-11:00|11:00-12:30||9:00-10:30|10:30-12:30
+Lunch	12:30-1:30
+Chinese / French / Japanese / Latin / Spanish	1:30-3:30
+
+F17 s1d4
+Hon US / AP US (Wheeler) / US History	8:00-10:00
+AP US (Rees) / World History 2| || |Hon World 2 / AP Euro / AP World	9:00-11:00|11:00-12:30||9:00-10:30|10:30-12:30
+Lunch	12:30-1:30
+World 1 / Hon World 1 / Economics	1:30-3:30
+
+F18 s2d1
+Econ / Physics / Hon Phys (Brada,Radice)| || |Prog / Adv Prog / Hon Phys (Allersma)	8:00-10:00|10:00-11:00||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+World 1 / Hon World 1 / Hon World 2 / US His / Hon US His	12:30-2:30
+
+F18 s2d2
+Spanish / French 2 / French 4 / Hon French 4| || |Chinese / Japanese / Latin / French 1 / French 3 / Hon Fr 3	8:00-10:00|10:00-11:00||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+Chem / Hon Chem / Hon Bio	12:30-2:30
+
+F18 s2d3
+Alg 1 / Geo / Hon Geo / Hon Alg 2| || |Alg 2 / Precalculus / Hon Precalc (Adler)	8:00-10:00|10:00-10:30||8:00-9:00|9:00-11:00
+Hon Precalc (Lieberman, Muldrew, Stahl) / Calc| || |Lunch	10:30-12:30|12:30-1:00||10:30-11:00|11:00-1:00
+
+Matriculation
+Matriculation Ceremony	9:45-10:30
+Advisory	10:30-11:30
+Lunch	11:30-12:15
+Meeting/Photos	12:15-1:00
+Photos	1:00-2:00
+
+ReCreate
+P5	8:00-9:25
+Advisory/ReCreate	9:35-10:40
+P7	10:50-12:15
+Lunch||Lunch|Club Leaders	12:20-1:30||12:20-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+Matriculation
+Matriculation (All Students)	9:00-1:00
+Matriculation (Grades 9-11)	1:00-2:00
+Matriculation (New Students)	2:00-2:30
+
+Matriculation 2017
+Matriculation (All Students)	9:00-2:00
+Matriculation (Grade 9)	2:00-2:30
+Matriculation (New Students)	2:30-3:00
