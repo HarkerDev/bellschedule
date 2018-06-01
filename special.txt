@@ -1,3 +1,4 @@
+8/21/15	Matriculation
 8/27/15	44
 9/7/15	Labor Day
 9/8/15	O2	[Class Meeting->School Meeting]
@@ -242,7 +243,7 @@ Lunch||Soph Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
 P3	12:00-1:25
 P4	1:35-3:00
 Collaboration	3:10-3:30
-<!--Skips 6 to have a gap for a cycling B schedule-->
+
 7
 P1	8:00-9:25
 P4	9:35-11:00
@@ -251,7 +252,6 @@ P2	12:00-1:25
 P3	1:35-3:00
 Collaboration	3:10-3:30
 
-<!--Custom Schedules-->
 4a
 P5	8:00-9:25
 Office Hours	9:35-10:05
@@ -752,4 +752,4 @@ Matriculation (New Students)	2:00-2:30
 Matriculation 2017
 Matriculation (All Students)	9:00-2:00
 Matriculation (Grade 9)	2:00-2:30
-Matriculation (New Students)	2:30-3:00
+Matriculation (New Students)	2:30-3:00xx
