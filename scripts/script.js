@@ -142,21 +142,15 @@ function updateUrlParams() {
 addEventListener("load", function (event) {
     initViewport();
     initTitle();
-    download("special.txt", function(data) {
-        rawSchedDataReceived(data, function() {
-            download("options.json", function(data) {
-                console.log(data)
-                createOptions(data);
-                updateSchedule(null, false, true);
-            }, displayOptionsError)
-        })
-    }, error);
+    $.get("special.txt", function(data) {
+        parseRawSchedule(data);
+        updateSchedule(null, false, true);
+    });
+    $.get("options.json", function(data) {
+        createOptions(JSON.stringify(data));
+        updateSchedule(null, false, true);
+    });
 });
-
-function rawSchedDataReceived(data, callback) {
-    rawSchedule = data;
-    parseRawSchedule(data, callback);
-}
 
 function error() {
     console.log("error downloading");
@@ -184,7 +178,9 @@ function initTitle() {
         updateSchedule(null, true);
     });
 
-    download("titles.txt", function(data){titleStr = data;}, error)
+    $.get("titles.txt", function(data) {
+        titleStr = data;
+    });
 }
 
 function checkDoge() {
@@ -205,7 +201,7 @@ function checkDoge() {
  * Parses raw schedule in body of page into schedule array
  * Code is questionable <- ya think
  */
-function parseRawSchedule(data, callback) {
+function parseRawSchedule(data) {
     var rawSchedules = data.split("\n"); //get raw schedule text
     //var rawSchedules = document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
     schedules = [];
@@ -236,7 +232,7 @@ function parseRawSchedule(data, callback) {
             }
         }
     }
-    callback();
+    //callback();
 }
 
 /**
