@@ -142,14 +142,14 @@ function updateUrlParams() {
 addEventListener("load", function (event) {
     initViewport();
     initTitle();
-    $.get("special.txt", function(data) {
+    $.ajax({url: "special.txt", success: function(data) {
         parseRawSchedule(data);
         updateSchedule(null, false, true);
-    });
-    $.get("options.json", function(data) {
+    }, cache: false});
+    $.ajax({url: "options.json", success: function(data) {
         createOptions(JSON.stringify(data));
         updateSchedule(null, false, true);
-    });
+    }, cache: false});
 });
 
 function error() {
@@ -178,9 +178,9 @@ function initTitle() {
         updateSchedule(null, true);
     });
 
-    $.get("titles.txt", function(data) {
+    $.ajax({url: "titles.txt", success: function(data) {
         titleStr = data;
-    });
+    }, cache: false});
 }
 
 function checkDoge() {
