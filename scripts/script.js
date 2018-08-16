@@ -47,7 +47,7 @@ var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
 //var isDoge;
 
-var START_DATE = new Date('January 22, 2018'); //The start day of the school year. This should be a weekday.
+var START_DATE = new Date('August 27, 2018'); //The start day of the school year. This should be a weekday.
 
 var START_SCHEDULE = 1; //The schedule on the first day
 
@@ -222,7 +222,7 @@ function setDisplayDate(time, force) {
         displayDate = new Date(date);
 
         //displayMessage = "It's been a journey, but we made it <a href='https://n3a9.github.io/harker-2018/'>#harker2018</a>.";
-        displayMessage = "Say bye to the HarkerDev member best at telling you what's not for lunch!";
+        displayMessage = "Tell a freshman about tiny.cc/hsbell!";
         if (getMonday(date) > getMonday(new Date())) {
             displayMessage += "<br>Future schedules may be incorrect."; //display warning if date is in the future
         }
