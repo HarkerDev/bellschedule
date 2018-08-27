@@ -191,7 +191,7 @@ function checkDoge() {
         dogeCounter = 7;
         setTitleTitle(titleStr)
     } else {
-        setTitleTitle("You are " + dogeCounter + " steps away from becoming a developer!")
+        setTitleTitle("You are " + dogeCounter + (dogeCounter == 1 ? "step" : "steps") + " away from becoming a developer!")
     }
 }
 
@@ -466,8 +466,8 @@ function makePeriodNameReplacements(periodName, replacements) {
 function setTitleTitle(data, time) {
     var date = (time ? new Date(time) : getDateFromUrlParams());
     var titles = data.split("\n");
+    titles.pop();
     displayMessage = titles[Math.floor(Math.random() * titles.length)];
-    //"Say bye to the HarkerDev member best at telling you what's not for lunch!";
     if (getMonday(date) > getMonday(new Date())) {
         displayMessage += futureWarning; //display warning if date is in the future
     }
