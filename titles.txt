@@ -53,3 +53,4 @@ Gluten free!
 Knows where you live!
 Not infallible!
 Click me!
+Now with async!
