@@ -1039,7 +1039,7 @@ function createOptions(data) {
 
     initOptions();
     attachOptionActions();
-    updateSchedule(null, true);
+    updateSchedule(null, true, true);
 }
 
 /**
