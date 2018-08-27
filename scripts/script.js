@@ -144,11 +144,9 @@ addEventListener("load", function (event) {
     initTitle();
     $.ajax({url: "special.txt", success: function(data) {
         parseRawSchedule(data);
-        updateSchedule(null, false, true);
-    }, cache: false});
-    $.ajax({url: "options.json", success: function(data) {
-        createOptions(JSON.stringify(data));
-        updateSchedule(null, false, true);
+        $.ajax({url: "options.json", success: function(data) {
+            createOptions(JSON.stringify(data));
+        }, cache: false});
     }, cache: false});
 });
 
