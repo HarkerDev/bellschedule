@@ -18,18 +18,18 @@ function setDogeDelay(delay) { suchDelay = delay; }
 function setDogeMax(max) { maxDoge = max; }
 
 function startDoge(delay) {
-	document.body.style.backgroundImage = "url('http://harkerdev.github.io/bellschedule/doge.jpg')";
-	
+	document.body.style.backgroundImage = "url('asset/doge.jpg')";
+
 	suchIntervalID = setInterval("swapDogeDiv()", delay);
 	swapDogeDiv();
 }
 
 function stopDoge() {
 	document.body.style.backgroundImage = "";
-	
+
 	clearInterval(suchIntervalID);
 	suchIntervalID = null;
-	
+
 	var doge = document.getElementsByClassName("doge");
 	for(var i=0;i<doge.length;i++) removeDogeDiv(doge[i]);
 }
@@ -37,21 +37,21 @@ function stopDoge() {
 function createDogeDiv() {
 	var dogeDiv = document.createElement("div");
 	var text = document.createTextNode(Math.random()<.1 ? "wow" : (choose(suchAdjectives) + " " + choose(suchNouns)));
-	
+
 	dogeDiv.classList.add("doge");
 	dogeDiv.appendChild(text);
-	
+
 	dogeDiv.style.font = "bold " + randInt(15,50) + "px 'Comic Sans MS'";
 	dogeDiv.style.color = "hsl(" + randInt(360) + ",100%,50%)";
 	dogeDiv.style.transform = dogeDiv.style.webkitTransform = "rotate(" + randInt(-30,30) + "deg)";
-	
+
 	dogeDiv.style.position = "fixed";
 	dogeDiv.style.opacity = "0"; //render invisible once to calculate width/height
 	dogeDiv.style.transition = dogeDiv.style.webkitTransition = "opacity .2s";
-	
+
 	document.body.appendChild(dogeDiv);
-	
-	/* 
+
+	/*
 	 * randomize position, but make sure dogeDiv doesn't overflow off right/bottom of window
 	 * all the dogeDivide by 2 nonsense accounts for rotation
 	 *     (length of a side of a triangle must be less than the sum of the lengths of the other two sides)

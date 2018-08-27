@@ -33,6 +33,13 @@
 					"default": false,
 					"mobileDefault": true,
 					"description": "Enable day view"
+				},
+				{
+					"name": "enableDoge",
+					"type": "checkbox",
+					"default": false,
+					"mobileDefault": false,
+					"description": "Enable doge"
 				}
 			]
 		},

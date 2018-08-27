@@ -25,7 +25,11 @@ Array.prototype.diff = function (a) {
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; //days of the week in string form
 var schedules; //array of schedules (each schedule is an array in this array
 var mobile = isMobile();
-
+var rawSchedule = "";
+var titles = [];
+var titleStr = "";
+var futureWarning = "<br>Future schedules may be incorrect.";
+var dogeCounter = 7;
 /**
  * Globals
  */
@@ -45,7 +49,7 @@ var KEY_DOWN = 40;
 var KEY_A = 65;
 var KEY_B = 66;
 var KONAMI = "" + KEY_UP + KEY_UP + KEY_DOWN + KEY_DOWN + KEY_LEFT + KEY_RIGHT + KEY_LEFT + KEY_RIGHT + KEY_B + KEY_A;
-//var isDoge;
+var isDoge;
 
 var START_DATE = new Date('August 27, 2018'); //The start day of the school year. This should be a weekday.
 
@@ -138,14 +142,17 @@ function updateUrlParams() {
 addEventListener("load", function (event) {
     initViewport();
     initTitle();
-    parseRawSchedule();
-
-    //updateSchedule();
-    //updateClock();
-    download("options.json", createOptions, displayOptionsError);
-
-    //isDoge = false;
+    $.ajax({url: "special.txt", success: function(data) {
+        parseRawSchedule(data);
+        $.ajax({url: "options.json", success: function(data) {
+            createOptions(JSON.stringify(data));
+        }, cache: false});
+    }, cache: false});
 });
+
+function error() {
+    console.log("error downloading");
+}
 
 function initViewport() {
     if (mobile) {
@@ -160,8 +167,8 @@ function initViewport() {
 /**
  * Adds appropriate event listeners to items in the schedule title.
  */
+log = console.log.bind(console);
 function initTitle() {
-    document.getElementById("header").addEventListener("click", setTitleTitle);
     document.getElementById("leftArrow").addEventListener("click", goLast);
     document.getElementById("rightArrow").addEventListener("click", goNext);
 
@@ -169,15 +176,32 @@ function initTitle() {
         updateSchedule(null, true);
     });
 
-    setTitleTitle();
+    $.ajax({url: "titles.txt", success: function(data) {
+        titleStr = data;
+    }, cache: false});
+}
+
+function checkDoge() {
+    dogeCounter -= 1;
+    if(dogeCounter == 0) {
+        setDoge(true);
+        setTitleTitle("doge")
+    } else if(dogeCounter < 0) {
+        setDoge(false);
+        dogeCounter = 7;
+        setTitleTitle(titleStr)
+    } else {
+        setTitleTitle("You are " + dogeCounter + " steps away from becoming a developer!")
+    }
 }
 
 /**
  * Parses raw schedule in body of page into schedule array
- * Code is questionable
+ * Code is questionable <- ya think
  */
-function parseRawSchedule() {
-    var rawSchedules = document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
+function parseRawSchedule(data) {
+    var rawSchedules = data.split("\n"); //get raw schedule text
+    //var rawSchedules = document.getElementById("schedules").textContent.split("\n"); //get raw schedule text
     schedules = [];
     var x = 0; //index in schedules
     schedules[0] = []; //create array of special schedule days
@@ -206,6 +230,7 @@ function parseRawSchedule() {
             }
         }
     }
+    //callback();
 }
 
 /**
@@ -213,24 +238,12 @@ function parseRawSchedule() {
  */
 function setDisplayDate(time, force) {
     var date = (time ? new Date(time) : getDateFromUrlParams()); //variable to keep track of current day in loop
-
     setDayBeginning(date);
-
     if (force || !displayDate || (date.valueOf() != displayDate.valueOf())) {
         var schedule = document.getElementById("schedule"); //get schedule table
-
         displayDate = new Date(date);
-
-        //displayMessage = "It's been a journey, but we made it <a href='https://n3a9.github.io/harker-2018/'>#harker2018</a>.";
-        displayMessage = "Tell a freshman about tiny.cc/hsbell!";
-        if (getMonday(date) > getMonday(new Date())) {
-            displayMessage += "<br>Future schedules may be incorrect."; //display warning if date is in the future
-        }
-
-        warn(displayMessage);
-
         while (schedule.rows.length) {
-            schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...  
+            schedule.deleteRow(-1); //clear existing weeks (rows); there should only be one, but just in case...
         }
 
         var week = schedule.insertRow(-1); //create new week (row)
@@ -450,9 +463,15 @@ function makePeriodNameReplacements(periodName, replacements) {
 /**
  * Sets the title of the title to a random line from the title titles list
  */
-function setTitleTitle() {
-    var titles = document.getElementById("titleTitles").textContent.split("\n");
-    document.getElementById("title").title = titles[Math.floor(Math.random() * titles.length)];
+function setTitleTitle(data, time) {
+    var date = (time ? new Date(time) : getDateFromUrlParams());
+    var titles = data.split("\n");
+    displayMessage = titles[Math.floor(Math.random() * titles.length)];
+    //"Say bye to the HarkerDev member best at telling you what's not for lunch!";
+    if (getMonday(date) > getMonday(new Date())) {
+        displayMessage += futureWarning; //display warning if date is in the future
+    }
+    warn(displayMessage);
 }
 
 /**
@@ -461,9 +480,9 @@ function setTitleTitle() {
 function getMonday(d) {
     var date = new Date(d);
     if (date.getDay() >= 6) {
-        date.setDate(date.getDate() + 2); //set date to next Monday if today is Saturday  
+        date.setDate(date.getDate() + 2); //set date to next Monday if today is Saturday
     } else {
-        date.setDate(date.getDate() - date.getDay() + 1); //else set date Monday of this week  
+        date.setDate(date.getDate() - date.getDay() + 1); //else set date Monday of this week
     }
     setDayBeginning(date); //set to beginning of day
     return date;
@@ -484,7 +503,7 @@ function getDateFromString(string, date) {
     var hour = string.substring(0, string.indexOf(":"));
     var min = string.substring(string.indexOf(":") + 1);
     if (hour < 7) {
-        hour = parseInt(hour, 10) + 12; //assumes hours less than seven are PM and hours 7 or greater are AM  
+        hour = parseInt(hour, 10) + 12; //assumes hours less than seven are PM and hours 7 or greater are AM
     }
     return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, min);
 }
@@ -519,7 +538,7 @@ function getDayInfo(day) {
     if (id === undefined) { //no special schedule found
         id = day.getDay();
         if (id === 0 || id == 6) {
-            index = id = 0; //no school on weekends  
+            index = id = 0; //no school on weekends
         } else { //default schedule for that day
             id = calculateScheduleRotationID(day);
             index = getScheduleIndex(id);
@@ -556,7 +575,7 @@ function getScheduleIndex(id) {
     }
     for (var i = 1; i < schedules.length; i++) { //find index of schedule id
         if (id == schedules[i][0]) {
-            return i; //found specified schedule id  
+            return i; //found specified schedule id
         }
     }
     return 0; //couldn't find specified schedule
@@ -769,7 +788,7 @@ function create3SubPeriods(parent, name1, start1, end1, name2, start2, end2, nam
 function goLast() {
     var date = new Date(displayDate);
     date.setDate(date.getDate() - (options.enableDayView ? 1 : 7));
-    updateSchedule(date);
+    updateSchedule(date, false, true);
     updateSearch(date);
 }
 
@@ -779,7 +798,7 @@ function goLast() {
 function goNext() {
     var date = new Date(displayDate);
     date.setDate(date.getDate() + (options.enableDayView ? 1 : 7));
-    updateSchedule(date);
+    updateSchedule(date, false, true);
     updateSearch(date);
 }
 
@@ -909,8 +928,13 @@ function setHighlightedPeriod(time) {
  * Updates schedule to display as it would on the given date/time; defaults to now if none is given.
  * Also updates
  */
-function updateSchedule(time, force) {
+function updateSchedule(time, force, title) {
     setDisplayDate(time, force);
+    document.getElementById("warning").removeEventListener("click", (options.enableDoge ? null : checkDoge));
+    document.getElementById("warning").addEventListener("click", (options.enableDoge ? checkDoge : null));
+    if (title) {
+        setTitleTitle(titleStr, time);
+    }
     setHighlightedPeriod();
 }
 
@@ -1120,6 +1144,11 @@ function attachOptionActions() {
             }
         }
     });
+
+    document.getElementsByName("enableDoge")[0].addEventListener("change", function(event) {
+        document.getElementById("warning").removeEventListener("click", (options.enableDoge ? null : checkDoge));
+        document.getElementById("warning").addEventListener("click", (options.enableDoge ? checkDoge : null));
+    })
 
     document.body.classList.add(options.enableDayView ? "day" : "week");
     document.getElementsByName("enableDayView")[0].addEventListener("change", function (event) {
