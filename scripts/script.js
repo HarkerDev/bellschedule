@@ -28,6 +28,7 @@ var mobile = isMobile();
 var rawSchedule = "";
 var titles = [];
 var titleStr = "";
+var forceTitle = false;
 var futureWarning = "<br>Future schedules may be incorrect.";
 var dogeCounter = 7;
 /**
@@ -191,7 +192,7 @@ function checkDoge() {
         dogeCounter = 7;
         setTitleTitle(titleStr)
     } else {
-        setTitleTitle("You are " + dogeCounter + (dogeCounter == 1 ? "step" : "steps") + " away from becoming a developer!")
+        setTitleTitle("You are " + dogeCounter + (dogeCounter == 1 ? " step" : " steps") + " away from becoming a developer!")
     }
 }
 
@@ -466,7 +467,7 @@ function makePeriodNameReplacements(periodName, replacements) {
 function setTitleTitle(data, time) {
     var date = (time ? new Date(time) : getDateFromUrlParams());
     var titles = data.split("\n");
-    titles.pop();
+    if (titles.length > 1) titles.pop();
     displayMessage = titles[Math.floor(Math.random() * titles.length)];
     if (getMonday(date) > getMonday(new Date())) {
         displayMessage += futureWarning; //display warning if date is in the future
@@ -932,7 +933,8 @@ function updateSchedule(time, force, title) {
     setDisplayDate(time, force);
     document.getElementById("warning").removeEventListener("click", (options.enableDoge ? null : checkDoge));
     document.getElementById("warning").addEventListener("click", (options.enableDoge ? checkDoge : null));
-    if (title) {
+    if (title || forceTitle) {
+        forceTitle = true;
         setTitleTitle(titleStr, time);
     }
     setHighlightedPeriod();
