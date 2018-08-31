@@ -23,7 +23,6 @@ Only in English!
 Object-oriented!
 Mostly JavaScript!
 Not explosive!
-Thanks Obama!
 Don't be late to class!
 Not a poem!
 Two words long!
@@ -50,7 +49,6 @@ Thoughtful!
 Uses JSON!
 Functional!
 Gluten free!
-Knows where you live!
 Not infallible!
 Click me!
 Now with async!
