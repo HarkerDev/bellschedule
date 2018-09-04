@@ -468,7 +468,8 @@ function setTitleTitle(data, time) {
     var date = (time ? new Date(time) : getDateFromUrlParams());
     var titles = data.split("\n");
     if (titles.length > 1) titles.pop();
-    displayMessage = titles[Math.floor(Math.random() * titles.length)];
+    //displayMessage = titles[Math.floor(Math.random() * titles.length)]; <-- for rotating messages
+    displayMessage = "Join HarkerDev at <a href='http://tiny.cc/joindev' target='_blank'>tiny.cc/joindev</a>";
     if (getMonday(date) > getMonday(new Date())) {
         displayMessage += futureWarning; //display warning if date is in the future
     }
