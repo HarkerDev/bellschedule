@@ -58,7 +58,7 @@ var START_SCHEDULE = 1; //The schedule on the first day
 
 var LINKS = {
     "Lunch": "https://tiny.cc/lunchmenu",
-    "School Meeting": "https://tiny.cc/schoolmeeting"
+    "School Meeting": "https://docs.google.com/forms/d/e/1FAIpQLSeZoCFQhzPqiX-Tbcc0qRUuw7_rjMgUxkiR97GN6aNB8Ulfsg/viewform?entry.1033439092=$MONTH%2F$DATE"
 }
 
 //On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.)
@@ -703,7 +703,7 @@ function createPeriod(parent, name, start, end, date, showTime) {
         if(LINKS[name]) {
             var linkWrapper = document.createElement("a");
             linkWrapper.className = "plain";
-            linkWrapper.href = LINKS[name];
+            linkWrapper.href = LINKS[name].split("$DATE").join(date.getDate()).split("$DAY").join(date.getDay() + 1).split("$FULLYEAR").join(date.getFullYear()).split("$MONTH").join(date.getMonth() + 1);
             linkWrapper.appendChild(periodWrapper);
             periodWrapper = linkWrapper;
         }
