@@ -17,6 +17,12 @@ a {
     color: #5043E4;
 }
 
+a.plain {
+    color: #000000;
+    text-decoration: none;
+    width: 158px;
+}
+
 button {
     color: #000;
     font-size: 12px;

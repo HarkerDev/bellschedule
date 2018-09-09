@@ -56,6 +56,10 @@ var START_DATE = new Date('August 27, 2018'); //The start day of the school year
 
 var START_SCHEDULE = 1; //The schedule on the first day
 
+var LINKS = {
+    "Lunch": "https://tiny.cc/lunchmenu",
+    "School Meeting": "https://tiny.cc/schoolmeeting"
+}
 
 //On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.)
 //to the particular function (e.g. Extra Help). This ultimately piggybacks on the replacement system.
@@ -694,6 +698,14 @@ function createPeriod(parent, name, start, end, date, showTime) {
             }
             //if(length>50 && !name.indexOf("P")) //handle block periods (class=long, i.e. bold text)
             //periodWrapper.classList.add("long");
+        }
+
+        if(LINKS[name]) {
+            var linkWrapper = document.createElement("a");
+            linkWrapper.className = "plain";
+            linkWrapper.href = LINKS[name];
+            linkWrapper.appendChild(periodWrapper);
+            periodWrapper = linkWrapper;
         }
         return parent.appendChild(periodWrapper);
     }
