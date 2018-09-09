@@ -208,6 +208,8 @@
 9/28/18	Fall Break
 10/10/18	PSAT
 10/29/18	Fall Break
+11/19/18|11/23/18	Thanksgiving Break
+12/24/18|1/4/19	Winter Break
 
 1
 P1	8:00-9:25
