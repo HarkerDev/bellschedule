@@ -58,7 +58,7 @@ var START_SCHEDULE = 1; //The schedule on the first day
 
 var LINKS = {
     "Lunch": "https://harkerdev.github.io/harker-lunch/#$DAYNAMELOWER$",
-    "School Meeting": "https://docs.google.com/forms/d/e/1FAIpQLSeZoCFQhzPqiX-Tbcc0qRUuw7_rjMgUxkiR97GN6aNB8Ulfsg/viewform?entry.1033439092=$MONTH%2F$DATE$"
+    "School Meeting": "https://docs.google.com/forms/d/e/1FAIpQLSeZoCFQhzPqiX-Tbcc0qRUuw7_rjMgUxkiR97GN6aNB8Ulfsg/viewform?entry.1033439092=$MONTH$%2F$DATE$"
 }
 
 //On a given day, independent of rotation, after school has a fixed function. This array maps the day (0 for Monday, etc.)
