@@ -206,6 +206,7 @@
 9/3/18	Labor Day
 9/20/18	2b	[Advisee Reviews->Assembly]
 9/28/18	Fall Break
+10/5/18	41e
 10/10/18	PSAT
 10/29/18	Fall Break
 11/19/18|11/23/18	Thanksgiving Break
@@ -611,6 +612,13 @@ Spirit Rally	11:10-12:10
 Lunch	12:15-1:25
 P6	1:35-3:00
 Collaboration	3:10-3:30
+
+41e
+P5	8:00-8:55
+P7	9:05-10:00
+Spirit Rally	10:10-11:05
+Lunch	11:10-12:00
+P6	12:05-1:00
 
 44
 P5	8:00-9:25
