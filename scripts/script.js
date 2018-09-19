@@ -57,7 +57,7 @@ var START_DATE = new Date('August 27, 2018'); //The start day of the school year
 var START_SCHEDULE = 1; //The schedule on the first day
 
 var LINKS = {
-    // "Lunch": "https://harkerdev.github.io/harker-lunch/#$DAYNAMELOWER$",
+    "Lunch": "https://harkerdev.github.io/harker-lunch/#$DAYNAMELOWER$",
     "School Meeting": "https://docs.google.com/forms/d/e/1FAIpQLSeZoCFQhzPqiX-Tbcc0qRUuw7_rjMgUxkiR97GN6aNB8Ulfsg/viewform?entry.1033439092=$MONTH$%2F$DATE$"
 }
 
