@@ -206,9 +206,15 @@
 9/3/18	Labor Day
 9/20/18	2b	[Advisee Reviews->Assembly]
 9/28/18	Fall Break
-10/5/18	41e
+10/3/18	2b	[Advisee Reviews->Parade]
+10/5/18	61
+10/8/18	7a
 10/10/18	PSAT
-10/12/18	41f
+10/11/18	5a
+10/12/18	41
+10/16/18	2h
+10/24/18	49
+10/26/18	2	[School Meeting->Advisory]
 10/29/18	Fall Break
 11/6/18	41
 11/19/18|11/23/18	Thanksgiving Break
@@ -354,6 +360,15 @@ Collaboration	3:10-3:30
 P5	8:00-9:25
 Frosh Mtg.||School Mtg.	9:35-10:05||9:35-10:05
 Office Hours	10:10-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
+2h
+P5	8:00-9:25
+School Mtg.	9:35-10:05
+Frosh Mtg.||Office Hours	10:10-10:40||10:10-10:40
 P6	10:50-12:15
 Lunch	12:20-1:30
 P7	1:35-3:00
@@ -588,7 +603,7 @@ Collaboration	3:10-3:30
 41
 P5	8:00-9:25
 P7	9:35-11:00
-Eagle Buddies (G11)||LIFE (G9-10/12)|Lunch	11:10-1:25||11:10-12:10|12:15-1:25
+Eagle Buddies (G11)||LIFE (G9-10/12)|Lunch	11:10-1:25||11:10-12:10|12:10-1:25
 P6	1:35-3:00
 Collaboration	3:10-3:30
 
@@ -610,22 +625,15 @@ Collaboration	3:10-3:30
 41d
 P5	8:00-9:25
 P7	9:35-11:00
-Spirit Rally	11:10-12:10
+Rally	11:10-12:10
 Lunch	12:15-1:25
 P6	1:35-3:00
 Collaboration	3:10-3:30
 
-41e
-P5	8:00-8:55
-P7	9:05-10:00
-Spirit Rally	10:10-11:05
-Lunch	11:10-12:00
-P6	12:05-1:00
-
 41f
 P5	8:00-9:25
 P7	9:35-11:00
-Eagle Buddies (G10/12)||LIFE (G9/11)|Lunch	11:10-1:25||11:10-12:10|12:15-1:25
+Eagle Buddies (G10/12)||LIFE (G9/11)|Lunch	11:10-1:25||11:10-12:10|12:10-1:25
 P6	1:35-3:00
 Collaboration	3:10-3:30
 
@@ -665,6 +673,19 @@ P7	11:15-12:00
 Lunch	12:00-1:05
 P6	1:15-2:00
 Office Hours	2:10-3:30
+
+49
+P5	8:00-9:25
+P7	9:35-11:00
+Assembly (G9-10)|Lunch||Lunch|Assembly (G11-12)	11:10-12:10|12:10-1:25||11:10-12:15|12:25-1:25
+P6	1:35-3:00
+
+61
+P5	8:00-8:55
+P7	9:05-10:00
+Spirit Rally	10:10-11:10
+Lunch	11:10-12:00
+P6	12:05-1:00
 
 71
 P5	8:00-9:25
