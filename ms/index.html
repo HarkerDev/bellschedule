@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="shortcut icon" href="asset/favicon.ico" />
+
+<link rel="apple-touch-icon" href="asset/logo.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<title>Bell Schedule</title>
+<script type="text/javascript" src="scripts/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/script.min.js"></script>
+
+<script type="text/javascript" src="scripts/doge.js"></script>
+
+<script>
+var color = false;
+
+function toggleColor(){
+	color = !color;
+	updateSchedule(displayDate, true);
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+
+</head>
+
+<body>
+
+<div id="header" class="noHighlight">
+	<h1>
+		<span id="leftArrow" title="Last Week">&#8249;</span>
+		<span id="rightArrow" title="Next Week">&#8250;</span>
+		<span id="title">Bell Schedule</span>
+	</h1>
+	<div id="warning"></div>
+</div>
+
+<!--<div class="noHighlight" id="currWeekWrapper" class="noHighlight"><h2>
+	<button class="noHighlight" type="button" id="currWeek" title="Go to Current Week" onclick="goCurrWeek()">Current Week</button>
+</h2></div>-->
+<!--<input type="button" value="Current Week" id = "currWeek" title = "Current Week" onclick="goCurrWeek()">-->
+
+<div id="container">
+	<table id="schedule"></table>
+</div>
+<div id="refresh" class="noHighlight" title="Update Schedule">&#8635;</div><!--&#8681;-->
+<div id="version"><a href="https://github.com/HarkerDev/bellschedule/releases" title="Changelog">V1.6.0</a></div>
+
+<div id="options">
+	<div id="optionsArrow" class="noHighlight">&#8598;</div>
+	<h2 id="optionsTitle">Options</h2>
+	<table id="optionsContent"></table>
+	<div id="repo">
+		<a href="https://github.com/HarkerDev/bellschedule" target="_blank" title="GitHub repository">GitHub repository</a>
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61981098-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
+</html>

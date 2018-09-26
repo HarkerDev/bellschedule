@@ -1,0 +1,93 @@
+{
+	"sections": [
+		{
+			"name": "General",
+			"options": [
+				{
+					"name": "color",
+					"type": "checkbox",
+					"default": true,
+					"description": "Show color"
+				},
+				{
+					"name": "showPassingPeriods",
+					"type": "checkbox",
+					"default": false,
+					"description": "Show passing periods"
+				},
+				{
+					"name": "enablePeriodNotifications",
+					"type": "checkbox",
+					"default": false,
+					"description": "Enable period change notifications"
+				},
+				{
+					"name": "notificationDuration",
+					"type": "number",
+					"default": 5,
+					"description": "Notification display time (seconds)"
+				},
+				{
+					"name": "enableDayView",
+					"type": "checkbox",
+					"default": false,
+					"mobileDefault": true,
+					"description": "Enable day view"
+				},
+				{
+					"name": "enableDoge",
+					"type": "checkbox",
+					"default": false,
+					"mobileDefault": false,
+					"description": "Enable doge"
+				}
+			]
+		},
+		{
+			"name": "Automatic Updating",
+			"tooltip": "Set to 0 to disable automatic updating",
+			"options": [
+				{
+					"name": "activeUpdateInterval",
+					"type": "number",
+					"default": 10,
+					"description": "Active update interval (seconds)",
+					"tooltip": "Applies while tab is selected and window is active"
+				},
+				{
+					"name": "inactiveUpdateInterval",
+					"type": "number",
+					"default": 30,
+					"description": "Inactive update interval (seconds)",
+					"tooltip": "Applies while tab is selected, but window is not active"
+				},
+				{
+					"name": "hiddenUpdateInterval",
+					"type": "number",
+					"default": 30,
+					"description": "Hidden update interval (seconds)",
+					"tooltip": "Applies while tab is not selected or window is minimized"
+				}
+			]
+		},
+		{
+			"name": "Override Refresh",
+			"tooltip": "Override default keyboard shortcuts for refresh and update the schedule instead.&#13;(Only really useful with automatic updating disabled.)",
+			"platforms": ["desktop"],
+			"options": [
+				{
+					"name": "interceptF5",
+					"type": "checkbox",
+					"default": false,
+					"description": "Override F5"
+				},
+				{
+					"name": "interceptCtrlR",
+					"type": "checkbox",
+					"default": false,
+					"description": "Override Ctrl/Cmd-R"
+				}
+			]
+		}
+	]
+}
