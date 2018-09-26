@@ -1005,9 +1005,9 @@ function initOptions() {
 
     var inputs = opt.getElementsByTagName("input");
 
-    if (localStorage.updateScheduleInterval) {
+    if (localStorage.msupdateScheduleInterval) {
         //rename key
-        localStorage.activeUpdateInterval = localStorage.updateScheduleInterval;
+        localStorage.msactiveUpdateInterval = localStorage.msupdateScheduleInterval;
         localStorage.removeItem("updateScheduleInterval");
     }
 
@@ -1016,33 +1016,33 @@ function initOptions() {
         //special cases because localStorage saves values as strings
         if (input.type == "checkbox") { //booleans
             input.addEventListener("change", function (event) {
-                options[event.target.name] = localStorage[event.target.name] = event.target.checked;
+                options[event.target.name] = localStorage["ms"+event.target.name] = event.target.checked;
             });
 
-            if (localStorage[input.name]) {
-                options[input.name] = input.checked = localStorage[input.name] == "true";
+            if (localStorage["ms"+input.name]) {
+                options[input.name] = input.checked = localStorage["ms"+input.name] == "true";
             } else {
-                options[input.name] = localStorage[input.name] = input.checked;
+                options[input.name] = localStorage["ms"+input.name] = input.checked;
             }
         } else if (input.type == "number") { //numbers
             input.addEventListener("change", function (event) {
-                options[event.target.name] = parseInt(localStorage[event.target.name] = event.target.value);
+                options[event.target.name] = parseInt(localStorage["ms"+event.target.name] = event.target.value);
             });
 
-            if (localStorage[input.name]) {
-                options[input.name] = parseInt(input.value = localStorage[input.name]);
+            if (localStorage["ms"+input.name]) {
+                options[input.name] = parseInt(input.value = localStorage["ms"+input.name]);
             } else {
-                options[input.name] = parseInt(localStorage[input.name] = input.value);
+                options[input.name] = parseInt(localStorage["ms"+input.name] = input.value);
             }
         } else { //strings
             input.addEventListener("change", function (event) {
-                options[event.target.name] = localStorage[event.target.name] = event.target.value;
+                options[event.target.name] = localStorage["ms"+event.target.name] = event.target.value;
             });
 
-            if (localStorage[input.name]) {
-                options[input.name] = input.value = localStorage[input.name];
+            if (localStorage["ms"+input.name]) {
+                options[input.name] = input.value = localStorage["ms"+input.name];
             } else {
-                options[input.name] = localStorage[input.name] = input.value;
+                options[input.name] = localStorage["ms"+input.name] = input.value;
             }
         }
     }
