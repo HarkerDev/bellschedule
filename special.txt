@@ -383,7 +383,7 @@ Collaboration	3:10-3:30
 P5	8:00-9:25
 School Mtg.	9:35-10:05
 Office Hours	10:10-10:25
-P6	10:35-12:50
+P6	10:35-12:15
 Lunch	12:20-1:30
 P7	1:35-3:00
 Collaboration	3:10-3:30
