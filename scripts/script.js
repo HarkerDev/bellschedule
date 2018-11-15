@@ -473,7 +473,7 @@ function setTitleTitle(data, time) {
     var titles = data.split("\n");
     if (titles.length > 1) titles.pop();
     //displayMessage = titles[Math.floor(Math.random() * titles.length)]; <-- for rotating messages
-    displayMessage = "Join HarkerDev at <a href='http://tiny.cc/joindev' target='_blank'>tiny.cc/joindev</a>";
+    displayMessage = "Bring donations for the victims of Camp Fire to the Journalism room.";
     if (getMonday(date) > getMonday(new Date())) {
         displayMessage += futureWarning; //display warning if date is in the future
     }
