@@ -278,7 +278,7 @@ function getDateFromUrlParams() {
         date = new Date("20" + urlParams.y, urlParams.m - 1, urlParams.d);
     }
 
-    if (urlParams.m > 0 && urlParams.d > 0) {
+    else if (urlParams.m > 0 && urlParams.d > 0) {
         date = new Date((new Date()).getFullYear(), urlParams.m - 1, urlParams.d);
     }
 
