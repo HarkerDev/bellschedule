@@ -234,9 +234,9 @@
 1/10/19	4g
 1/21/19 MLKDay
 1/31/19	21f
-2/11/19|2/18/19 Presidents' Break
-4/1/19|4/5/19 Spring Break
-5/27/19 Memorial Day
+2/11/19|2/18/19	Presidents' Break
+4/1/19|4/5/19	Spring Break
+5/27/19	Memorial Day
 
 1
 P1	8:00-9:25
