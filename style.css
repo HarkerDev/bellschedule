@@ -330,7 +330,7 @@ table {
     -moz-box-sizing: content-box;
     position: fixed;
     right: -50%;
-    bottom: -70%;
+    bottom: -90%;
     border-left: 1px solid gray;
     border-top: 1px solid gray;
     border-top-left-radius: 5px;
@@ -338,12 +338,13 @@ table {
     /*width: 30px;
 	height: 30px;*/
     width: 50%;
-    height: 70%;
+    height: 90%;
     background-color: rgba(207, 207, 207, 0.9);
     color: #333;
     transition: right .5s, bottom .5s, padding .5s, border-top-left-radius .5s;
     -webkit-transition: right .5s, bottom .5s, padding .5s border-top-left-radius .5s;
     z-index: 10;
+    overflow-y: scroll;
 }
 
 #options.mobile {

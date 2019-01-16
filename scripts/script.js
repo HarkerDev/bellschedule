@@ -690,6 +690,9 @@ function createPeriod(parent, name, start, end, date, showTime) {
 
         if (length >= 15) {
             if (name) {
+                if (name.length == 2 && name[0] == 'P' && name[1] >= 1 && name[1] <= 7 && localStorage.getItem("period" + name[1]) != "") {
+                    name = localStorage.getItem("period" + name[1]) + " (" + name + ")";
+                }
                 periodWrapper.innerHTML = name;
             }
             //Force long periods (30 minutes and up) to have a time
@@ -1144,6 +1147,27 @@ function attachOptionActions() {
         updateSchedule(null, true);
     });
     document.getElementsByName("color")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period1")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period2")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period3")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period4")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period5")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period6")[0].addEventListener("change", function (event) {
+        updateSchedule(null, true);
+    });
+    document.getElementsByName("period7")[0].addEventListener("change", function (event) {
         updateSchedule(null, true);
     });
 
