@@ -690,8 +690,8 @@ function createPeriod(parent, name, start, end, date, showTime) {
 
         if (length >= 15) {
             if (name) {
-                if (name.length == 2 && name[0] == 'P' && name[1] >= 1 && name[1] <= 7 && localStorage.getItem("period" + name[1]) != "") {
-                    name = localStorage.getItem("period" + name[1]) + " (" + name + ")";
+                if (name.length == 2 && name[0] == 'P' && name[1] >= 1 && name[1] <= 7 && options["period" + name[1]] != "") {
+                    name = options["period" + name[1]] + " (" + name + ")";
                 }
                 periodWrapper.innerHTML = name;
             }
