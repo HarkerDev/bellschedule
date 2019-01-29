@@ -1149,27 +1149,12 @@ function attachOptionActions() {
     document.getElementsByName("color")[0].addEventListener("change", function (event) {
         updateSchedule(null, true);
     });
-    document.getElementsByName("period1")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
-    document.getElementsByName("period2")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
-    document.getElementsByName("period3")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
-    document.getElementsByName("period4")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
-    document.getElementsByName("period5")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
-    document.getElementsByName("period6")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
-    document.getElementsByName("period7")[0].addEventListener("change", function (event) {
-        updateSchedule(null, true);
-    });
+    //Adds listeners to update schedule when period names are changed
+    for (var i = 1; i <= 7; i++) {
+      document.getElementsByName("period" + i)[0].addEventListener("change", function (event) {
+         updateSchedule(null, true);
+     });
+    }
 
     document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function (event) {
         if (options.enablePeriodNotifications) {

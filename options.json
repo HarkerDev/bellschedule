@@ -49,43 +49,43 @@
 			"options": [
 				{
 					"name": "period1",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 1 Class"
 				},
 				{
 					"name": "period2",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 2 Class"
 				},
 				{
 					"name": "period3",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 3 Class"
 				},
 				{
 					"name": "period4",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 4 Class"
 				},
 				{
 					"name": "period5",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 5 Class"
 				},
 				{
 					"name": "period6",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 6 Class"
 				},
 				{
 					"name": "period7",
-					"type": "string",
+					"type": "text",
 					"default": "",
 					"description": "Period 7 Class"
 				}
