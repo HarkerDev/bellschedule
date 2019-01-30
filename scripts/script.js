@@ -689,6 +689,9 @@ function createPeriod(parent, name, start, end, date, showTime) {
 
         if (length >= 15) {
             if (name) {
+                if (name.length == 2 && name[0] == 'P' && name[1] >= 1 && name[1] <= 7 && options["period" + name[1]] != "") {
+                    name = options["period" + name[1]] + " (" + name + ")";
+                }
                 periodWrapper.innerHTML = name;
             }
             //Force long periods (30 minutes and up) to have a time
@@ -1145,6 +1148,12 @@ function attachOptionActions() {
     document.getElementsByName("color")[0].addEventListener("change", function (event) {
         updateSchedule(null, true);
     });
+    //Adds listeners to update schedule when period names are changed
+    for (var i = 1; i <= 7; i++) {
+      document.getElementsByName("period" + i)[0].addEventListener("change", function (event) {
+         updateSchedule(null, true);
+     });
+    }
 
     document.getElementsByName("enablePeriodNotifications")[0].addEventListener("change", function (event) {
         if (options.enablePeriodNotifications) {
