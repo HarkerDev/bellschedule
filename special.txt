@@ -244,6 +244,8 @@
 3/22/19	41b
 4/1/19|4/5/19	Spring Break
 5/27/19	Memorial Day
+6/7/19|8/22/19	Summer
+8/23/19	Matriculation
 
 1
 P1	8:00-9:25
@@ -641,7 +643,7 @@ P3	1:40-2:25
 Office Hours	2:35-3:00
 
 36
-Office Hours	9:00-9:25
+AMC	8:00-9:25
 P4	9:35-11:00
 Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
 P2	12:00-1:25
