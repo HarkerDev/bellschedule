@@ -261,6 +261,8 @@ function setDisplayDate(time, force) {
                 date.setDate(date.getDate() + 1); //increment day
             }
         } else {
+            if(date.getDay()==0 || date.getDay==6) goNext();
+            date = getNextWeekday(date);
             createDay(week, date);
         }
     }
@@ -488,6 +490,19 @@ function getMonday(d) {
         date.setDate(date.getDate() + 2); //set date to next Monday if today is Saturday
     } else {
         date.setDate(date.getDate() - date.getDay() + 1); //else set date Monday of this week
+    }
+    setDayBeginning(date); //set to beginning of day
+    return date;
+}
+
+/**
+ * Returns Monday if date is Saturday or Sunday; else returns the current day
+ */
+function getNextWeekday(d) {
+    var date = new Date(d);
+    if (date.getDay() == 0 || date.getDay() == 6) {
+        goNext();
+        return getMonday(d);
     }
     setDayBeginning(date); //set to beginning of day
     return date;
@@ -803,7 +818,13 @@ function create3SubPeriods(parent, name1, start1, end1, name2, start2, end2, nam
  */
 function goLast() {
     var date = new Date(displayDate);
-    date.setDate(date.getDate() - (options.enableDayView ? 1 : 7));
+    if(!options.enableDayView) {
+        date.setDate(date.getDate() - 7);
+    }
+    else {
+        date.setDate(date.getDate() - 1);
+        while(date.getDay() == 0 || date.getDay() == 6) date.setDate(date.getDate() - 1);
+    }
     updateSchedule(date, false, true);
     updateSearch(date);
 }
@@ -813,7 +834,13 @@ function goLast() {
  */
 function goNext() {
     var date = new Date(displayDate);
-    date.setDate(date.getDate() + (options.enableDayView ? 1 : 7));
+    if(!options.enableDayView) {
+        date.setDate(date.getDate() + 7);
+    }
+    else {
+        date.setDate(date.getDate() + 1);
+        while(date.getDay()==0 || date.getDay()==6) date.setDate(date.getDate() + 1);
+    }
     updateSchedule(date, false, true);
     updateSearch(date);
 }
