@@ -414,7 +414,7 @@ Collaboration	3:10-3:30
 
 2j
 P5	8:00-9:25
-School Meeting	9:30-10:05
+School Meeting	9:35-10:05
 Advisee Reviews	10:10-10:40
 P6	10:50-12:15
 Lunch	12:20-1:30
