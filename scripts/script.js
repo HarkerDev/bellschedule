@@ -147,13 +147,30 @@ function updateUrlParams() {
 addEventListener("load", function (event) {
     initViewport();
     initTitle();
-    $.ajax({url: "special.txt", success: function(data) {
+
+
+    httpGet("special.txt?x=y", (data) => {
         parseRawSchedule(data);
-        $.ajax({url: "options.json", success: function(data) {
+        httpGet('options.json?x=y', (data)=>{
             createOptions(JSON.stringify(data));
-        }, cache: false});
-    }, cache: false});
+        });
+    });
 });
+
+
+function httpGet(fileName, contentFunction){
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function(data){
+        if (xhr.status >= 200 && xhr.status < 300){
+            contentFunction(data);
+        }
+    }
+    xhr.open('GET', fileName);
+    xhr.send();
+}
+
+httpGet(createOptions)
+
 
 function error() {
     console.log("error downloading");
@@ -176,14 +193,15 @@ log = console.log.bind(console);
 function initTitle() {
     document.getElementById("leftArrow").addEventListener("click", goLast);
     document.getElementById("rightArrow").addEventListener("click", goNext);
-
+    
     document.getElementById("refresh").addEventListener("click", function () {
         updateSchedule(null, true);
     });
 
-    $.ajax({url: "titles.txt", success: function(data) {
+    httpGet('titles.txt?x=y', (data) => {
         titleStr = data;
-    }, cache: false});
+    });
+
 }
 
 function checkDoge() {
