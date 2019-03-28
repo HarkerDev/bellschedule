@@ -245,6 +245,11 @@
 3/20/19	20
 3/22/19	41b
 4/1/19|4/5/19	Spring Break
+4/10/19	4b	[Advisee Reviews->ROAR]
+4/12/19	21b
+4/16/19	4c
+4/22/19	4b	[Advisee Reviews->Assembly]
+4/24/19	20b
 5/27/19	Memorial Day
 6/7/19|8/22/19	Summer
 8/23/19	Matriculation
@@ -519,6 +524,14 @@ Lunch	12:20-1:30
 P7	1:35-3:00
 Collaboration	3:10-3:30
 
+20b
+P5	8:00-9:25
+Senior Mtg.||Class Speeches	9:35-10:40||9:35-10:40
+P6	10:50-12:15
+Lunch	12:20-1:30
+P7	1:35-3:00
+Collaboration	3:10-3:30
+
 21
 P5	8:00-9:25
 P6	9:35-11:00
@@ -530,7 +543,7 @@ Collaboration	3:10-3:30
 P5	8:00-9:25
 P6	9:35-11:00
 Spirit Rally	11:10-12:10
-Lunch	12:10-1:25
+Lunch	12:20-1:30
 P7	1:35-3:00
 Collaboration	3:10-3:30
 
