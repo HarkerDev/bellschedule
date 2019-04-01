@@ -9,6 +9,10 @@ body {
     background-position-x: center;
 }
 
+body.april {
+    font-family: "Comic Sans MS", "Segoe UI", "Arial", sans-serif;
+}
+
 h1 {
     margin-bottom: .25em;
 }
@@ -132,6 +136,13 @@ button {
     max-width: 400px;
 }
 
+.april #header {
+    background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
+}
+
 #title {
     display: inline;
     /*-webkit-touch-callout: initial;*/
@@ -140,6 +151,18 @@ button {
     -moz-user-select: initial;
     -ms-user-select: initial;
     user-select: initial;
+}
+
+.april #title {
+    font-family: "Papyrus";
+
+    background: red;
+    background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 #leftArrow {
@@ -177,6 +200,17 @@ button {
     margin-bottom: 1em;
 }
 
+.april #warning {
+    font-family: "Papyrus";
+
+    background: red;
+    background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet);
+    background: -o-linear-gradient(left, orange, yellow, green, cyan, blue, violet);
+    background: -moz-linear-gradient(left, orange, yellow, green, cyan, blue, violet);
+    background: linear-gradient(to left, orange , yellow, green, cyan, blue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 /* ------------------------------ */
 /*  Schedule                      */
@@ -190,7 +224,7 @@ table {
     margin: auto;
     height: 300px;
     /* acts like min-height */
-    background-color: rgba(255, 255, 255, .5)
+    background-color: rgba(255, 255, 255, .7);
 }
 
 #schedule td {
@@ -201,32 +235,60 @@ table {
     vertical-align: top;
 }
 
+.april #schedule td {
+    background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: linear-gradient(to left, orange, goldenrod, green, darkcyan, blue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .periodone {
     background-color: #f9d689;
 }
-
 .periodtwo {
     background-color: #efa7cc;
 }
-
 .periodthree {
     background-color: #9df2aa;
 }
-
 .periodfour {
     background-color: #dd8d8d;
 }
-
 .periodfive {
     background-color: #9bccef;
 }
-
 .periodsix {
     background-color: #abaaf7;
 }
-
 .periodseven {
     background-color: #aeefde;
+}
+
+.april .periodseven {
+    background-color: rgba(0, 255, 255, 0.3);
+}
+.april .periodone {
+    background-color: rgba(255, 255, 0, 0.3);
+}
+.april .periodtwo {
+    background-color: rgba(255, 52, 211, 0.3);
+}
+.april .periodthree {
+    background-color: rgba(255, 255, 100, 0.3);
+}
+.april .periodfour {
+    background-color: rgba(255, 100, 0, 0.3);
+}
+.april .periodfive {
+    background-color: rgba(50, 50, 100, 0.3);
+}
+.april .periodsix {
+    background-color: rgba(255, 50, 200, 0.3);
+}
+.april .periodseven {
+    background-color: rgba(0, 255, 255, 0.3);
 }
 
 .period,
@@ -345,6 +407,13 @@ table {
     -webkit-transition: right .5s, bottom .5s, padding .5s border-top-left-radius .5s;
     z-index: 10;
     overflow-y: scroll;
+}
+
+.april #options {
+    background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    background: linear-gradient(to right, rgba(255, 166, 0, 0.7) , rgba(255, 255, 0, 0.7), rgba(0, 128, 0, 0.7), rgba(0, 255, 255, 0.7), rgba(0, 0, 255, 0.7), rgba(238, 130, 238, 0.7));
 }
 
 #options.mobile {
@@ -489,4 +558,20 @@ table {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+#exit {
+    display: none;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    margin-left: -85px;
+    color: white;
+    font-weight: bolder;
+    -webkit-text-stroke: 1px #003;
+    cursor: pointer;
+}
+
+.april #exit {
+    display: block;
 }
