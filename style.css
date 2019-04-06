@@ -25,7 +25,6 @@ a.plain {
     color: #000000;
     text-decoration: none;
     width: 158px;
-    display: inline-block;
 }
 
 button {
@@ -238,7 +237,7 @@ table {
     vertical-align: top;
 }
 
-.april #schedule td, a.plain {
+.april #schedule td {
     background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet);
     background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
     background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
