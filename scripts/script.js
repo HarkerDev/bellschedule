@@ -153,12 +153,6 @@ addEventListener("load", function (event) {
             createOptions(JSON.stringify(data));
         }, cache: false});
     }, cache: false});
-
-    if (!urlParams.old) document.body.classList.add("april");
-    document.getElementById("exit").addEventListener("click", function() {
-        urlParams.old = true;
-        window.location.search = updateSearch();
-    })
 });
 
 function error() {
@@ -190,10 +184,6 @@ function initTitle() {
     $.ajax({url: "titles.txt", success: function(data) {
         titleStr = data;
     }, cache: false});
-    if (!urlParams.old) {
-        setDoge(true);
-        initApril();
-    }
 }
 
 function checkDoge() {
@@ -208,12 +198,6 @@ function checkDoge() {
     } else {
         setTitleTitle("You are " + dogeCounter + (dogeCounter == 1 ? " step" : " steps") + " away from becoming a developer!")
     }
-}
-
-function initApril() {
-    document.getElementById("leftArrow").innerHTML = '<img class="manImg" src="asset/spideyleft.png" width="40"></img>';
-    document.getElementById("rightArrow").innerHTML = '<img class="manImg" src="asset/spideyright.png" width="40"></img>';
-    document.getElementById("optionsArrow").innerHTML = '<img src="https://i.kym-cdn.com/photos/images/original/000/915/652/b49.gif" width="150">';
 }
 
 /**
@@ -892,18 +876,14 @@ function updateSearch(week, noHistory) {
     } else {
         delete urlParams.y;
     }
-    var search = updateSearch();
 
-    history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
-}
-
-function updateSearch() {
     var search = "?";
     for (var param in urlParams) {
         search += param + "=" + urlParams[param] + "&";
     }
     search = search.slice(0, -1);
-    return search;
+
+    history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
 /**
@@ -1007,7 +987,7 @@ function updateSchedule(time, force, title) {
  */
 function expandOptions() {
     document.getElementById("options").classList.add("expanded");
-    if (urlParams.old) document.getElementById("optionsArrow").innerHTML = "&#8600;";
+    document.getElementById("optionsArrow").innerHTML = "&#8600;";
 }
 
 /**
@@ -1015,7 +995,7 @@ function expandOptions() {
  */
 function contractOptions() {
     document.getElementById("options").classList.remove("expanded");
-    if (urlParams.old) document.getElementById("optionsArrow").innerHTML = "&#8598;";
+    document.getElementById("optionsArrow").innerHTML = "&#8598;";
 }
 
 /**

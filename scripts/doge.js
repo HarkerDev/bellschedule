@@ -18,7 +18,8 @@ function setDogeDelay(delay) { suchDelay = delay; }
 function setDogeMax(max) { maxDoge = max; }
 
 function startDoge(delay) {
-	document.body.style.backgroundImage = "url('https://media3.giphy.com/media/sIIhZliB2McAo/giphy.gif')";
+	document.body.style.backgroundImage = "url('asset/doge.jpg')";
+
 	suchIntervalID = setInterval("swapDogeDiv()", delay);
 	swapDogeDiv();
 }
