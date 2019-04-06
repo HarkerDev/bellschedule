@@ -157,7 +157,7 @@ addEventListener("load", function (event) {
     if (!urlParams.old) document.body.classList.add("april");
     document.getElementById("exit").addEventListener("click", function() {
         urlParams.old = true;
-        window.location.search = getSearchParam();
+        window.location.search = updateSearch();
     })
 });
 
@@ -892,12 +892,12 @@ function updateSearch(week, noHistory) {
     } else {
         delete urlParams.y;
     }
-    var search = getSearchParam();
+    var search = updateSearch();
 
     history.pushState(week, document.title, location.protocol + "//" + location.host + location.pathname + search + location.hash);
 }
 
-function getSearchParam() {
+function updateSearch() {
     var search = "?";
     for (var param in urlParams) {
         search += param + "=" + urlParams[param] + "&";
