@@ -211,8 +211,8 @@ function checkDoge() {
 }
 
 function initApril() {
-    document.getElementById("leftArrow").innerHTML = '<img class="manImg" src="asset/spideyleft.png" width="35"></img>';
-    document.getElementById("rightArrow").innerHTML = '<img class="manImg" src="asset/spideyright.png" width="35"></img>';
+    document.getElementById("leftArrow").innerHTML = '<img class="manImg" src="asset/spideyleft.png" width="40"></img>';
+    document.getElementById("rightArrow").innerHTML = '<img class="manImg" src="asset/spideyright.png" width="40"></img>';
     document.getElementById("optionsArrow").innerHTML = '<img src="https://i.kym-cdn.com/photos/images/original/000/915/652/b49.gif" width="150">';
 }
 
