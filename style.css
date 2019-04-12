@@ -7,7 +7,7 @@ body {
     font: .75em "Segoe UI", "Arial", sans-serif;
     text-align: center;
     background-position-x: center;
-    background-color: yellow;
+    animation: rotateColor 15s infinite;
 }
 
 h1 {
@@ -62,6 +62,36 @@ button {
     }
     100% {
         opacity: 0;
+    }
+}
+
+@keyframes rotateColor {
+    0%,100% {
+        background-color: yellow;
+    }
+    39% {
+        background-color: gray;
+    }
+    69% {
+        background-color: white;
+    }
+    99% {
+        background-color: green;
+    }
+}
+
+@-webkit-keyframes rotateColor {
+    0%,100% {
+        background-color: yellow;
+    }
+    39% {
+        background-color: gray;
+    }
+    69% {
+        background-color: white;
+    }
+    99% {
+        background-color: green;
     }
 }
 
@@ -191,7 +221,7 @@ table {
     margin: auto;
     height: 300px;
     /* acts like min-height */
-    background-color: yellow
+    animation: rotateColor 15s infinite;
 }
 
 #schedule td {
