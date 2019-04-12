@@ -69,13 +69,13 @@ button {
     0%,100% {
         background-color: yellow;
     }
-    39% {
+    30% {
         background-color: gray;
     }
-    69% {
+    60% {
         background-color: white;
     }
-    99% {
+    90% {
         background-color: green;
     }
 }
