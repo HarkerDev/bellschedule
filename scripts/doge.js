@@ -3,7 +3,7 @@
 
 var suchAdjectives = ["such","very","much","many","so"];
 
-var suchNouns = ["schedule","time","date","table","class","periods","lines","title","color","day","organize","impress", "harkerdev"];
+var suchNouns = ["2019", "adler", "yellow", "senior", "1st place", "surprise"];
 
 var suchDelay = 2000;	//delay between adding new div in ms
 var maxDoge = 5;		//max number of dogeDivs
