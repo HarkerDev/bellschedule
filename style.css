@@ -7,6 +7,7 @@ body {
     font: .75em "Segoe UI", "Arial", sans-serif;
     text-align: center;
     background-position-x: center;
+    background-color: yellow;
 }
 
 h1 {
@@ -190,7 +191,7 @@ table {
     margin: auto;
     height: 300px;
     /* acts like min-height */
-    background-color: rgba(255, 255, 255, .5)
+    background-color: yellow
 }
 
 #schedule td {
