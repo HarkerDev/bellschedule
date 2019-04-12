@@ -1,5 +1,6 @@
 //javascript:(function(){document.body.appendChild(document.createElement('script')).src="http://harkerdev.github.io/bellschedule/doge.js";setTimeout("startDoge(2000)",500);})();
 //bookmarklet to run doge mode on any page (nouns will be the same, though)
+setDoge(true); 
 
 var suchAdjectives = ["such","very","much","many","so"];
 
