@@ -492,6 +492,14 @@ Lunch	12:20-1:30
 P6	1:35-3:00
 Collaboration	3:10-3:30
 
+4i
+P5	8:00-9:25
+Assembly	9:35-10:50
+P7	11:00-12:25
+Lunch||Lunch|Club Leaders	12:30-1:30||12:30-1:00|1:00-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
 12
 P1	8:00-9:25
 Eagle Buddies (G11-12)||LIFE (G9-G10)|Lunch	9:35-11:50||9:35-10:35|10:35-11:50
