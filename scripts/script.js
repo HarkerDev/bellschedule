@@ -294,15 +294,16 @@ function getDateFromUrlParams() {
  * Displays the given warning or hides the warning div if no warning text is given.
  */
 function warn(text) {
-    var warning = document.getElementById("warning");
+    //Commented to remove random-text feature
+    // var warning = document.getElementById("warning");
 
-    if (text) {
-        warning.style.display = "block";
-    } else {
-        warning.style.display = "none";
-    }
+    // if (text) {
+    //     warning.style.display = "block";
+    // } else {
+    //     warning.style.display = "none";
+    // }
 
-    warning.innerHTML = text;
+    // warning.innerHTML = text;
 }
 
 /**
