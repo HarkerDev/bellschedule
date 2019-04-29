@@ -893,7 +893,7 @@ function updateSearch(week, noHistory) {
 function setHighlightedPeriod(time) {
     //set default time argument
     if (!time) {
-        time = Date.now();
+        time = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
     }
 
     //set date based on time (for finding day to highlight)
