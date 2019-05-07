@@ -251,8 +251,13 @@
 4/22/19	4i
 4/24/19	20b
 5/6/19	2b	[Advisee Reviews->Office Hours]
+5/7/19	APCSchedule
+5/9/19	APASchedule
 5/10/19	2b	[Advisee Reviews->Office Hours]
+5/13/19	APCSchedule
+5/15/19	APASchedule
 5/16/19	2b	[Advisee Reviews->Office Hours]
+5/17/19	APCSchedule
 5/23/19	37
 5/24/19	44
 5/27/19	Memorial Day
@@ -994,3 +999,19 @@ Matriculation 2017
 Matriculation (All Students)	9:00-2:00
 Matriculation (Grade 9)	2:00-2:30
 Matriculation (New Students)	2:30-3:00xx
+
+APASchedule
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch	11:10-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+APCSchedule
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch	11:10-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
