@@ -262,7 +262,10 @@
 5/24/19	44
 5/27/19	Memorial Day
 5/28/19	51
-6/3/19	7a
+6/3/19	7b
+6/4/19	F19 s2d1
+6/5/19	F19 s2d2
+6/6/19	F19 s2d3
 6/7/19|8/22/19	Summer
 8/23/19	Matriculation
 
@@ -316,13 +319,13 @@ P2	12:00-1:25
 P3	1:35-3:00
 Collaboration	3:10-3:30
 
-7a
+7b
 P1	8:00-8:40
 P2	8:50-9:30
 Office Hours	9:35-9:55
 P3	10:00-10:40
 P4	10:50-11:30
-Lunch 11:35-12:35
+Lunch	11:35-12:35
 P5	12:40-1:20
 P6	1:30-2:10
 P7	2:20-3:00
@@ -973,6 +976,20 @@ World 1 / Hon World 1 / World 2 / Hon World 2 / AP Euro / AP World	1:30-3:30
 
 F18 s1d4
 US History / Hon US History / AP US History	8:00-10:00
+
+F19 s2d1
+World 1 / Hon World 1 (Meyer, Milius)| || |Hon World 1 (Hull) / Chem / Hon Chem	8:00-10:00|10:00-11:00||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+Prog / Adv Prog / Econ / Behav Econ	12:30-2:30
+
+F19 s2d2
+Hon Bio (Artiss, Harley) / Hon Phys (Allersma, Brada)| || |Bio / Hon Bio (Pistacchi) / Physics / Hon Physics (Radice)	8:00-10:00|10:00-11:00||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+Math	12:30-2:30
+
+F19 s2d3
+Mandarin / Spanish| || |French / Latin	8:00-10:00|10:00-10:30||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
 
 Matriculation
 Matriculation Ceremony	9:45-10:30
