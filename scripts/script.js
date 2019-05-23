@@ -294,15 +294,16 @@ function getDateFromUrlParams() {
  * Displays the given warning or hides the warning div if no warning text is given.
  */
 function warn(text) {
-    var warning = document.getElementById("warning");
+    //Commented to remove random-text feature
+    // var warning = document.getElementById("warning");
 
-    if (text) {
-        warning.style.display = "block";
-    } else {
-        warning.style.display = "none";
-    }
+    // if (text) {
+    //     warning.style.display = "block";
+    // } else {
+    //     warning.style.display = "none";
+    // }
 
-    warning.innerHTML = text;
+    // warning.innerHTML = text;
 }
 
 /**
@@ -892,7 +893,7 @@ function updateSearch(week, noHistory) {
 function setHighlightedPeriod(time) {
     //set default time argument
     if (!time) {
-        time = Date.now();
+        time = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
     }
 
     //set date based on time (for finding day to highlight)

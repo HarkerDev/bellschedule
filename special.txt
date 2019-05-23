@@ -248,9 +248,24 @@
 4/10/19	4b	[Advisee Reviews->ROAR]
 4/12/19	21b
 4/16/19	4c
-4/22/19	4b	[Advisee Reviews->Assembly]
+4/22/19	4i
 4/24/19	20b
+5/6/19	2b	[Advisee Reviews->Office Hours]
+5/7/19	APCSchedule
+5/9/19	APASchedule
+5/10/19	2b	[Advisee Reviews->Office Hours]
+5/13/19	APCSchedule
+5/15/19	APASchedule
+5/16/19	2b	[Advisee Reviews->Office Hours]
+5/17/19	APCSchedule
+5/23/19	37
+5/24/19	44
 5/27/19	Memorial Day
+5/28/19	51
+6/3/19	7b
+6/4/19	F19 s2d1
+6/5/19	F19 s2d2
+6/6/19	F19 s2d3
 6/7/19|8/22/19	Summer
 8/23/19	Matriculation
 
@@ -303,6 +318,18 @@ Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
 P2	12:00-1:25
 P3	1:35-3:00
 Collaboration	3:10-3:30
+
+7b
+P1	8:00-8:40
+P2	8:50-9:30
+Office Hours	9:35-9:55
+P3	10:00-10:40
+P4	10:50-11:30
+Lunch	11:35-12:35
+P5	12:40-1:20
+P6	1:30-2:10
+P7	2:20-3:00
+Collaboration 3:10-3:30
 
 4a
 P5	8:00-9:25
@@ -489,6 +516,14 @@ Assembly	9:35-10:05
 Office Hours	10:10-10:40
 P7	10:50-12:15
 Lunch	12:20-1:30
+P6	1:35-3:00
+Collaboration	3:10-3:30
+
+4i
+P5	8:00-9:25
+Assembly	9:35-10:50
+P7	11:00-12:25
+Lunch||Lunch|Club Leaders	12:30-1:30||12:30-1:00|1:00-1:30
 P6	1:35-3:00
 Collaboration	3:10-3:30
 
@@ -683,6 +718,20 @@ P2	12:00-1:25
 P3	1:35-3:00
 Collaboration	3:10-3:30
 
+37
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch	11:10-11:55
+P3	12:00-1:25
+
+38
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch	11:10-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
 40
 P5	8:00-9:25
 Honor Council Assembly	9:35-10:40
@@ -786,6 +835,14 @@ P5	8:00-9:25
 P7	9:35-11:00
 Assembly (G9-10)|Lunch||Lunch|Assembly (G11-12)	11:10-12:10|12:10-1:25||11:10-12:15|12:25-1:25
 P6	1:35-3:00
+Collaboration	3:10-3:30
+
+51
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch	11:10-11:55
+P3	12:00-1:25
+P4	1:35-3:00
 Collaboration	3:10-3:30
 
 61
@@ -920,6 +977,20 @@ World 1 / Hon World 1 / World 2 / Hon World 2 / AP Euro / AP World	1:30-3:30
 F18 s1d4
 US History / Hon US History / AP US History	8:00-10:00
 
+F19 s2d1
+World 1 / Hon World 1 (Meyer, Milius)| || |Hon World 1 (Hull) / Chem / Hon Chem	8:00-10:00|10:00-11:00||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+Prog / Adv Prog / Econ / Behav Econ	12:30-2:30
+
+F19 s2d2
+Hon Bio (Artiss, Harley) / Hon Phys (Allersma, Brada)| || |Bio / Hon Bio (Pistacchi) / Physics / Hon Physics (Radice)	8:00-10:00|10:00-11:00||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+Math	12:30-2:30
+
+F19 s2d3
+Mandarin / Spanish| || |French / Latin	8:00-10:00|10:00-10:30||8:00-9:00|9:00-11:00
+Lunch	11:00-12:30
+
 Matriculation
 Matriculation Ceremony	9:45-10:30
 Advisory	10:30-11:30
@@ -944,3 +1015,19 @@ Matriculation 2017
 Matriculation (All Students)	9:00-2:00
 Matriculation (Grade 9)	2:00-2:30
 Matriculation (New Students)	2:30-3:00xx
+
+APASchedule
+P1	8:00-9:25
+P2	9:35-11:00
+Lunch	11:10-11:55
+P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+APCSchedule
+P1	8:00-9:25
+P4	9:35-11:00
+Lunch	11:10-11:55
+P2	12:00-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
