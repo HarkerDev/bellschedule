@@ -475,7 +475,7 @@ function setTitleTitle(data, time) {
     var date = (time ? new Date(time) : getDateFromUrlParams());
     var titles = data.split("\n");
     if (titles.length > 1) titles.pop();
-    displayMessage = titles[Math.floor(Math.random() * titles.length)];// <-- for rotating messages
+    displayMessage = "Congratulations to the Class of 2019" //titles[Math.floor(Math.random() * titles.length)];// <-- for rotating messages
     if (getMonday(date) > getMonday(new Date())) {
         displayMessage += futureWarning; //display warning if date is in the future
     }
