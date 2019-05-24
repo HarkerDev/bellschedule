@@ -221,7 +221,7 @@ table {
     margin: auto;
     height: 300px;
     /* acts like min-height */
-    animation: rotateColor 15s infinite;
+    /*animation: rotateColor 15s infinite;*/
 }
 
 #schedule td {
