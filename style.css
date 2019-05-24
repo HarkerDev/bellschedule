@@ -7,7 +7,7 @@ body {
     font: .75em "Segoe UI", "Arial", sans-serif;
     text-align: center;
     background-position-x: center;
-    /*animation: rotateColor 15s infinite;*/
+
 }
 
 h1 {
@@ -64,37 +64,6 @@ button {
         opacity: 0;
     }
 }
-
-@keyframes rotateColor {
-    0%,100% {
-        background-color: yellow;
-    }
-    30% {
-        background-color: gray;
-    }
-    60% {
-        background-color: white;
-    }
-    90% {
-        background-color: green;
-    }
-}
-
-@-webkit-keyframes rotateColor {
-    0%,100% {
-        background-color: yellow;
-    }
-    30% {
-        background-color: gray;
-    }
-    60% {
-        background-color: white;
-    }
-    90% {
-        background-color: green;
-    }
-}
-
 
 /* iPhone */
 
@@ -221,7 +190,6 @@ table {
     margin: auto;
     height: 300px;
     /* acts like min-height */
-    /*animation: rotateColor 15s infinite;*/
 }
 
 #schedule td {
