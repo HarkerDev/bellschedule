@@ -270,6 +270,7 @@
 6/6/19	F19 s2d3
 6/7/19|8/22/19	Summer
 8/23/19	Matriculation
+8/29/19	ReCreate
 9/2/19	Labor Day
 9/27/19	Fall Break
 
