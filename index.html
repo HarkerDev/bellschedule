@@ -31,12 +31,12 @@ function toggleColor(){
 <script>
 window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 ga('create', 'UA-136862177-6', 'auto');
-ga('send', 'pageview');
 if (window.localStorage) {
 	ga('set', 'dimension1', localStorage.getItem('period1') != '' || localStorage.getItem('period2') != '' || localStorage.getItem('period3') != '');
 	ga('set', 'dimension2', localStorage.getItem('color'));
 	ga('set', 'dimension3', localStorage.getItem('enableDayView'));
 }
+ga('send', 'pageview');
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
 
