@@ -272,7 +272,7 @@
 8/23/19	Matriculation
 8/29/19	ReCreate
 9/2/19	Labor Day
-9/9/10	2b	[Advisee Reviews->Assembly]
+9/9/19	2b	[Advisee Reviews->Assembly]
 9/27/19	Fall Break
 
 1
