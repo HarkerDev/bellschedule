@@ -275,6 +275,16 @@
 9/9/19	2b	[Advisee Reviews->Assembly]
 9/11/19	Club Fair
 9/27/19	Fall Break
+10/8/19	2b	[Advisee Reviews->Parade]
+10/10/19	62
+10/11/19	XX
+10/16/19	PSAT
+10/21/19	21c
+10/22/19	31e
+10/23/19	44
+10/25/19	20
+10/28/19	Fall Break
+10/30/19	4	[Office Hours->Service Fair]
 
 1
 P1	8:00-9:25
@@ -378,6 +388,14 @@ P1	8:00-9:25
 P2	9:35-11:00
 Lunch	11:10-11:55
 P3	12:00-1:25
+P4	1:35-3:00
+Collaboration	3:10-3:30
+
+XX
+P1	8:00-9:25
+P2	9:35-11:00
+Rally	11:10-12:10
+Lunch	12:15-1:25
 P4	1:35-3:00
 Collaboration	3:10-3:30
 
@@ -694,6 +712,13 @@ Lunch|Holiday Show (9/10)||Holiday Show (11/12)|Lunch	11:05-12:15|12:20-1:20||11
 P3	1:35-3:00
 Collaboration	3:10-3:30
 
+31e
+P1	8:00-9:25
+P4	9:35-11:00
+Assembly (9/10)|Lunch||Lunch|Assembly (11/12)	11:10-12:10|12:10-1:25||11:10-12:15|12:25-1:25
+P3	1:35-3:00
+Collaboration	3:10-3:30
+
 32
 P1	8:00-9:20
 Holiday Show	9:30-10:40
@@ -805,7 +830,7 @@ P2	9:35-11:00
 Lunch||Frosh Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
 P7	12:00-1:25
 P6	1:35-3:00
-Office Hours	3:10-3:30
+Collaboration	3:10-3:30
 
 45
 P5	8:00-9:25
@@ -858,6 +883,14 @@ P7	9:05-10:00
 Spirit Rally	10:10-11:10
 Lunch	11:10-12:00
 P6	12:05-1:00
+
+62
+P5	8:00-9:25
+P3	9:35-11:00
+Lunch||Senior Mtg.|Lunch	11:10-11:55||11:10-11:25|11:25-11:55
+P7	12:00-1:25
+P6	1:35-3:00
+Collaboration	3:10-3:30
 
 63
 P5	8:00-9:25
