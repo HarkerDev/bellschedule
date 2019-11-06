@@ -287,6 +287,7 @@
 10/30/19	4	[Office Hours->Service Fair]
 11/1/19	2b	[Advisee Reviews->School Meeting]
 11/5/19	4e
+11/6/19	1b
 11/7/19	2k
 11/11/19	4a
 11/13/19	21
