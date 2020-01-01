@@ -12,6 +12,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 
 <title>Bell Schedule</title>
+
+<style>
+	.blink {animation: blink 0.5s linear infinite;}
+	@keyframes blink {50% {opacity: 0;}}
+</style>
+<script>
+	var match = RegExp("[?&]old=([^&]*)").exec(window.location.search);
+	var old = match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+	if (!old) window.location.replace("https://bell.harker.org/?utm_source=v1&utm_medium=redirect");
+</script>
 <script type="text/javascript" src="scripts/jquery.min.js"></script>
 <script type="text/javascript" src="scripts/script.min.js"></script>
 
